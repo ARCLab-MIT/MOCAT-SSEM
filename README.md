@@ -39,7 +39,7 @@ Each sub-directory contains the sub-modules used by the workbooks. The sub-modul
 
 ## Tutorial
 
-The folder Tutorial contains to example of solutions retrieved by MOCAT-3 using constant launch rate and static exponential or JB2008-based atmospheric density models.
+The folder Tutorials contains two previews of output solutions retrieved by MOCAT-3 using constant launch rate and static exponential or JB2008-based atmospheric density models. These can be accessed online without need of any software.
 
 <!--
 The following website contains an example of the MOCAT-SSEM Matlab livescript functionalities: [https://gdmend.github.io/MOCAT/](https://gdmend.github.io/MOCAT/) . (TO BE CHANGED)
