@@ -1,0 +1,269 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_rotvec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_rotvec</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_ROTVEC transforms a vector to a new coordinate system rotated by
+   `angle' radians about axis `iaxis'. This transformation rotates `v1' by
+   -angle radians about the specified axis.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      v1       a vector (typically representing a vector fixed in inertial
+               space) which is to be expressed in another coordinate system.
+
+               [3,1] = size(v1); double = class(v1)
+
+               The vector remains fixed but the coordinate system changes.
+
+      angle    an angle given in radians, through which the rotation is
+               performed.
+
+               [1,1] = size(angle); double = class(angle)
+
+      iaxis    the index of the axis of rotation.
+
+               [1,1] = size(iaxis); int32 = class(iaxis)
+
+               The X, Y, and Z axes have indices 1, 2 and 3 respectively.
+
+   the call:
+
+      [vout] = <b>cspice_rotvec</b>( v1, angle, iaxis )
+
+   returns:
+
+      vout     the vector expressed in the new coordinate system specified
+               by the angle of rotation and axis.
+
+               [3,1] = size(vout); double = class(vout)
+
+               If
+
+                  m = [angle]
+                             iaxis
+
+               represents the rotation matrix described by the `angle'
+               and `iaxis', (refer to the routine <a href="cspice_rotate.html">cspice_rotate</a>) then
+
+                  vout =  m * v1  = [angle]      * v1
+                                           iaxis
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Apply a rotation of -45.0 degrees about the +Z axis to
+      a 3 dimensional vector.
+
+      Example code begins here.
+
+
+      function rotvec_ex1()
+
+         %
+         % Input values.
+         %
+         v1    = [1.414, 0.0, 0.0]';
+
+         angle = <a href="cspice_pi.html">cspice_pi</a>/4;
+         iaxis = 3;
+
+         %
+         % Rotate `v1' by `angle' radians about `iaxis'.
+         %
+         [vout] = <b>cspice_rotvec</b>( v1, angle, iaxis );
+
+         fprintf( 'Input vector  : %9.3f %9.3f %9.3f\n', ...
+                                     v1(1), v1(2), v1(3) )
+         fprintf( 'Rotated vector: %9.3f %9.3f %9.3f\n', ...
+                               vout(1), vout(2), vout(3) )
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, the output was:
+
+
+      Input vector  :     1.414     0.000     0.000
+      Rotated vector:     1.000    -1.000     0.000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A rotation about the first, i.e. X-axis, is described by
+
+      .-                              -.
+      |   1       0            0       |
+      |   0   cos(theta)   sin(theta)  |
+      |   0  -sin(theta)   cos(theta)  |
+      `-                              -'
+
+   A rotation about the second, i.e. Y-axis, is described by
+
+      .-                              -.
+      |   cos(theta)   0  -sin(theta)  |
+      |       0        1       0       |
+      |   sin(theta)   1   cos(theta)  |
+      `-                              -'
+
+   A rotation about the third, i.e. Z-axis, is described by
+
+      .-                              -.
+      |   cos(theta)   sin(theta)   0  |
+      |  -sin(theta)   cos(theta)   0  |
+      |       0            0        1  |
+      `-                              -'
+
+   <b>cspice_rotvec</b> decides which form is appropriate according to the value
+   of `iaxis' and applies the rotation to the input vector.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the `iaxis' index is not in the range 1 to 3, it will be
+       treated the same as that integer 1, 2, or 3 that is congruent
+       to it mod 3.
+
+   2)  If any of the input arguments, `v1', `angle' or `iaxis', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `v1', `angle' or `iaxis', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 09-AUG-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   rotate a vector
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

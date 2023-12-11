@@ -1,0 +1,388 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ktotal</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ktotal</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_KTOTAL returns the number of kernels of a specified type that are
+   currently loaded via the <a href="cspice_furnsh.html">cspice_furnsh</a> interface.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      kind     a list of types of kernels to count when computing loaded
+               kernels.
+
+               [1,c1] = size(kind); char = class(kind)
+
+                  or
+
+               [1,1] = size(kind); cell = class(kind)
+
+               `kind' should consist of a list of words of kernels to
+               examine. Recognized types are
+
+                  SPK  --- All SPK files are counted in the total.
+                  CK   --- All CK files are counted in the total.
+                  PCK  --- All binary PCK files are counted in the
+                           total.
+                  DSK  --- All DSK files are counted in the total.
+                  EK   --- All EK files are counted in the total.
+                  TEXT --- All text kernels that are not meta-text
+                           kernels are included in the total.
+                  META --- All meta-text kernels are counted in the
+                           total.
+                  ALL  --- Every type of kernel is counted in the
+                           total.
+
+               `kind' is case insensitive. If a word appears in `kind'
+               that is not one of those listed above, it is ignored.
+
+               When `kind' consists of multiple words, the words must
+               be separated by blanks. Examples of valid lists are the
+               strings
+
+                  'SPK CK TEXT'
+                  'SPK CK text'
+                  'PCK DSK'
+                  'CK'
+                  'ALL'
+
+               See the -Examples section for illustrations of the
+               use of `kind'.
+
+   the call:
+
+      [count] = <b>cspice_ktotal</b>( kind )
+
+   returns:
+
+      count    the number of kernels loaded through <a href="cspice_furnsh.html">cspice_furnsh</a> that
+               belong to the list specified by `kind'.
+
+               [1,1] = size(count); int32 = class(count)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Load a meta-kernel with a PCK, an LSK and an SPK, and
+      separately, a text kernel and a binary PCK. Show the
+      total number of kernels and meta-kernels loaded. Determine the
+      number of text kernels loaded, and the number of binary
+      kernels.
+
+      Unload all kernels and clear the kernel pool using
+      <a href="cspice_kclear.html">cspice_kclear</a>, and check that no kernels are loaded.
+
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: ktotal_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00008.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00008.tpc',
+                                'naif0009.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Use the PCK kernel below as the binary PCK required for the
+      example.
+
+         earth_latest_high_prec.bpc
+
+
+      Use the FK kernel below as the text kernel required for the
+      example.
+
+         RSSD0002.TF
+
+
+      Example code begins here.
+
+
+      function ktotal_ex1()
+
+         %
+         % Load several kernel files.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'ktotal_ex1.tm' )
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'RSSD0002.TF' )
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'earth_latest_high_prec.bpc' )
+
+         %
+         % Count the number of loaded kernel files.
+         %
+         n   = <b>cspice_ktotal</b>( 'ALL' );
+         txt = sprintf(['The total number of kernels after ',             ...
+                        '<a href="cspice_kclear.html">cspice_kclear</a> call: %d'], n        );
+         disp( txt )
+
+         %
+         % Count the number of meta-kernels.
+         %
+         n   = <b>cspice_ktotal</b>( 'META' );
+         txt = sprintf(['The total number of meta-kernels  ',             ...
+                        '                  : %d'], n        );
+         disp( txt )
+
+         %
+         % Count the number of text kernels.
+         %
+         n   = <b>cspice_ktotal</b>( 'TEXT' );
+         txt = sprintf(['The total number of text kernels  ',             ...
+                        '                  : %d'], n        );
+         disp( txt )
+
+         %
+         % Count the number of binary kernels. These kernels
+         % are of type CK, DSK, EK, PCK or SPK.
+         %
+         n   = <b>cspice_ktotal</b>( 'CK DSK EK PCK SPK' );
+         txt = sprintf(['The total number of binary kernels',             ...
+                        '                  : %d'], n        );
+         disp( txt )
+
+         %
+         % Clear the KEEPER system, retrieve the number of loaded
+         % after the clear.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+         n   = <b>cspice_ktotal</b>( 'ALL' );
+         txt = sprintf(['The total number of kernels after ',             ...
+                        '<a href="cspice_kclear.html">cspice_kclear</a>     : %d'], n        );
+         disp( txt )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      The total number of kernels after <a href="cspice_kclear.html">cspice_kclear</a> call: 6
+      The total number of meta-kernels                    : 1
+      The total number of text kernels                    : 3
+      The total number of binary kernels                  : 2
+      The total number of kernels after <a href="cspice_kclear.html">cspice_kclear</a>     : 0
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   <b>cspice_ktotal</b> allows you to easily determine the number of kernels
+   loaded via the interface <a href="cspice_furnsh.html">cspice_furnsh</a> that are of a type of interest.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If a word on the list specified by `kind' is not recognized,
+       it is ignored.
+
+   2)  If `kind' is blank, or none of the words in `kind' is on the
+       list specified above, `count' will be returned as zero.
+
+   3)  If the input argument `kind' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   4)  If the input argument `kind' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 2.1.0, 01-NOV-2021 (EDW) (JDR) (NJB)
+
+       Edited the -Examples section to comply with NAIF standard. Added
+       example's problem statement and meta-kernel. Merged the existing
+       code fragments into a complete example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+       Updated -I/O description of input argument &quot;kind&quot; to illustrate
+       use of multi-word lists. Added kernel.req to the list of required
+       readings, and removed dsk.req. Improved -Abstract section.
+       Corrected class type description for output argument `count', to
+       int32.
+
+   -Mice Version 2.0.0, 20-JAN-2016 (EDW) (NJB)
+
+       Header update to reflect support for use of DSKs. Corrected
+       class type description for output argument `count', to double.
+
+   -Mice Version 1.0.2, 01-DEC-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.1, 06-MAY-2009 (EDW)
+
+       Added mice.req reference to the Required Reading section.
+
+   -Mice Version 1.0.0, 01-DEC-2006 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Number of loaded kernels of a given type
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:25 2021</pre>
+
+</body>
+</html>
+

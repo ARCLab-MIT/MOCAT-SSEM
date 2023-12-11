@@ -1,0 +1,301 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_npelpt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_npelpt</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_NPELPT finds the nearest point on an ellipse to a specified point,
+   both in three-dimensional space, and finds the distance between the
+   ellipse and the point.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      point    a point in 3-dimensional space.
+
+               [3,1] = size(point); double = class(point)
+
+      ellips   a SPICE ellipse that represents an ellipse in
+               three-dimensional space.
+
+               [1,1] = size(ellips); struct = class(ellips)
+
+               The structure has the fields:
+
+                 center:    [3,1] = size(center); double = class(center)
+                 semiMinor: [3,1] = size(semiMinor); double =
+                 class(semiMinor) semiMajor: [3,1] = size(semiMajor); double
+                 = class(semiMajor)
+
+   the call:
+
+      [pnear, dist] = <b>cspice_npelpt</b>( point, ellips )
+
+   returns:
+
+      pnear    the nearest point on `ellips' to `point'.
+
+               [3,1] = size(pnear); double = class(pnear)
+
+      dist     the distance between `point' and `pnear'.
+
+               [1,1] = size(dist); double = class(dist)
+
+               This is the distance between `point' and the ellipse.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Create a SPICE ellipse given its center and its semi-major and
+      semi-minor axes, and calculate the location on that ellipse
+      which is closest to a defined point, and the distance between
+      those points.
+
+      Example code begins here.
+
+
+      function npelpt_ex1()
+
+         %
+         % Define a center, and semimajor and semiminor axes for
+         % an ellipse.
+         %
+         % Also define an arbitrary point in space.
+         %
+         center = [  1.;  2.; -3. ];
+         smajor = [  3.;  0.;  0. ];
+         sminor = [  0.;  2.;  0. ];
+         point  = [ -4.;  2.;  1. ];
+
+         %
+         % Create an ellipse structure using `center', `smajor',
+         % and `sminor'.
+         %
+         ellips = <a href="cspice_cgv2el.html">cspice_cgv2el</a>( center, smajor, sminor );
+
+         fprintf( 'Input SPICE ellipse:\n' );
+         fprintf( '  Semi-minor axis: %10.6f %10.6f %10.6f\n',   ...
+                                              ellips.semiMinor);
+         fprintf( '  Semi-major axis: %10.6f %10.6f %10.6f\n',   ...
+                                              ellips.semiMajor);
+         fprintf( '  Center         : %10.6f %10.6f %10.6f\n\n',   ...
+                                              ellips.center   );
+
+         %
+         % Calculate the location on the ellipse closest to
+         % the defined point.
+         %
+         [pnear, dist] = <b>cspice_npelpt</b>( point, ellips );
+         fprintf( 'Nearest point    : %10.6f %10.6f %10.6f\n', pnear )
+         fprintf( 'Distance         : %10.6f\n', dist                )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Input SPICE ellipse:
+        Semi-minor axis:   0.000000   2.000000   0.000000
+        Semi-major axis:   3.000000   0.000000   0.000000
+        Center         :   1.000000   2.000000  -3.000000
+
+      Nearest point    :  -2.000000   2.000000  -3.000000
+      Distance         :   4.472136
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Given an ellipse and a point in 3-dimensional space, if the
+   orthogonal projection of the point onto the plane of the ellipse
+   is on or outside of the ellipse, then there is a unique point on
+   the ellipse closest to the original point. This routine finds
+   that nearest point on the ellipse. If the projection falls inside
+   the ellipse, there may be multiple points on the ellipse that are
+   at the minimum distance from the original point. In this case,
+   one such closest point will be returned.
+
+   This routine returns a distance, rather than an altitude, in
+   contrast to the Mice routine <a href="cspice_nearpt.html">cspice_nearpt</a>. Because our ellipse is
+   situated in 3-space and not 2-space, the input point is not
+   &quot;inside&quot; or &quot;outside&quot; the ellipse, so the notion of altitude does
+   not apply to the problem solved by this routine. In the case of
+   <a href="cspice_nearpt.html">cspice_nearpt</a>, the input point is on, inside, or outside the ellipsoid,
+   so it makes sense to speak of its altitude.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input ellipse `ellips' has one or both semi-axis lengths
+       equal to zero, the error SPICE(DEGENERATECASE) is signaled by
+       a routine in the call tree of this routine.
+
+   2)  If the geometric ellipse represented by `ellips' does not
+       have a unique point nearest to the input point, any point
+       at which the minimum distance is attained may be returned
+       in `pnear'.
+
+   3)  If a ratio of non-zero ellipse radii violates the constraints
+       imposed by <a href="cspice_nearpt.html">cspice_nearpt</a>, an error is signaled by a routine in the
+       call tree of this routine.
+
+   4)  The routine does not check for overflow when scaling or
+       translating the input point.
+
+   5)  If any of the input arguments, `point' or `ellips', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   6)  If any of the input arguments, `point' or `ellips', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 27-AUG-2021 (EDW) (JDR)
+
+       Changed input argument name &quot;ellipse&quot; to &quot;ellips&quot;.
+
+       Edited the header to comply with NAIF standard. Added
+       code example to -Examples section.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 14-NOV-2014 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   nearest point on ellipse to point
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

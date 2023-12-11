@@ -1,0 +1,461 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_srfrec</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_srfrec</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SRFREC converts planetocentric latitude and longitude of a surface
+   point on a specified body to rectangular coordinates.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      body     the NAIF integer code of an extended body on which a surface
+               point of interest is located.
+
+               [1,1] = size(body); int32 = class(body)
+
+               The body is modeled as a triaxial ellipsoid.
+
+      lon      the longitude of the input point(s).
+
+               [1,n] = size(lon); double = class(lon)
+
+               This is the angle between the prime meridian and the
+               meridian containing the point. The direction of increasing
+               longitude is from the +X axis towards the +Y axis.
+
+               Longitude is measured in radians. On input, the
+               range of longitude is unrestricted.
+
+      lat      the latitude of the input point(s).
+
+               [1,n] = size(lat); double = class(lat)
+
+               This is the angle from the XY plane of the ray from the
+               origin through the point.
+
+               Latitude is measured in radians. On input, the range
+               of latitude is unrestricted.
+
+   the call:
+
+      [rectan] = <b>cspice_srfrec</b>( body, lon, lat )
+
+   returns:
+
+      rectan   the rectangular coordinates of the input surface point(s).
+
+               [3,n] = size(rectan); double = class(rectan)
+
+               Units are the same as those used to define the radii of
+               `body'. Normally, these units are km.
+
+               `rectan' returns with the vectorization measure, N, as
+               `lon', and `lat'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Find the rectangular coordinates of the point
+
+         100 degrees planetocentric longitude
+         -35 degrees planetocentric latitude
+
+      on the Earth; then convert these coordinates back to
+      latitudinal coordinates. We should be able to recover
+      our original longitude and latitude values.
+
+      Use the PCK kernel below to load the required triaxial
+      ellipsoidal shape model and orientation data for the Earth.
+
+         pck00008.tpc
+
+
+      Example code begins here.
+
+
+      function srfrec_ex1()
+
+
+         %
+         % NAIF ID for our body of interest.
+         %
+         EARTH =  399;
+
+         %
+         % Load the kernel pool with a PCK file that contains
+         % values for the radii of the Earth.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'pck00008.tpc' )
+
+         %
+         % Find `x', the rectangular coordinates of the surface point
+         % defined by `lat' and `lon'.  The NAIF integer code for
+         % the Earth is 399. (See the NAIF_IDS required reading file
+         % for the complete set of codes.)
+         %
+         lon =  100.;
+         lat =   35.;
+
+         fprintf( 'Original latitudinal coordinates: \n' )
+         fprintf( '                 Longitude (deg): %f\n', lon )
+         fprintf( '                 Latitude  (deg): %f\n\n', lat )
+
+
+         %
+         % Convert angles to radians forr input to <b>cspice_srfrec</b>.
+         %
+         x = <b>cspice_srfrec</b>( EARTH, lon*<a href="cspice_rpd.html">cspice_rpd</a>(), lat*<a href="cspice_rpd.html">cspice_rpd</a>() );
+
+         fprintf( 'Rectangular coordinates: \n')
+         fprintf( '                 X (km): %f\n', x(1) )
+         fprintf( '                 Y (km): %f\n', x(2) )
+         fprintf( '                 Z (km): %f\n\n', x(3) )
+
+
+         %
+         %
+         % Now try to recover the original latitudinal coordinates
+         % from the rectangular coordinates found by <b>cspice_srfrec</b>.
+         %
+         [radius, lon1, lat1] = <a href="cspice_reclat.html">cspice_reclat</a>( x);
+
+         %
+         % Convert angles back to degree for display.
+         %
+         fprintf( 'Latitudinal coordinates recovered from \n' )
+         fprintf( 'rectangular coordinates: \n' )
+         fprintf( '                 Longitude (deg): %f\n',  ...
+                                          lon1*<a href="cspice_dpr.html">cspice_dpr</a>() )
+         fprintf( '                 Latitude  (deg): %f\n',  ...
+                                          lat1*<a href="cspice_dpr.html">cspice_dpr</a>() )
+
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>()
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Original latitudinal coordinates:
+                       Longitude (deg): 100.000000
+                       Latitude  (deg): 35.000000
+
+      Rectangular coordinates:
+                       X (km): -906.249429
+                       Y (km): 5139.595909
+                       Z (km): 3654.300840
+
+      Latitudinal coordinates recovered from
+      rectangular coordinates:
+                       Longitude (deg): 100.000000
+                       Latitude  (deg): 35.000000
+
+
+   2) Create a table showing a variety of Earth latitudinal coordinates
+      and the corresponding rectangular coordinates.
+
+      Corresponding latitudinal and rectangular coordinates are
+      listed to four decimal places.
+
+      Use the PCK file from example 1 above.
+
+
+      Example code begins here.
+
+
+      function srfrec_ex2()
+
+         %
+         % NAIF ID for our body of interest.
+         %
+         EARTH =  399;
+
+         %
+         % Load the kernel pool with a PCK file that contains
+         % values for the radii of the Earth.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'pck00008.tpc' )
+
+         %
+         % Define ten sets of latitudinal coordinates.
+         %
+         longitudes = [ 0., 90., 0. 180., -90., ...
+                                        0., 45., 0., 90., 45. ];
+         latitudes  = [ 0., 0., 90., 0., 0.,    ...
+                                        -90., 0., 45., 45., 35.2643 ];
+
+         %
+         % Convert angles to radians for input to <b>cspice_srfrec</b>.
+         %
+         rectan = <b>cspice_srfrec</b>( EARTH, longitudes*<a href="cspice_rpd.html">cspice_rpd</a>(), ...
+                                        latitudes*<a href="cspice_rpd.html">cspice_rpd</a>() );
+
+         %
+         % Create an array of values for output.
+         %
+         output = [ longitudes; latitudes; rectan ];
+
+         %
+         % Output banner.
+         %
+         disp('  longitude  latitude       x         y           z   ')
+         disp('  --------   --------   --------   --------   --------')
+
+         txt = sprintf( '%10.4f %10.4f %10.4f %10.4f %10.4f\n', output );
+         disp( txt )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>()
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+        longitude  latitude       x         y           z
+        --------   --------   --------   --------   --------
+          0.0000     0.0000  6378.1400     0.0000     0.0000
+         90.0000     0.0000     0.0000  6378.1400     0.0000
+          0.0000    90.0000     0.0000     0.0000  6356.7500
+        180.0000     0.0000 -6378.1400     0.0000     0.0000
+        -90.0000     0.0000     0.0000 -6378.1400     0.0000
+          0.0000   -90.0000     0.0000     0.0000 -6356.7500
+         45.0000     0.0000  4510.0260  4510.0260     0.0000
+          0.0000    45.0000  4502.4445     0.0000  4502.4445
+         90.0000    45.0000     0.0000  4502.4445  4502.4445
+         45.0000    35.2643  3678.2946  3678.2946  3678.2824
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine returns the rectangular coordinates of a surface
+   point on an extended body with known radii, where the location
+   of the surface point is specified in planetocentric latitudinal
+   coordinates.
+
+   Latitudinal coordinates are defined by a distance from a central
+   reference point, an angle from a reference meridian, and an angle
+   above the equator of a sphere centered at the central reference
+   point. In this case, the distance from the central reference
+   point is not required as an input because the fact that the
+   point is on the body's surface allows one to deduce this quantity.
+
+   Below are two tables that demonstrate by example the relationship
+   between rectangular and latitudinal coordinates.
+
+   Listed in the first table (under R, `lon' and `lat') are
+   latitudinal coordinate triples that approximately represent
+   points whose rectangular coordinates are taken from the set
+   {-1, 0, 1}. (Angular quantities are given in degrees.)
+
+
+        R           lon       lat    rectan(1)   rectan(2)  rectan(3)
+       --------------------------    --------------------------------
+       0.0000    0.0000    0.0000      0.0000      0.0000     0.0000
+       1.0000    0.0000    0.0000      1.0000      0.0000     0.0000
+       1.0000   90.0000    0.0000      0.0000      1.0000     0.0000
+       1.0000    0.0000   90.0000      0.0000      0.0000     1.0000
+       1.0000  180.0000    0.0000     -1.0000      0.0000     0.0000
+       1.0000  -90.0000    0.0000      0.0000     -1.0000     0.0000
+       1.0000    0.0000  -90.0000      0.0000      0.0000    -1.0000
+       1.4142   45.0000    0.0000      1.0000      1.0000     0.0000
+       1.4142    0.0000   45.0000      1.0000      0.0000     1.0000
+       1.4142   90.0000   45.0000      0.0000      1.0000     1.0000
+       1.7320   45.0000   35.2643      1.0000      1.0000     1.0000
+
+
+   This routine is related to the Mice routine <a href="cspice_latrec.html">cspice_latrec</a>, which
+   accepts a radius, longitude, and latitude as inputs and produces
+   equivalent rectangular coordinates as outputs.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If radii for `body' are not found in the kernel pool, an error
+       is signaled by a routine in the call tree of this routine.
+
+   2)  If the size of the `body' body radii kernel variable is not
+       three, an error is signaled by a routine in the call tree of
+       this routine.
+
+   3)  If any of the three `body' body radii is less-than or equal to
+       zero, an error is signaled by a routine in the call tree of
+       this routine.
+
+   4)  If any of the input arguments, `body', `lon' or `lat', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   5)  If any of the input arguments, `body', `lon' or `lat', is not
+       of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+   6)  If the input vectorizable arguments `lon' and `lat' do not
+       have the same measure of vectorization (N), an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  A PCK text kernel containing the body radius definitions
+       required by this routine must be loaded into the kernel
+       pool prior to any calls to this routine.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 01-NOV-2021 (EDW) (JDR)
+
+       Changed input argument names &quot;longitude&quot; and &quot;latitude&quot; to &quot;lon&quot; and
+       &quot;lat&quot;. Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections. Edited
+       the header to comply with NAIF standard.
+
+       Added example's task description.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 01-DEC-2016 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   convert bodyfixed latitudinal coordinates to rectangular
+   convert surface latitudinal coordinates to rectangular
+   surface point latitudinal coordinates to rectangular
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:27 2021</pre>
+
+</body>
+</html>
+

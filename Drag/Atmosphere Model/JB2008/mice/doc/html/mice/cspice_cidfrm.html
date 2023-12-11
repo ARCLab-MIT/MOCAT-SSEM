@@ -1,0 +1,284 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_cidfrm</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_cidfrm</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CIDFRM retrieves the ID code and name of the preferred
+   frame associated with a given body ID.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      cent     the ID code(s) for object(s) for which there is a preferred
+               reference frame.
+
+               [1,n] = size(cent); int32 = class(cent)
+
+   the call:
+
+      [frcode, frname, found] = <b>cspice_cidfrm</b>( cent )
+
+   returns:
+
+      frcode   the frame ID code(s) to associate with the object specified by
+               `cent'.
+
+               [1,n] = size(frcode); int32 = class(frcode)
+
+      frname   the name(s) of the frame(s) that should be associated with the
+               object specified by `cent'.
+
+               [n,c1] = size(frname); char = class(frname)
+
+               `frname' should be declared as CHARACTER*(32) to ensure
+               that it can contain the full name of the frame. If `frname'
+               does not have enough room to hold the full name of the frame,
+               the name will be truncated on the right.
+
+      found    true if the appropriate frame ID code and frame name can be
+               determined.
+
+               [1,n] = size(found); logical = class(found)
+
+               Otherwise `found' is returned with the value false.
+
+               `frcode', `frname', and `found' return with the same
+               vectorization measure (N) as `cent'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Retrieve the ID code and name of the preferred frame associated
+      with a set of body IDs.
+
+      Example code begins here.
+
+
+      function cidfrm_ex1()
+
+         disp( ' Body ID  Frame ID  Frame Name       ' )
+         disp( '--------  --------  -----------------' )
+         %
+         % Retrieve frame information for body ID 501.
+         %
+         disp('Scalar:' )
+
+         bodies = 501;
+         [ frcode, frname, found ] = <b>cspice_cidfrm</b>( bodies );
+
+         if ( found )
+            fprintf( '%8d  %8d  %s\n', bodies, frcode, frname )
+         end
+
+         %
+         % Retrieve frame information for a vector of body IDs.
+         %
+         disp('Vector:' )
+
+         bodies = [ 0, 301, 401, -501 ];
+
+         [ frcode, frname, found ] = <b>cspice_cidfrm</b>( bodies );
+
+         for i=1:numel( bodies)
+
+            if ( found(i) )
+               fprintf( '%8d  %8d  %s\n', bodies(i), frcode(i), frname(i,:) )
+            else
+               fprintf( 'No frame associated with ID %d\n', bodies(i) )
+            end
+
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+       Body ID  Frame ID  Frame Name
+      --------  --------  -----------------
+      Scalar:
+           501     10023  IAU_IO
+      Vector:
+             0        16  MARSIAU
+           301     10020  IAU_MOON
+           401     10021  IAU_PHOBOS
+      No frame associated with ID -501
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine allows the user to determine the frame that should
+   be associated with a particular object. For example, if you
+   need the frame name and ID associated with Io, you can call
+   <b>cspice_cidfrm</b> to return these values.
+
+   The preferred frame to use with an object is specified via one
+   of the kernel pool variables:
+
+       OBJECT_&lt;cent&gt;_FRAME
+
+   where &lt;cent&gt; is the NAIF ID or name of the object.
+
+   For those objects that have &quot;built-in&quot; frame names this
+   routine returns the corresponding &quot;IAU&quot; frame and frame ID code.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input argument `cent' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   2)  If the input argument `cent' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 23-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard.
+       Reformatted example's output and added problem statement.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 11-NOV-2013 (EDW) (SCK)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Fetch reference frame attributes
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

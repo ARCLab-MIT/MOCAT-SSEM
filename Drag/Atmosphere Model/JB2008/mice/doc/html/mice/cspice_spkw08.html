@@ -1,0 +1,376 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkw08</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkw08</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKW08 writes a type 8 segment to an SPK file.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the file handle of an SPK file open for writing.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      body     the SPICE ID code for an ephemeris object
+               whose state relative to another body is described
+               by the segment to be created.
+
+               [1,1] = size(body); int32 = class(body)
+
+      center   the SPICE ID code for the center of motion
+               of the object identified by body.
+
+               [1,1] = size(center); int32 = class(center)
+
+      frame    the name for a reference frame relative to which the state
+               information for body is specified.
+
+               [1,c1] = size(fname); char = class(fname)
+
+                  or
+
+               [1,1] = size(fname); cell = class(fname)
+
+      first,
+      last     are, respectively, the start and stop times of
+               the time interval over which the segment defines
+               the state of body.
+
+               [1,1] = size(first); double = class(first)
+               [1,1] = size(last);  double = class(last)
+
+      segid    is the segment identifier. An SPK segment
+               identifier may contain up to 40 characters.
+
+      degree   the degree of the Lagrange polynomials used to
+               interpolate the states. All components of the
+               state vectors are interpolated by polynomials of
+               fixed degree.
+
+               [1,1] = size(degree); int32 = class(degree)
+
+      states   contains a time-ordered array of geometric states
+               ( x, y, z, dx/dt, dy/dt, dz/dt, in kilometers and
+               kilometers per second ) of body relative to center,
+               specified relative to frame.
+
+               [6,m] = size(states); double = class(states)
+
+      begtim   the epoch corresponding to the first state in
+               the state array. Because extra states are needed
+               at the beginning and end of the segment in order
+               for the interpolation method to work, begtim will
+               normally precede first.
+
+               [1,1] = size(begtim); double = class(begtim)
+
+      step     the time step separating the epochs of adjacent
+               states in the input state array. step is specified
+               in TDB seconds.
+
+               [1,1] = size(step); double = class(step)
+
+   the call:
+
+      <b>cspice_spkw08</b>( handle, body,  center, frame,  first,  ...
+                     last,   segid, degree, states, begtim, ...
+                     step )
+
+   returns:
+
+   The routine writes to the SPK file referred to by `handle' a type 8 SPK
+   segment containing the data listed in `states'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) This example demonstrates how to create an SPK type 8 kernel
+      containing only one segment, given a time-ordered set of
+      discrete states and epochs.
+
+
+      Example code begins here.
+
+
+      function spkw08_ex1()
+
+         %
+         % Define the segment identifier parameters.
+         %
+         BODY       = 3;
+         CENTER     = 10;
+         REF        = 'J2000';
+         POLY_DEG   = 3;
+         SPK8       = 'spkw08_ex1.bsp';
+         N_DISCRETE = 9;
+
+         %
+         % A set of epochs.
+         %
+         DISCRETEEPOCHS = (1:9)*100;
+
+         %
+         % An array of discrete states to write to the SPK segment.
+         %
+         base = [ (1:6)*100 ]';
+
+         %
+         % Create the 6xN array of states.
+         %
+         DISCRETESTATES = [(base+1), (base+2), (base+3), ...
+                           (base+4), (base+5), (base+6), ...
+                           (base+7), (base+8), (base+9) ];
+
+         %
+         % Create a segment identifier.
+         %
+         segid = 'SPK type 8 test segment';
+
+         %
+         % Open a new SPK file.
+         %
+         handle = <a href="cspice_spkopn.html">cspice_spkopn</a>( SPK8, segid, 4 );
+
+         step   = DISCRETEEPOCHS(2) - DISCRETEEPOCHS(1);
+
+         %
+         % Create a type 8 segment.
+         %
+         <b>cspice_spkw08</b>( handle,                       ...
+                        BODY,                         ...
+                        CENTER,                       ...
+                        REF,                          ...
+                        DISCRETEEPOCHS(1),            ...
+                        DISCRETEEPOCHS(N_DISCRETE),   ...
+                        segid,                        ...
+                        POLY_DEG,                     ...
+                        DISCRETESTATES,               ...
+                        DISCRETEEPOCHS(1),            ...
+                        step )
+
+         %
+         % Close the SPK file.
+         %
+         <a href="cspice_spkcls.html">cspice_spkcls</a>( handle )
+
+
+      When this program is executed, no output is presented on
+      screen. After run completion, a new SPK type 8 exists in
+      the output directory.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine writes an SPK type 08 data segment to the open SPK
+   file according to the format described in the type 08 section of
+   the SPK Required Reading. The SPK file must have been opened with
+   write access.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   If any of the following exceptions occur, this routine will return
+   without creating a new segment.
+
+   1)  If `frame' is not a recognized name, the error
+       SPICE(INVALIDREFFRAME) is signaled by a routine in the call
+       tree of this routine.
+
+   2)  If the last non-blank character of `segid' occurs past index 40,
+       the error SPICE(SEGIDTOOLONG) is signaled by a routine in the
+       call tree of this routine.
+
+   3)  If `segid' contains any nonprintable characters, the error
+       SPICE(NONPRINTABLECHARS) is signaled by a routine in the call
+       tree of this routine.
+
+   4)  If `degree' is not at least 1 or is greater than MAXDEG, the
+       error SPICE(INVALIDDEGREE) is signaled by a routine in the
+       call tree of this routine.
+
+   5)  If the number of states `n' is not at least degree+1, the
+       error SPICE(TOOFEWSTATES) is signaled by a routine in the call
+       tree of this routine.
+
+   6)  If `first' is greater than `last', the error SPICE(BADDESCRTIMES)
+       is signaled by a routine in the call tree of this routine.
+
+   7)  If `step' is non-positive, the error SPICE(INVALIDSTEPSIZE) is
+       signaled by a routine in the call tree of this routine.
+
+   8)  If the start time of the first record exceeds the descriptor
+       begin time by more than a computed tolerance, or if the end
+       time of the last record precedes the descriptor end time by
+       more than a computed tolerance, the error SPICE(COVERAGEGAP)
+       is signaled by a routine in the call tree of this routine. See
+       the -Parameters section above for a description of the
+       tolerance.
+
+   9)  If any of the input arguments, `handle', `body', `center',
+       `frame', `first', `last', `segid', `degree', `states',
+       `begtim' or `step', is undefined, an error is signaled by the
+       Matlab error handling system.
+
+   10) If any of the input arguments, `handle', `body', `center',
+       `frame', `first', `last', `segid', `degree', `states',
+       `begtim' or `step', is not of the expected type, or it does
+       not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   A new type 8 SPK segment is written to the SPK file attached
+   to `handle'.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+   SPC.REQ
+   <a href="../req/spk.html">SPK.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Changed the input argument name &quot;epoch1&quot; to &quot;begtim&quot; for
+       consistency with other routines.
+
+       Edited the -Examples section to comply with NAIF standard. Added
+       example's problem statement.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section. Updated the Required Reading section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 23-MAY-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   write SPK type_8 ephemeris data segment
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:27 2021</pre>
+
+</body>
+</html>
+

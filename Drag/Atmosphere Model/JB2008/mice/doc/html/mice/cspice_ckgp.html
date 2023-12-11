@@ -1,0 +1,725 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckgp</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckgp</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKGP returns pointing (attitude) for a specified
+   object at a user specified spacecraft clock time.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      inst     NAIF ID for the instrument, spacecraft, or other structure for
+               which pointing is requested.
+
+               [1,1] = size(inst); int32 = class(inst)
+
+               The frame fixed to this object is called the &quot;instrument
+               frame&quot; or &quot;instrument-fixed&quot; frame.
+
+      sclkdp   encoded spacecraft clock time(s) for which pointing is
+               requested.
+
+               [1,n] = size(sclkdp); double = class(sclkdp)
+
+      tol      time tolerance given in ticks (+/-), the units of encoded
+               spacecraft clock time, about `sclkdp'.
+
+               [1,1] = size(tol); double = class(tol)
+
+               The C-matrix returned by <b>cspice_ckgp</b>, if any, is the one
+               whose time tag is closest to `sclkdp' and within `tol'
+               units of `sclkdp'.
+
+               In general, because using a non-zero tolerance affects
+               selection of the segment from which the data is obtained,
+               users are strongly discouraged from using a non-zero
+               tolerance when reading CKs with continuous data. Using
+               a non-zero tolerance should be reserved exclusively to
+               reading CKs with discrete data because in practice
+               obtaining data from such CKs using a zero tolerance is
+               often not possible due to time round off.
+
+      ref      naming the desired reference frame for the returned pointing.
+
+               [1,c1] = size(ref); char = class(ref)
+
+   the call:
+
+      [cmat, clkout, found] = <b>cspice_ckgp</b>( inst, sclkdp, tol, ref )
+
+   returns:
+
+      cmat     rotation matrix(ces) that transform components of a vector
+               expressed in the frame specified by `ref' to components
+               expressed in the frame tied to the instrument, spacecraft, or
+               other structure at time(s) `clkout'.
+
+               If [1,1] = size(sclkdp) then [3,3]   = size(cmat)
+               If [1,n] = size(sclkdp) then [3,3,n] = size(cmat)
+
+      clkout   the double precision scalar or double precision 1xN array of
+               encoded spacecraft clock time(s) associated with the returned
+               C-matrix `cmat' (this value may differ from the requested
+               time, but never by more than the input tolerance `tol').
+
+               [1,n] = size(clkout); double = class(clkout)
+
+      found    the flag(s) indicating if the requested pointing is found.
+
+               [1,n] = size(found); logical = class(found)
+
+               `cmat', `clkout' and `found' return with the same
+               vectorization measure (N) as `sclkdp'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) The following example program uses ckgp_c to get C-matrices for a
+      set of images whose SCLK counts (un-encoded character string
+      versions) are contained in the array `sclkch'.
+
+      If available, the program will get the corrected pointing values.
+
+      For each C-matrix, a unit pointing vector is constructed and
+      printed.
+
+      Use the CK kernel below to load the CASSINI image navigated
+      spacecraft pointing and orientation data.
+
+         04153_04182ca_ISS.bc
+
+
+      Use the SCLK kernel below to load the CASSINI spacecraft clock
+      time correlation data required for the conversion between
+      spacecraft clock string representation and double precision
+      encoding of spacecraft clock counts.
+
+         cas00071.tsc
+
+
+      Example code begins here.
+
+
+      function ckgp_ex1()
+         %
+         % Load the CK pointing file.
+         %
+         CK     = '04153_04182ca_ISS.bc';
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( CK )
+
+         %
+         % Need to load a CASSINI `sclk' kernel to convert from
+         % clock string to ticks.  Although not required for
+         % the CASSINI spacecraft clock, most modern spacecraft
+         % clocks require a leapseconds kernel to be loaded in
+         % addition to a `sclk' kernel.
+         %
+         SCLK   = 'cas00071.tsc';
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( SCLK )
+
+         %
+         % The code for the CASSINI spacecraft clock is -82
+         %
+         SC     =  -82;
+
+         %
+         % The code for CASSINI spacecraft reference frame
+         % is -82000.
+         %
+         INST =  -82000;
+
+         %
+         % Spacecraft clock times for successive CASSINI
+         % navigation images always differ by more than 1.0 seconds.
+         % This is an acceptable tolerance, and must be
+         % converted to &quot;ticks&quot; (units of encoded `sclk') for
+         % input to <b>cspice_ckgp</b>.
+         %
+         TOL  = '1.0';
+
+         %
+         % The reference frame we want is J2000.
+         %
+         REF  = 'J2000';
+
+         %
+         % The CASSINI ISS camera boresight
+         % in the spacecraft frame is
+         % (0.0005760, -0.99999982, -0.0001710).
+         %
+         BORE   = [ 0.0005760; -0.99999982; -0.0001710];
+         NPICS  = 2;
+
+         %
+         % Two CASSINI clock strings of interest.
+         %
+         SCLKCH =  strvcat( '1465644281.0', '1465644351.0' );
+
+         %
+         % Convert tolerance from CASSINI formatted character string
+         % SCLK to ticks, which are units of encoded SCLK.
+         %
+         toltik = <a href="cspice_sctiks.html">cspice_sctiks</a>( SC, TOL );
+
+         %
+         % <b>cspice_ckgp</b> requires encoded spacecraft clock time.
+         %
+         sclkdp = <a href="cspice_scencd.html">cspice_scencd</a>( SC, SCLKCH );
+
+         %
+         % Retrieve the 'REF' reference frame to 'INST' reference frame
+         % transformation matrix at time sclkdp with a tolerance
+         % 'toltik'.
+         %
+         %   [INST] = [cmat][ref]
+         %
+         [cmat, clkout, found] = <b>cspice_ckgp</b>( INST, sclkdp, toltik, REF );
+
+         for n=1:2
+
+            if( found(n) )
+
+               %
+               % Transform the 'BORE' vector from 'INST' reference frame to
+               % 'REF' frame.
+               %                T
+               %  [ref] = [cmat] [INST]
+               %
+               vinert = cmat(:,:,n)' * BORE;
+               [clkch] = <a href="cspice_scdecd.html">cspice_scdecd</a>( SC, clkout(n) );
+
+               fprintf( 'Requested SCLK time : %s\n', SCLKCH(n,:) );
+               fprintf( '   CASSINI SCLK time: %s\n', clkch       );
+               fprintf( ['   CASSINI ISS boresight:', ...
+                          '%10.7f %10.7f %10.7f\n' ], vinert         );
+               disp( ' ' )
+
+            else
+
+               fprintf( 'At SCLK time       : %s pointing not found', ...
+                                                         SCLKCH(n,:) );
+               disp( ' ' )
+
+            end
+
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Requested SCLK time : 1465644281.0
+         CASSINI SCLK time: 1/1465644281.171
+         CASSINI ISS boresight: 0.9376789  0.3444125  0.0462419
+
+      Requested SCLK time : 1465644351.0
+         CASSINI SCLK time: 1/1465644351.071
+         CASSINI ISS boresight: 0.9376657  0.3444504  0.0462266
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   How the tolerance argument is used
+   ==================================
+
+
+   Reading a type 1 CK segment (discrete pointing instances)
+   ---------------------------------------------------------
+
+   In the diagram below
+
+      - &quot;0&quot; is used to represent discrete pointing instances
+        (quaternions and associated time tags).
+
+      - &quot;( )&quot; are used to represent the end points of the time
+        interval covered by a segment in a CK file.
+
+      - sclkdp is the time at which you requested pointing.
+        The location of `sclkdp' relative to the time tags of the
+        pointing instances is indicated by the &quot;+&quot; sign.
+
+      - tol is the time tolerance specified in the pointing
+        request. The square brackets &quot;[ ]&quot; represent the
+        endpoints of the time interval
+
+           sclkdp-tol : sclkdp+tol
+
+      - The quaternions occurring in the segment need not be
+        evenly spaced in time.
+
+
+   Case 1: pointing is available
+   ------------------------------
+
+                            sclkdp
+                                 \   tol
+                                  | /
+                                  |/\
+   Your request                [--+--]
+                               .  .  .
+   Segment      (0-----0--0--0--0--0--0---0--0------------0--0--0--0)
+                                   ^
+                                   |
+                       <b>cspice_ckgp</b> returns this instance.
+
+
+   Case 2: pointing is not available
+   ----------------------------------
+
+                                                 sclkdp
+                                                    \   tol
+                                                     | /
+                                                     |/\
+   Your request                                   [--+--]
+                                                  .  .  .
+   Segment      (0-----0--0--0--0--0--0---0--0--0---------0--0--0--0)
+
+
+                       <b>cspice_ckgp</b> returns no pointing; the output
+                       `found' flag is set to False.
+
+
+
+   Reading a type 2, 3, 4, or 5 CK segment (continuous pointing)
+   -------------------------------------------------------------
+
+   In the diagrams below
+
+      - &quot;==&quot; is used to represent periods of continuous pointing.
+
+      - &quot;--&quot; is used to represent gaps in the pointing coverage.
+
+      - &quot;( )&quot; are used to represent the end points of the time
+        interval covered by a segment in a CK file.
+
+      - sclkdp is the time at which you requested pointing.
+        The location of sclkdp relative to the time tags of the
+        pointing instances is indicated by the &quot;+&quot; sign.
+
+      - tol is the time tolerance specified in the pointing
+        request. The square brackets &quot;[ ]&quot; represent the
+        endpoints of the time interval
+
+           sclkdp-tol : sclkdp+tol
+
+      - The quaternions occurring in the periods of continuous
+        pointing need not be evenly spaced in time.
+
+
+   Case 1: pointing is available at the request time
+   --------------------------------------------------
+
+                           sclkdp
+                                 \   tol
+                                  | /
+                                  |/\
+   Your request                [--+--]
+                               .  .  .
+                               .  .  .
+                               .  .  .
+   Segment            (==---===========---=======----------===--)
+                                  ^
+                                  |
+
+                 The request time lies within an interval where
+                 continuous pointing is available. <b>cspice_ckgp</b> returns
+                 pointing at the requested epoch.
+
+
+   Case 2: pointing is available &quot;near&quot; the request time
+   ------------------------------------------------------
+
+                                  sclkdp
+                                        \   tol
+                                         | /
+                                         |/\
+   Your request                       [--+--]
+                                      .  .  .
+   Segment            (==---===========----=======---------===--)
+                                           ^
+                                           |
+
+                 The request time lies in a gap: an interval where
+                 continuous pointing is *not* available. <b>cspice_ckgp</b>
+                 returns pointing for the epoch closest to the
+                 request time sclkdp.
+
+
+   Case 3: pointing is not available
+   ----------------------------------
+
+                                               sclkdp
+                                                     \   tol
+                                                      | /
+                                                      |/\
+   Your request                                    [--+--]
+                                                   .  .  .
+   Segment            (==---===========----=======---------===--)
+
+                       <b>cspice_ckgp</b> returns no pointing; the output
+                       found flag is set to False.
+
+
+
+   Tolerance and segment priority
+   ==============================
+
+   <b>cspice_ckgp</b> searches through loaded C-kernels to satisfy a pointing
+   request. Last-loaded files are searched first. Individual files
+   are searched in backwards order, so that between competing
+   segments (segments containing data for the same object, for
+   overlapping time ranges), the one closest to the end of the file
+   has highest priority.
+
+   The search ends when a segment is found that can provide pointing
+   for the specified instrument at a time falling within the
+   specified tolerance on either side of the request time. Within
+   that segment, the instance closest to the input time is located
+   and returned.
+
+   The following four cases illustrate this search procedure.
+   Segments A and B are in the same file, with segment A located
+   further towards the end of the file than segment B. Both segments
+   A and B contain discrete pointing data, indicated by the number
+   0.
+
+
+   Case 1: Pointing is available in the first segment searched.
+            Because segment A has the highest priority and can
+            satisfy the request, segment B is not searched.
+
+
+                                sclkdp
+                                      \  tol
+                                       | /
+                                       |/\
+   Your request                     [--+--]
+                                    .  .  .
+   Segment A          (0-----------------0--------0--0-----0)
+                                         ^
+                                         |
+                                         |
+                             <b>cspice_ckgp</b> returns this instance
+
+   Segment B     (0--0--0--0--0--0--0--0--0--0--0--0--0--0--0--0--0)
+
+
+
+   Case 2: Pointing is not available in the first segment searched.
+            Because segment A cannot satisfy the request, segment B
+            is searched.
+
+
+                           sclkdp
+                                \   tol
+                                 | /
+                                 |/\
+   Your request               [--+--]
+                              .  .  .
+   Segment A          (0-----------------0--------0--0-----0)
+                              .  .  .
+   Segment B     (0--0--0--0--0--0--0--0--0--0--0--0--0--0--0--0--0)
+                                 ^
+                                 |
+                     <b>cspice_ckgp</b> returns this instance
+
+
+   Segments that contain continuous pointing data are searched in
+   the same manner as segments containing discrete pointing data.
+   For request times that fall within the bounds of continuous
+   intervals, <b>cspice_ckgp</b> will return pointing at the request time. When
+   the request time does not fall within an interval, then a time at
+   an endpoint of an interval may be returned if it is the closest
+   time in the segment to the user request time and is also within
+   the tolerance.
+
+   In the following examples, segment A is located further towards
+   the end of the file than segment C. Segment A contains discrete
+   pointing data and segment C contains continuous data, indicated
+   by the &quot;=&quot; character.
+
+
+   Case 3: Pointing is not available in the first segment searched.
+            Because segment A cannot satisfy the request, segment C
+            is searched.
+
+                           sclkdp
+                                 \   tol
+                                  | /
+                                  |/\
+   Your request                [--+--]
+                               .  .  .
+                               .  .  .
+   Segment A          (0-----------------0--------0--0-----0)
+                               .  .  .
+                               .  .  .
+   Segment C          (---=============-----====--------==--)
+                                  ^
+                                  |
+                                  |
+                       <b>cspice_ckgp</b> returns this instance
+
+
+   In the next case, assume that the order of segments A and C in the
+   file is reversed: A is now closer to the front, so data from
+   segment C are considered first.
+
+
+   Case 4: Pointing is available in the first segment searched.
+            Because segment C has the highest priority and can
+            satisfy the request, segment A is not searched.
+
+                                           sclkdp
+                                          /
+                                         |  tol
+                                         | /
+                                         |/\
+   Your request                       [--+--]
+                                      .  .  .
+                                      .  .  .
+   Segment C          (---=============-----====--------==--)
+                                           ^
+                                           |
+                              <b>cspice_ckgp</b> returns this instance
+
+   Segment A          (0-----------------0--------0--0-----0)
+                                         ^
+                                         |
+                                   &quot;Best&quot; answer
+
+
+   The next case illustrates an unfortunate side effect of using
+   a non-zero tolerance when reading multi-segment CKs with
+   continuous data. In all cases when the look-up interval
+   formed using tolerance overlaps a segment boundary and
+   the request time falls within the coverage of the lower
+   priority segment, the data at the end of the higher priority
+   segment will be picked instead of the data from the lower
+   priority segment.
+
+
+   Case 5: Pointing is available in the first segment searched.
+            Because segment C has the highest priority and can
+            satisfy the request, segment A is not searched.
+
+                                           sclkdp
+                                          /
+                                         |  tol
+                                         | /
+                                         |/\
+   Your request                       [--+--]
+                                      .  .  .
+                                      .  .  .
+   Segment C                                (===============)
+                                            ^
+                                            |
+                              <b>cspice_ckgp</b> returns this instance
+
+   Segment A          (=====================)
+                                         ^
+                                         |
+                                   &quot;Best&quot; answer
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If a C-kernel file has not been loaded using <a href="cspice_furnsh.html">cspice_furnsh</a> prior to
+       a call to this routine, an error is signaled by a routine in
+       the call tree of this routine.
+
+   2)  If `tol' is negative, found is set to false.
+
+   3)  If `ref' is not a supported reference frame, an error is
+       signaled by a routine in the call tree of this routine and
+       `found' is set to false.
+
+   4)  If any of the input arguments, `inst', `sclkdp', `tol' or
+       `ref', is undefined, an error is signaled by the Matlab error
+       handling system.
+
+   5)  If any of the input arguments, `inst', `sclkdp', `tol' or
+       `ref', is not of the expected type, or it does not have the
+       expected dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   <b>cspice_ckgp</b> searches through files loaded by <a href="cspice_furnsh.html">cspice_furnsh</a> to locate a
+   segment that can satisfy the request for pointing for instrument `inst'
+   at time `sclkdp'. You must load a C-kernel file using <a href="cspice_furnsh.html">cspice_furnsh</a> prior
+   to calling this routine.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/sclk.html">SCLK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   B.V. Semenov        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.3.0, 26-NOV-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Updated the code,
+       input times and kernel set to work with PDS archived CASSINI data.
+       Added <a href="cspice_kclear.html">cspice_kclear</a> call to code example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.2.0, 11-JUN-2013 (EDW) (SCK)
+
+       -I/O descriptions edits to conform to Mice documentation format.
+
+       &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+   -Mice Version 1.1.1, 03-JUN-2010 (BVS)
+
+       Edits to header. Added warning regarding non-zero tolerance.
+
+   -Mice Version 1.1.0, 23-FEB-2009 (EDW)
+
+       Added zzmice_str call on input 'ref' to convert string cells to
+       character arrays if 'ref' has type string cells. Added proper
+       markers for usage string variable types.
+
+   -Mice Version 1.0.0, 22-NOV-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   get CK pointing
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

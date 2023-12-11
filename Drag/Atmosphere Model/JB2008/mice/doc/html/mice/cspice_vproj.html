@@ -1,0 +1,286 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_vproj</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_vproj</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_VPROJ computes the projection of one 3-dimensional vector onto
+   another 3-dimensional vector.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a        double precision, 3-dimensional vector(s).
+
+               [3,n] = size(a); double = class(a)
+
+               This vector is to be projected onto the vector `b'.
+
+      b        double precision, 3-dimensional vector(s).
+
+               [3,n] = size(b); double = class(b)
+
+               This vector is the vector which receives the projection.
+
+               An implicit assumption exists that `a' and `b' are specified
+               in the same reference frame. If this is not the case, the
+               numerical result has no meaning.
+
+   the call:
+
+      [p] = <b>cspice_vproj</b>( a, b )
+
+   returns:
+
+      p        the double precision, 3-dimensional vector(s) containing the
+               projection of `a' onto `b'.
+
+               [3,n] = size(p); double = class(p)
+
+               (`p' is necessarily parallel to `b'.) If `b' is the zero
+               vector then `p' will be returned as the zero vector.
+
+               `p' returns with the same vectorization measure, N, as
+               `a' and `b'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Define two sets of vectors and compute the projection of
+      each vector of the first set on the corresponding vector of
+      the second set.
+
+      Example code begins here.
+
+
+      function vproj_ex1()
+
+         %
+         % Define two vector sets.
+         %
+         a = [ [ 6, 6, 6]', ...
+               [ 6, 6, 6]', ...
+               [ 6, 6, 0]', ...
+               [ 6, 0, 0]' ];
+
+         b = [ [ 2, 0, 0]', ...
+               [-3, 0, 0]', ...
+               [ 0, 7, 0]', ...
+               [ 0, 0, 9]' ];
+
+         %
+         % Calculate the projection.
+         %
+         p = <b>cspice_vproj</b>( a, b );
+
+         for i=1:4
+            fprintf( 'Vector A  : %5.1f %5.1f %5.1f\n', ...
+                             a(1,i), a(2,i), a(3,i) )
+            fprintf( 'Vector B  : %5.1f %5.1f %5.1f\n', ...
+                             b(1,i), b(2,i), b(3,i) )
+            fprintf( 'Projection: %5.1f %5.1f %5.1f\n\n', ...
+                             p(1,i), p(2,i), p(3,i) )
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Vector A  :   6.0   6.0   6.0
+      Vector B  :   2.0   0.0   0.0
+      Projection:   6.0   0.0   0.0
+
+      Vector A  :   6.0   6.0   6.0
+      Vector B  :  -3.0   0.0   0.0
+      Projection:   6.0  -0.0  -0.0
+
+      Vector A  :   6.0   6.0   0.0
+      Vector B  :   0.0   7.0   0.0
+      Projection:   0.0   6.0   0.0
+
+      Vector A  :   6.0   0.0   0.0
+      Vector B  :   0.0   0.0   9.0
+      Projection:   0.0   0.0   0.0
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Given any vectors `a' and `b', there is a unique decomposition of `a' as
+   a sum v + p such that `v', the dot product of `v' and `b', is zero, and
+   the dot product of `p' with `b' is equal the product of the lengths of
+   `p' and `b'. `p' is called the projection of `a' onto `b'. It can be
+   expressed mathematically as
+
+      dot(a,b)
+      -------- * b
+      dot(b,b)
+
+   (This is not necessarily the prescription used to compute the
+   projection. It is intended only for descriptive purposes.)
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If any of the input arguments, `a' or `b', is undefined, an
+       error is signaled by the Matlab error handling system.
+
+   2)  If any of the input arguments, `a' or `b', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+   3)  If the input vectorizable arguments `a' and `b' do not have
+       the same measure of vectorization (N), an error is signaled by
+       the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  G. Thomas and R. Finney, &quot;Calculus and Analytic Geometry,&quot;
+        7th Edition, Addison Wesley, 1988.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 01-NOV-2021 (EDW) (JDR)
+
+       Changed output argument name &quot;vproj&quot; to &quot;p&quot;.
+
+       Edited the header to comply with NAIF standard. Added
+       example's problem statement and reformatted example's output.
+
+       Added -Parameters, -Particulars, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 12-MAR-2012 (EDW) (SCK)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   3-vector projection
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

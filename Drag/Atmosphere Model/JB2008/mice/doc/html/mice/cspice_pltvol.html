@@ -1,0 +1,335 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pltvol</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pltvol</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PLTVOL computes the volume of a three-dimensional region bounded by
+   a collection of triangular plates.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      vrtces   an array containing the plate model's vertices.
+
+               [3,nv] = size(vrtces); double = class(vrtces)
+
+               Elements
+
+                  vrtces(1,i)
+                  vrtces(2,i)
+                  vrtces(3,i)
+
+               are, respectively, the X, Y, and Z components of
+               the ith vertex, where `i' ranges from 1 to nv.
+
+               This routine doesn't associate units with the
+               vertices.
+
+      plates   an array containing 3-tuples of integers
+               representing the model's plates. The elements of
+               `plates' are vertex indices. The vertex indices are
+               1-based: vertices have indices ranging from 1 to
+               nv.
+
+               [3,np] = size(plates); int32 = class(plates)
+
+               The elements
+
+                  plates(1,i)
+                  plates(2,i)
+                  plates(3,i)
+
+               are, respectively, the indices of the vertices
+               comprising the ith plate.
+
+               Note that the order of the vertices of a plate is
+               significant: the vertices must be ordered in the
+               positive (counterclockwise) sense with respect to
+               the outward normal direction associated with the
+               plate. In other words, if v1, v2, v3 are the
+               vertices of a plate, then
+
+                 ( v2 - v1 )  x  ( v3 - v2 )
+
+               points in the outward normal direction. Here
+               &quot;x&quot; denotes the vector cross product operator.
+
+   the call:
+
+      [pltvol] = <b>cspice_pltvol</b>( vrtces, plates )
+
+   returns:
+
+      pltvol   the volume of the spatial region bounded
+               by the plates.
+
+               [1,1] = size(pltvol); double = class(pltvol)
+
+               If the components of the vertex array have distance unit L,
+               then the output volume has units
+
+                   3
+                  L
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Compute the volume of the pyramid defined by the four
+      triangular plates whose vertices are the 3-element
+      subsets of the set of vectors:
+
+         ( 0, 0, 0 )
+         ( 1, 0, 0 )
+         ( 0, 1, 0 )
+         ( 0, 0, 1 )
+
+
+      Example code begins here.
+
+
+      function pltvol_ex1()
+
+         %
+         % Let the notation
+         %
+         %    &lt; A, B &gt;
+         %
+         % denote the dot product of vectors A and B.
+         %
+         % The plates defined below lie in the following planes,
+         % respectively:
+         %
+         %    Plate 1:    { P :  &lt; P, (-1,  0,  0) &gt; = 0 }
+         %    Plate 2:    { P :  &lt; P, ( 0, -1,  0) &gt; = 0 }
+         %    Plate 3:    { P :  &lt; P, ( 0,  0, -1) &gt; = 0 }
+         %    Plate 4:    { P :  &lt; P, ( 1,  1,  1) &gt; = 1 }
+         %
+         vrtces =[  [ 0.0, 0.0, 0.0 ]', ...
+                    [ 1.0, 0.0, 0.0 ]', ...
+                    [ 0.0, 1.0, 0.0 ]', ...
+                    [ 0.0, 0.0, 1.0 ]'  ];
+
+         plates =[ [ 1, 4, 3 ]', ...
+                   [ 1, 2, 4 ]', ...
+                   [ 1, 3, 2 ]', ...
+                   [ 2, 3, 4 ]'  ];
+
+           vol = <b>cspice_pltvol</b>( vrtces, plates );
+
+           fprintf ( 'Expected volume  =      1/6\n'       )
+           fprintf ( 'Computed volume  =   %24.17e\n', vol )
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, the output was:
+
+
+      Expected volume  =      1/6
+      Computed volume  =    1.66666666666666657e-01
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine computes the volume of a spatial region bounded by
+   a set of triangular plates. If the plate set does not actually
+   form the boundary of a spatial region, the result of this routine
+   is invalid.
+
+   Examples:
+
+      Valid inputs
+      ------------
+      Tetrahedron
+      Box
+      Tiled ellipsoid
+      Two disjoint boxes
+
+      Invalid inputs
+      --------------
+      Single plate
+      Tiled ellipsoid with one plate removed
+      Two boxes with intersection having positive volume
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  The input plate model must define a spatial region with
+       a boundary. This routine does not check the inputs to
+       verify this condition. See the -Restrictions section below.
+
+   2)  If the number of vertices is less than 4, the error
+       SPICE(TOOFEWVERTICES) is signaled by a routine in the call
+       tree of this routine.
+
+   3)  If the number of plates is less than 4, the error
+       SPICE(TOOFEWPLATES) is signaled by a routine in the call tree
+       of this routine.
+
+   4)  If any plate contains a vertex index outside of the range
+
+          [1, nv]
+
+       where `nv' is the number of vertices, the error
+       SPICE(INDEXOUTOFRANGE) is signaled by a routine in the call
+       tree of this routine.
+
+   5)  If any of the input arguments, `vrtces' or `plates', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   6)  If any of the input arguments, `vrtces' or `plates', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  The plate collection must describe a surface and enclose a
+       volume such that the divergence theorem (see [1]) is
+       applicable.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/dsk.html">DSK.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  T. Apostol, &quot;Calculus, Vol. II,&quot; John Wiley &amp; Sons, 1969.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 07-AUG-2020 (EDW) (JDR)
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections. Fixed
+       minor typos in header.
+
+       Edited the header to comply with NAIF standard.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 16-MAR-2016 (EDW) (NJB)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   compute plate model volume
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

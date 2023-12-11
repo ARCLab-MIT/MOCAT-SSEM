@@ -1,0 +1,410 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pxform</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pxform</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PXFORM returns the matrix that transforms position
+   vectors from one specified frame to another at a specified epoch.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      from     the name of a reference frame in which a position vector is
+               known.
+
+               [1,c1] = size(from); char = class(from)
+
+                  or
+
+               [1,1] = size(from); cell = class(from)
+
+      to       the name of a reference frame in which it is desired to
+               represent a position vector.
+
+               [1,c2] = size(to); char = class(to)
+
+                  or
+
+               [1,1] = size(to); cell = class(to)
+
+      et       the epoch(s) in ephemeris seconds past the epoch of J2000
+               (TDB) at which the position transformation matrix `rotate'
+               should be evaluated.
+
+               [1,n] = size(et); double = class(et)
+
+   the call:
+
+      [rotate] = <b>cspice_pxform</b>( from, to, et )
+
+   returns:
+
+      rotate   the matri(x|ces) that transforms position vectors from the
+               reference frame `from' to the frame `to' at epoch `et'.
+
+               If [1,1] = size(et) then [3,3]   = size(rotate)
+               If [1,n] = size(et) then [3,3,n] = size(rotate)
+                                         double = class(rotate)
+
+               If (x, y, z) is a position relative to the frame `from'
+               then the vector ( x', y', z') is the same position relative
+               to the frame `to' at epoch `et'. Here the vector (x', y', z')
+               is defined by the equation:
+
+                  .-   -.     .-        -.   .-  -.
+                  | x'  |     |          |   | x  |
+                  | y'  |  =  |  rotate  |   | y  |
+                  | z'  |     |          |   | z  |
+                  `-   -'     `-        -'   `-  -'
+
+               `rotate' returns with the same vectorization measure, N,
+               as `et'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Output the right ascension and declination of the earth's pole
+      in the J2000 frame approximately every month for the time
+      interval January 1, 1990 to January 1, 1991 (UTC).
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: pxform_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'naif0009.tls'
+                                'pck00009.tpc' )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function pxform_ex1()
+
+         %
+         % Load kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'pxform_ex1.tm' )
+
+         %
+         % Define the time bounds for the time interval,
+         % 20 years, convert to ephemeris time J2000.
+         %
+         utc_bounds = strvcat( '1 Jan 1990', '1 Jan 1991' );
+         et_bounds  = <a href="cspice_str2et.html">cspice_str2et</a>( utc_bounds );
+
+         %
+         % Step in units of a month.
+         %
+         step = (et_bounds(2) - et_bounds(1) ) / 12.;
+
+         %
+         % Create an array of 12 ephemeris times ending at
+         % ~et_bound(2) in intervals of 'step'.
+         %
+         et = [1:12]*step + et_bounds(1);
+
+         %
+         % Set the conversion constant &quot;radians to degrees.&quot;
+         %
+         r2d = <a href="cspice_dpr.html">cspice_dpr</a>;
+
+         %
+         % Convert the 12-vector of 'et' to an array of corresponding
+         % transformation matrices (dimensions (3,3,12) ).
+         %
+         mat = <b>cspice_pxform</b>( 'IAU_EARTH', 'J2000', et );
+
+         %
+         % Extract the pole vector from the transformation matrix,
+         % convert to RA and DEC expressed in degrees.
+         %
+
+         %
+         % The last column in each matrix is the pole vector (z = (0,0,1))
+         % of the earth in IAU expressed in J2000.
+         %
+         % Recall, MATLAB uses 1 based indexing, so (:,3,:) represents.
+         % the third column of the matrices.
+         %
+         pole = mat(:,3,:);
+
+         %
+         % 'pole' ready for use in <a href="cspice_radrec.html">cspice_radrec</a>.
+         %
+         [radius, ra, dec] = <a href="cspice_recrad.html">cspice_recrad</a>( pole );
+
+         %
+         % Output the ephemeris time and the corresponding
+         % angular values (in degrees). 'ra' and 'dec' return
+         % as double precision 12-vectors.
+         %
+         ra  = ra  * r2d;
+         dec = dec * r2d;
+
+         %
+         % Create an array of values for output.
+         %
+         output = [  et; ra; dec ];
+
+         fprintf( '%24.8f %16.8f %16.8f\n', output );
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in MATLAB due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+           -312947942.73273718     180.06356619      89.94476386
+           -310319942.64940447     180.06303239      89.94522771
+           -307691942.56607175     180.06249859      89.94569156
+           -305063942.48273909     180.06196478      89.94615541
+           -302435942.39940637     180.06143098      89.94661925
+           -299807942.31607366     180.06089718      89.94708310
+           -297179942.23274094     180.06036338      89.94754695
+           -294551942.14940822     180.05982958      89.94801080
+           -291923942.06607556     180.05929578      89.94847465
+           -289295941.98274285     180.05876198      89.94893850
+           -286667941.89941013     180.05822818      89.94940235
+           -284039941.81607741     180.05769438      89.94986620
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine provides the user level interface to computing
+   position transformations from one reference frame to another.
+
+   Note that the reference frames may be inertial or non-inertial.
+   However, the user must take care that sufficient SPICE kernel
+   information is loaded to provide a complete position
+   transformation path from the `from' frame to the `to' frame.
+
+   A common type of reference frame transformation is one from one
+   time-dependent frame to another, where the orientations of the
+   frames are computed at different epochs. For example, a remote
+   sensing application may compute the transformation from a target
+   body-fixed frame, with its orientation evaluated at the epoch of
+   photon emission, to a spacecraft instrument frame, with its
+   orientation evaluated at the epoch of photon reception. The
+   Mice routine <a href="cspice_pxfrm2.html">cspice_pxfrm2</a> computes this type of frame
+   transformation.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If sufficient information has not been supplied via loaded
+       SPICE kernels to compute the transformation between the
+       two frames, an error is signaled by a routine
+       in the call tree of this routine.
+
+   2)  If either frame `from' or `to' is not recognized, the error
+       SPICE(UNKNOWNFRAME) is signaled by a routine in the call tree
+       of this routine.
+
+   3)  If any of the input arguments, `from', `to' or `et', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   4)  If any of the input arguments, `from', `to' or `et', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 24-AUG-2021 (EDW) (JDR) (NJB)
+
+       Edited the header to comply with NAIF standard. Reduced
+       the time interval and ephemeris epochs used as input in code
+       example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+       Updated -I/O to extend &quot;rotate&quot; description and -Particulars
+       to mention <a href="cspice_pxfrm2.html">cspice_pxfrm2</a>.
+
+   -Mice Version 1.0.2, 05-FEB-2015 (EDW)
+
+       Minor edits to -I/O header to match corresponding header
+       in <a href="cspice_sxform.html">cspice_sxform</a>.
+
+   -Mice Version 1.0.1, 09-NOV-2012 (EDW) (SCK)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 22-NOV-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Find a position transformation matrix
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

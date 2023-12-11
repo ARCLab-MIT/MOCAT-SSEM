@@ -1,0 +1,323 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_chbval</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_chbval</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CHBVAL returns the value of a polynomial evaluated at the input
+   `x' using the coefficients for the Chebyshev expansion of the polynomial.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      cp       an array of coefficients a polynomial with respect to the
+               Chebyshev basis.
+
+               [1,1] = size(cp); double = class(cp)
+
+               The polynomial to be evaluated is assumed to be of the
+               form:
+
+                  cp(degp+1)*T(degp,s) + cp(degp)*T(degp-1,s) + ...
+
+                                       + cp(2)*T(1,s) + cp(1)*T(0,s)
+
+               where T(i,s) is the i'th Chebyshev polynomial
+               evaluated at a number `s' whose double precision
+               value lies between -1 and 1. The value of `s' is
+               computed from the input variables x2s(1), x2s(2)
+               and `x'.
+
+      degp     the degree of the Chebyshev polynomial to be evaluated.
+
+               [1,1] = size(degp); int32 = class(degp)
+
+      x2s      an array of two parameters.
+
+               [2,1] = size(x2s); double = class(x2s)
+
+               These parameters are used to transform the domain of the
+               input variable `x' into the standard domain of the Chebyshev
+               polynomial. x2s(1) should be a reference point in the domain
+               of `x'; x2s(2) should be the radius by which points are
+               allowed to deviate from the reference point and while
+               remaining within the domain of `x'. The value of `x' is
+               transformed into the value `s' given by
+
+                  s = ( x - x2s(1) ) / x2s(2)
+
+               Typically x2s(1) is the midpoint of the interval over
+               which `x' is allowed to vary and x2s(2) is the radius of
+               the interval.
+
+               The main reason for doing this is that a Chebyshev
+               expansion is usually fit to data over a span
+               from A to B where A and B are not -1 and 1
+               respectively. Thus to get the &quot;best fit&quot; the
+               data was transformed to the interval [-1,1] and
+               coefficients generated. These coefficients are
+               not rescaled to the interval of the data so that
+               the numerical &quot;robustness&quot; of the Chebyshev fit will
+               not be lost. Consequently, when the &quot;best fitting&quot;
+               polynomial needs to be evaluated at an intermediate
+               point, the point of evaluation must be transformed
+               in the same way that the generating points were
+               transformed.
+
+      x        the value for which the polynomial is to be evaluated.
+
+               [1,1] = size(x); double = class(x)
+
+   the call:
+
+      [p] = <b>cspice_chbval</b>( cp, degp, x2s, x )
+
+   returns:
+
+      p        the value of the polynomial to be evaluated.
+
+               [1,1] = size(p); double = class(p)
+
+               It is given by
+
+                  cp(degp+1)*T(degp,s) + cp(degp)*T(degp-1,s) + ...
+
+                                       + cp(2)*T(1,s) + cp(1)*T(0,s)
+
+               where T(i,s) is the i'th Chebyshev polynomial
+               evaluated  at a number s = ( x - x2s(1) )/x2s(2)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Depending upon the user's needs, there are 3 routines
+      available for evaluating Chebyshev polynomials.
+
+         <b>cspice_chbval</b>   for evaluating a Chebyshev polynomial when no
+                         derivatives are desired.
+
+         <a href="cspice_chbint.html">cspice_chbint</a>   for evaluating a Chebyshev polynomial and its
+                         first derivative.
+
+         <a href="cspice_chbder.html">cspice_chbder</a>   for evaluating a Chebyshev polynomial and a user
+                         or application dependent number of derivatives.
+
+      Of these 3 the one most commonly employed by SPICE software
+      is <a href="cspice_chbint.html">cspice_chbint</a> as it is used to interpolate ephemeris state
+      vectors; this requires the evaluation of a polynomial
+      and its derivative. When no derivatives are desired one
+      should use <b>cspice_chbval</b>, or when more than one or an unknown
+      number of derivatives are desired one should use <a href="cspice_chbder.html">cspice_chbder</a>.
+
+      The code example below illustrates how this routine might
+      be used to obtain points for plotting a polynomial.
+
+
+      Example code begins here.
+
+
+      function chbval_ex1()
+
+         %
+         % Set the coefficients of the polynomial and its
+         % transformation parameters
+         %
+         cp   = [1.0,3.0,0.5,1.0,0.5,-1.0,1.0]';
+         x2s  = [0.5,3.0]';
+
+         degp = 6;
+         x    = 1.0;
+
+         [p]  = <b>cspice_chbval</b>( cp, degp, x2s, x );
+
+         fprintf( 'Value of the polynomial at x=1:  %9.6f\n', p )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Value of the polynomial at x=1:  -0.340878
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine computes the value `p' given by
+
+      cp(degp+1)*T(degp,s) + cp(degp)*T(degp-1,s) + ...
+
+                           + cp(2)*T(1,s) + cp(1)*T(0,s)
+
+   where
+
+      s  =  ( x - x2s(1) ) / x2s(2)
+
+   and
+
+      T(i,s) is the i'th Chebyshev polynomial of the first kind
+      evaluated at `s'.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If any of the input arguments, `cp', `degp', `x2s' or `x', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   2)  If any of the input arguments, `cp', `degp', `x2s' or `x', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+   3)  If the input degree is negative, an error is signaled by the
+       Mice interface.
+
+   4)  If the number of elements in `cp' is less than degp+1, an error
+       is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  One needs to be careful that the value
+
+          (x-x2s(1)) / x2s(2)
+
+       lies between -1 and 1. Otherwise, the routine may fail
+       spectacularly (for example with a floating point overflow).
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling,
+        &quot;Numerical Recipes -- The Art of Scientific Computing,&quot;
+        chapter 5.4, &quot;Recurrence Relations and Clenshaw's Recurrence
+        Formula,&quot; p 161, Cambridge University Press, 1986.
+
+   [2]  T. Rivlin, &quot;The Chebyshev Polynomials,&quot; Wisley, 1974.
+
+   [3]  R. Weast and S. Selby, &quot;CRC Handbook of Tables for
+        Mathematics,&quot; 4th Edition, CRC Press, 1976.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 19-JUL-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   value of a chebyshev polynomial expansion
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:22 2021</pre>
+
+</body>
+</html>
+

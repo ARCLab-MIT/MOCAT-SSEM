@@ -1,0 +1,365 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_el2cgv</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_el2cgv</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EL2CGV converts a SPICE ellipse to a center vector and two
+   generating vectors. The selected generating vectors are semi-axes of
+   the ellipse.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      ellips   a structure describing a SPICE ellipse. The structure has
+               the fields:
+
+               [1,1] = size(ellips); struct = class(ellips)
+
+               The structure has the fields:
+
+               center:    [3,1] = size(center); double = class(center)
+               semiMinor: [3,1] = size(semiMinor); double = class(semiMinor)
+               semiMajor: [3,1] = size(semiMajor); double = class(semiMajor)
+
+   the call:
+
+      [center, smajor, sminor] = <b>cspice_el2cgv</b>( ellips )
+
+   returns:
+
+      center   the location of the center of `ellips'.
+
+               [3,1] = size(center); double = class(center)
+
+      smajor   the semi-major axis of `ellips'.
+
+               [3,1] = size(smajor); double = class(smajor)
+
+      sminor   double precision 3x1 array defining the semi-minor
+               axis of `ellips'
+
+               [3,1] = size(sminor); double = class(sminor)
+
+               This ellipse is the set of points
+
+                  center + cos(theta) smajor + sin(theta) sminor
+
+               where theta ranges over the interval (-pi, pi].
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given a SPICE ellipse structure, extract its components into
+      independent variables.
+
+      Example code begins here.
+
+
+      function el2cgv_ex1()
+
+         %
+         % Define two arbitrary, linearly independent vectors
+         % and a center vector.
+         %
+         vec1    = [ 1;  1; 1 ];
+         vec2    = [ 1; -1; 1 ];
+         center  = [ 1;  1; 1 ];
+
+         %
+         % Calculate the semi-major and semi-minor axes of
+         % the ellipse as generated by `vec1' and `vec2'.
+         %
+         % The <a href="cspice_saelgv.html">cspice_saelgv</a> call determines the orthogonal axes
+         % of an ellipse from two generating vectors.
+         %
+         [smajor, sminor ] = <a href="cspice_saelgv.html">cspice_saelgv</a>( vec1, vec2 );
+
+         %
+         % Load the generating vectors into an ellipse structure.
+         %
+         [ellips] = <a href="cspice_cgv2el.html">cspice_cgv2el</a>( center, smajor, sminor );
+         fprintf( 'Input SPICE ellipse:\n' );
+         fprintf( '  Semi-minor axis: %10.6f %10.6f %10.6f\n',   ...
+                                              ellips.semiMinor);
+         fprintf( '  Semi-major axis: %10.6f %10.6f %10.6f\n',   ...
+                                              ellips.semiMajor);
+         fprintf( '  Center         : %10.6f %10.6f %10.6f\n\n',   ...
+                                              ellips.center   );
+
+         %
+         % Extract the SPICE ellipse structure components into
+         % variable.
+         %
+         [cent, smaj, smin] = <b>cspice_el2cgv</b>( ellips );
+         fprintf( 'Ellipse components:\n' );
+         fprintf( '  Semi-minor axis: %10.6f %10.6f %10.6f\n',   ...
+                                                          smin);
+         fprintf( '  Semi-major axis: %10.6f %10.6f %10.6f\n',   ...
+                                                          smaj);
+         fprintf( '  Center         : %10.6f %10.6f %10.6f\n\n',   ...
+                                                          cent );
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Input SPICE ellipse:
+        Semi-minor axis:   0.000000   1.414214   0.000000
+        Semi-major axis:   1.414214  -0.000000   1.414214
+        Center         :   1.000000   1.000000   1.000000
+
+      Ellipse components:
+        Semi-minor axis:   0.000000   1.414214   0.000000
+        Semi-major axis:   1.414214  -0.000000   1.414214
+        Center         :   1.000000   1.000000   1.000000
+
+
+   2) Given an ellipsoid and a viewpoint exterior to it, calculate
+      the limb ellipse as seen from that viewpoint.
+
+      Example code begins here.
+
+
+      function el2cgv_ex2()
+
+         %
+         % Define an ellipsoid
+         %
+         a = sqrt(2.);
+         b = 2.*sqrt(2.);
+         c = sqrt(2.);
+
+         %
+         % Locate a viewpoint exterior to the ellipsoid.
+         %
+         viewpt = [ 2., 0.,  0. ]';
+
+         %
+         % Calculate the limb ellipse as seen by from the viewpoint.
+         %
+         limb = <a href="cspice_edlimb.html">cspice_edlimb</a>( a, b, c, viewpt );
+
+         %
+         % Output the structure components.
+         %
+         fprintf( 'Semiminor axis: %10.3f %10.3f %10.3f\n', ...
+                  limb.semiMinor                          );
+         fprintf( 'Semimajor axis: %10.3f %10.3f %10.3f\n', ...
+                  limb.semiMajor                          );
+         fprintf( 'Center:         %10.3f %10.3f %10.3f\n', ...
+                  limb.center                             );
+
+         %
+         % Check against expected values:
+         %
+         % Semiminor: 0., 0., -1.
+         % Semimajor: 0., 2.,  0.
+         % Center   : 1., 0.,  0.
+         %
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Semiminor axis:      0.000      0.000     -1.000
+      Semimajor axis:      0.000      2.000     -0.000
+      Center:              1.000      0.000      0.000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   SPICE ellipses serve to simplify calling sequences and reduce
+   the chance for error in declaring and describing argument lists
+   involving ellipses.
+
+   The set of ellipse conversion routines is
+
+      <a href="cspice_cgv2el.html">cspice_cgv2el</a>( Center and generating vectors to ellipse )
+      <b>cspice_el2cgv</b>( Ellipse to center and generating vectors )
+
+   A word about the output of this routine: the semi-major axis of
+   an ellipse is a vector of largest possible magnitude in the set
+
+      cos(theta) vec1  +  sin(theta) vec2,
+
+   where theta is in the interval (-pi, pi]. There are two such
+   vectors; they are additive inverses of each other. The semi-minor
+   axis is an analogous vector of smallest possible magnitude. The
+   semi-major and semi-minor axes are orthogonal to each other. If
+   smajor and sminor are choices of semi-major and semi-minor axes,
+   then the input ellipse can also be represented as the set of
+   points
+
+      center + cos(theta) smajor + sin(theta) sminor
+
+   where theta ranges over the interval (-pi, pi].
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input argument `ellips' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   2)  If the input argument `ellips' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Changed input argument name &quot;ellipse&quot; to &quot;ellips&quot;.
+
+       Edited the header to comply with NAIF standard. Fixed typos in
+       -I/O section. Added example's problem statement, reformatted
+       example's output and added second example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 09-NOV-2012 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 30-DEC-2008 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   ellipse to center and generating vectors
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

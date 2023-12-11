@@ -1,0 +1,328 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_boddef</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_boddef</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_BODDEF defines a body name/ID code pair for later translation via
+   <a href="cspice_bodn2c.html">cspice_bodn2c</a> or <a href="cspice_bodc2n.html">cspice_bodc2n</a>.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name     the string defining the name to associate to the ID value
+               `code'.
+
+               [1,c1] = size(name); char = class(name)
+
+                  or
+
+               [1,1] = size(name); cell = class(name)
+
+               The case and positions of blanks in a name are significant.
+               <a href="cspice_bodc2n.html">cspice_bodc2n</a> returns the same string (case and space) most
+               recently mapped to a code. When `name' consists of more than
+               one word, the words require separation by at least one blank.
+
+               The kernel sub-system stores `name' as described in the
+               <b>cspice_boddef</b> call, but creates an equivalence class based on
+               `name' for comparisons in <a href="cspice_bodn2c.html">cspice_bodn2c</a>. This class ignores
+               leading and trailing whitespace, compresses interior
+               whitespace to a single space, and ignores character case.
+
+               The following strings belong to the same equivalence
+               class:
+
+                  'JUPITER BARYCENTER'
+                  'Jupiter Barycenter'
+                  'JUPITER BARYCENTER   '
+                  'JUPITER    BARYCENTER'
+                  '   JUPITER BARYCENTER'
+
+               However, 'JUPITERBARYCENTER' is distinct from the names above.
+
+      code     the NAIF ID code corresponding to `name'.
+
+               [1,1] = size(code); int32 = class(code)
+
+   the call:
+
+      <b>cspice_boddef</b>( name, code )
+
+   performs the mapping assignment
+
+         `name' -&gt; `code'
+
+      and
+
+         `code' -&gt; 'name'
+
+      The `code' -&gt; `name' assignment supersedes any other mapping for
+      `code'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Map a non-existent code and name to each other, and test that
+      the translation is found when searching by code or by name.
+
+      Example code begins here.
+
+
+      function boddef_ex1()
+         %
+         % Map a non-existent code and name to each other.
+         %
+         <b>cspice_boddef</b>( 'spud',  -69 );
+
+         %
+         % Retrieve the code for name 'spud'.
+         %
+         [ code, found ] = <a href="cspice_bodn2c.html">cspice_bodn2c</a>( 'spud' );
+
+         %
+         % Check we found a mapping.
+         %
+         if ( found )
+            txt = sprintf( 'ID for spud : %i', code );
+         else
+            txt = 'Found no mapping for spud.';
+         end
+
+         disp( txt )
+
+         %
+         % Retrieve the name for ID -69.
+         %
+         [ name, found ] = <a href="cspice_bodc2n.html">cspice_bodc2n</a>( -69 );
+
+         %
+         % Check we found a mapping.
+         %
+         if (found)
+            txt = sprintf( 'Name for -69: %s', name );
+         else
+            txt = 'Found no mapping for -69.';
+         end
+
+         disp( txt )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      ID for spud : -69
+      Name for -69: spud
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   <b>cspice_boddef</b> is one of five related subroutines,
+
+      <a href="cspice_bods2c.html">cspice_bods2c</a>      Body string to code
+      <a href="cspice_bodc2s.html">cspice_bodc2s</a>      Body code to string
+      <a href="cspice_bodn2c.html">cspice_bodn2c</a>      Body name to code
+      <a href="cspice_bodc2n.html">cspice_bodc2n</a>      Body code to name
+      <b>cspice_boddef</b>      Body name/code definition
+
+   <a href="cspice_bods2c.html">cspice_bods2c</a>, <a href="cspice_bodc2s.html">cspice_bodc2s</a>, <a href="cspice_bodn2c.html">cspice_bodn2c</a>, and <a href="cspice_bodc2n.html">cspice_bodc2n</a>
+   perform translations between body names and their corresponding
+   integer ID codes which are used in SPICE files and routines.
+
+   <a href="cspice_bods2c.html">cspice_bods2c</a> is a slightly more general version of <a href="cspice_bodn2c.html">cspice_bodn2c</a>:
+   support for strings containing ID codes in string format enables a caller
+   to identify a body using a string, even when no name is associated with
+   that body.
+
+   <a href="cspice_bodc2s.html">cspice_bodc2s</a> is a general version of <a href="cspice_bodc2n.html">cspice_bodc2n</a>; the routine returns
+   either the name assigned in the body ID to name mapping or a string
+   representation of the `code' value if no mapping exists.
+
+   <b>cspice_boddef</b> assigns a body name to ID mapping. The mapping has
+   priority in name-to-ID and ID-to-name translations.
+
+   Refer to naif_ids.req for the list of name/code associations built
+   into SPICE, and for details concerning adding new name/code
+   associations at run time by loading text kernels.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If improper inputs are supplied, or if there is insufficient
+       room to store the requested addition, an error is signaled by
+       a routine in the call tree of this routine.
+
+   2)  If the length of `name' exceeds the maximum allowed length for a
+       body name, the name stored in the kernel pool will be
+       truncated on the right.
+
+   3)  If a name-code definition inserted into this routine seems to
+       have no effect, it is possible that the contents of the
+       definition are masked by the higher precedence kernel pool
+       assignments. See the -Particulars section of this document
+       for more information.
+
+   4)  If any of the input arguments, `name' or `code', is undefined,
+       an error is signaled by the Matlab error handling system.
+
+   5)  If any of the input arguments, `name' or `code', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added -Parameters,
+       -Exceptions, -Files, -Restrictions, -Literature_References and
+       -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.2, 28-OCT-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.1, 16-MAY-2009 (EDW)
+
+       Edit to -Particulars section to document the <a href="cspice_bodc2s.html">cspice_bodc2s</a> routine.
+       Extended argument descriptions in the -I/O section.
+
+   -Mice Version 1.0.0, 22-NOV-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   body name/id code definition
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:22 2021</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,469 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dskv02</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dskv02</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DSKV02 fetches vertices from a type 2 DSK segment.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the handle of a DSK file containing a type 2
+               segment from which data are to be fetched.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      dladsc   the DLA descriptor associated with the segment
+               from which data are to be fetched.
+
+               [SPICE_DLA_DSCSIZ,1]  = size(dladsc)
+                               int32 = class(dladsc)
+
+      start    the ID of the first vertex to be fetched from the
+               segment designated by `handle' and `dladsc'.
+
+               [1,1] = size(start); int32 = class(start)
+
+               The ID of a vertex is its ordinal position within the
+               segment. Vertex IDs range from 1 to NV, where NV is
+               the number of vertices in the segment.
+
+               Note that Fortran-style 1-based indexing is used for
+               vertex IDs because these IDs must be consistent with
+               the IDs used in DSK files, across all languages
+               supported by SPICE.
+
+      room     the maximum number of vertices to return.
+
+               [1,1] = size(room); int32 = class(room)
+
+   the call:
+
+      [vrtces] = <b>cspice_dskv02</b>( handle, dladsc, start, room )
+
+   returns:
+
+      vrtces   the array representing a contiguous set of `n' vertices,
+               where `n' is between 1 and `room' inclusive.
+
+               [3,n] = size(vrtces); double = class(vrtces)
+
+               The returned vertices are arranged in order of increasing
+               vertex ID. The IDs of the returned vertices range from
+
+                  start
+
+               to
+
+                  start + n - 1
+
+               Each vertex is a 3-vector. The correspondence of elements
+               of `vrtces' with the elements of the set of vertices
+               contained in the segment is:
+
+                  vrtces[1,1]      segment_vertex_set(1, start)
+                  vrtces[2,1]      segment_vertex_set(2, start)
+                  vrtces[3,1]      segment_vertex_set(3, start)
+                    ...             ...
+                  vrtces[1,n]      segment_vertex_set(1, start+n-1)
+                  vrtces[2,n]      segment_vertex_set(2, start+n-1)
+                  vrtces[3,n]      segment_vertex_set(3, start+n-1)
+
+               The vertices are expressed in the body-fixed
+               reference frame of the segment designated by `handle'
+               and `dladsc'. The center of this frame is the origin
+               of the Cartesian coordinate system in which the
+               vertices are expressed. Note that the frame center
+               need not coincide with the central body of the
+               segment. Units are km.
+
+               If an error occurs on the call, `vrtces' is
+               undefined.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   See the parameter definitions file
+
+      MiceDLA.m
+
+   for declarations of DLA descriptor sizes and documentation of the
+   contents of DLA descriptors.
+
+   See the parameter definitions file
+
+      MiceDSK.m
+
+   for declarations of DSK descriptor sizes and documentation of the
+   contents of DSK descriptors.
+
+   See the parameter definitions file
+
+      MiceDSK.m
+
+   for declarations of DSK data type 2 (plate model) parameters.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Look up all the vertices associated with each plate
+      of the model contained in a specified type 2 segment. For each
+      of the first 5 plates, display the plate's vertices and normal
+      vector.
+
+      For this example, we'll show the context of this look-up:
+      opening the DSK file for read access, traversing a trivial,
+      one-segment list to obtain the segment of interest.
+
+      Example code begins here.
+
+
+      function dskv02_ex1
+
+         %
+         % Declare DSK Mice parameters for use in API calls.
+         %
+         MiceUser
+
+         %
+         % Constants
+         %
+         PBUFSIZ = 10000;
+
+         %
+         % Initial values
+         %
+         verts = zeros(3,3);
+
+         %
+         % Prompt for the name of the file to search.
+         %
+         dsk = input( 'Name of DSK file &gt; ', 's' );
+
+         %
+         % Open the DSK file for read access.
+         % We use the DAS-level interface for
+         % this function.
+         %
+         handle  = <a href="cspice_dasopr.html">cspice_dasopr</a>( dsk );
+
+         %
+         % Begin a forward search through the
+         % kernel, treating the file as a DLA.
+         % In this example, it's a very short
+         % search.
+         %
+         [dladsc, found] = <a href="cspice_dlabfs.html">cspice_dlabfs</a>( handle );
+
+         if ~found
+
+            %
+            % We arrive here only if the kernel
+            % contains no segments. This is
+            % unexpected, but we're prepared for it.
+            %
+            fprintf( 'No segments found in DSK file %s\n', dsk )
+            return
+
+         end
+
+         %
+         % If we made it this far, `dladsc' is the
+         % DLA descriptor of the first segment.
+         %
+         % Get segment vertex and plate counts.
+         %
+         [nv, np] = <a href="cspice_dskz02.html">cspice_dskz02</a>( handle, dladsc );
+
+         fprintf( '\n' )
+         fprintf( 'Number of vertices:  %d\n', nv )
+         fprintf( 'Number of plates:    %d\n', np )
+
+         %
+         %  Display the vertices of each of the first 5 plates.
+         %
+         remain = min(np, 5);
+         start  = 1;
+
+         while (remain &gt; 0 )
+
+            %
+            % `nread' is the number of plates we&quot;ll read on this
+            % loop pass. Set `nread' to the minimum of PBUFSIZ
+            % and `remain'.
+            %
+            nread = min(PBUFSIZ, remain);
+
+            plates = <a href="cspice_dskp02.html">cspice_dskp02</a>( handle, dladsc, start, nread );
+
+            for  i = 1:(nread)
+
+               plix = start + i - 1;
+
+               %
+               %  Read the vertices of the current plate.
+               %
+               for  j = 1:3
+
+                  verts(j,:) = <b>cspice_dskv02</b>( handle, dladsc,             ...
+                                              plates(j,i), 1 );
+
+               end
+
+
+               %
+               % Display the vertices of the ith plate:
+               %
+               fprintf( '\n' )
+               fprintf( 'Plate number: %d\n', i )
+
+               for  j = 1:3
+                  fprintf( '   Vertex %d: ( %16.8e %16.8e %16.8e )\n',    ...
+                                                         j, verts(j,:) )
+               end
+
+               %
+               % Display the normal vector of the current plate:
+               %
+               normal = <a href="cspice_dskn02.html">cspice_dskn02</a>( handle, dladsc, plix );
+               fprintf( '   Normal:   ( %16.8e %16.8e %16.8e )\n', normal )
+
+            end
+
+            start  = start  + nread;
+            remain = remain - nread;
+
+         end
+
+         %
+         % Close file.
+         %
+         <a href="cspice_dascls.html">cspice_dascls</a>( handle )
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, using the DSK file named phobos512.bds, the output
+      was:
+
+
+      Name of DSK file &gt; phobos512.bds
+
+      Number of vertices:  1579014
+      Number of plates:    3145728
+
+      Plate number: 1
+         Vertex 1: (  -6.77444000e+00   6.26815000e+00   6.01149000e+00 )
+         Vertex 2: (  -6.76238000e+00   6.25728000e+00   6.02556000e+00 )
+         Vertex 3: (  -6.75710000e+00   6.27754000e+00   6.02096000e+00 )
+         Normal:   (  -5.81973770e-01   3.21285613e-01   7.47048918e-01 )
+
+      Plate number: 2
+         Vertex 1: (  -6.77444000e+00   6.26815000e+00   6.01149000e+00 )
+         Vertex 2: (  -6.77973000e+00   6.24790000e+00   6.01610000e+00 )
+         Vertex 3: (  -6.76238000e+00   6.25728000e+00   6.02556000e+00 )
+         Normal:   (  -5.81456950e-01   3.21988310e-01   7.47148809e-01 )
+
+      Plate number: 3
+         Vertex 1: (  -6.77973000e+00   6.24790000e+00   6.01610000e+00 )
+         Vertex 2: (  -6.76768000e+00   6.23701000e+00   6.03019000e+00 )
+         Vertex 3: (  -6.76238000e+00   6.25728000e+00   6.02556000e+00 )
+         Normal:   (  -5.81597068e-01   3.22641957e-01   7.46757671e-01 )
+
+      Plate number: 4
+         Vertex 1: (  -6.77973000e+00   6.24790000e+00   6.01610000e+00 )
+         Vertex 2: (  -6.78499000e+00   6.22762000e+00   6.02070000e+00 )
+         Vertex 3: (  -6.76768000e+00   6.23701000e+00   6.03019000e+00 )
+         Normal:   (  -5.83129010e-01   3.20560704e-01   7.46459237e-01 )
+
+      Plate number: 5
+         Vertex 1: (  -6.78499000e+00   6.22762000e+00   6.02070000e+00 )
+         Vertex 2: (  -6.77299000e+00   6.21674000e+00   6.03482000e+00 )
+         Vertex 3: (  -6.76768000e+00   6.23701000e+00   6.03019000e+00 )
+         Normal:   (  -5.83664048e-01   3.23060196e-01   7.44962005e-01 )
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine enables SPICE-based user applications to rapidly
+   fetch the vertex data from a specified type 2 DSK segment. Using
+   a large output array generally improves efficiency.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input handle is invalid, an error is signaled by a
+       routine in the call tree of this routine.
+
+   2)  If a file read error occurs, the error is signaled by a
+       routine in the call tree of this routine.
+
+   3)  If the input DLA descriptor is invalid, the effect of this
+       routine is undefined. The error *may* be diagnosed by
+       routines in the call tree of this routine, but there are no
+       guarantees.
+
+   4)  If `room' is non-positive, the error SPICE(VALUEOUTOFRANGE)
+       is signaled by a routine in the call tree of this routine.
+
+   5)  If `start' is less than 1 or greater than the number of
+       vertices in the segment, the error SPICE(INDEXOUTOFRANGE) is
+       signaled by a routine in the call tree of this routine.
+
+   6)  If any of the input arguments, `handle', `dladsc', `start' or
+       `room', is undefined, an error is signaled by the Matlab error
+       handling system.
+
+   7)  If any of the input arguments, `handle', `dladsc', `start' or
+       `room', is not of the expected type, or it does not have the
+       expected dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   See input argument `handle'.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/das.html">DAS.REQ</a>
+   <a href="../req/dsk.html">DSK.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   M. Liukis           (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 21-JUL-2020 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Updated
+       code example to prompt for the input DSK file and reduce the
+       number of plates whose vertices are shown on output.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 04-APR-2017 (NJB) (EDW) (ML)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   return specified vertices from type 2 DSK segment
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

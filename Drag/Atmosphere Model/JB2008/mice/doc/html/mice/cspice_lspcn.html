@@ -1,0 +1,433 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_lspcn</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_lspcn</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_LSPCN computes L_s, the planetocentric longitude of the sun,
+   as seen from a specified body.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      body     the name of the central body, typically a planet.
+
+               [1,c1] = size(body); char = class(body)
+
+                  or
+
+               [1,1] = size(body); cell = class(body)
+
+      et       the epoch(s) at which the longitude of the sun (L_s) is
+               to be computed. `et' is expressed as seconds past J2000
+               TDB (Barycentric Dynamical Time).
+
+               [1,n] = size(et); double = class(et)
+
+      abcorr   indicates the aberration corrections to be applied
+               when computing the longitude of the sun.
+
+               [1,c2] = size(abcorr); char = class(abcorr)
+
+                  or
+
+               [1,1] = size(abcorr); cell = class(abcorr)
+
+               `abcorr' may be any of the following.
+
+                  'NONE'     Apply no correction.
+
+                  'LT'       Correct the position of the sun,
+                             relative to the central body, for
+                             planetary (light time) aberration.
+
+                  'LT+S'     Correct the position of the sun,
+                             relative to the central body, for
+                             planetary and stellar aberrations.
+
+   the call:
+
+      [lspcn] = <b>cspice_lspcn</b>( body, et, abcorr )
+
+   returns:
+
+      lspcn    the planetocentric longitude(s) of the sun, often called
+               &quot;L_s,&quot; for the specified body at the specified time.
+
+               [1,n] = size(et); double = class(et)
+
+               The longitude is defined in a right-handed frame whose
+               basis vectors are defined as follows:
+
+               - The positive Z direction is given by the instantaneous
+                 angular velocity vector of the orbit of the body about
+                 the sun.
+
+               - The positive X direction is that of the cross product
+                 of the instantaneous north spin axis of the body with
+                 the positive Z direction.
+
+               - The positive Y direction is Z x X.
+
+               Units are radians; the range is 0 to 2*pi. Longitudes are
+               positive to the east.
+
+               `lspcn' returns with the same vectorization measure (N) as
+               `et'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Compute the planetocentric longitude of the Sun as seen from
+      the Earth on 21 March 2006. The result should be approximately
+      0, as the date corresponds to the Spring equinox.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: lspcn_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00010.tpc                  Planet orientation and
+                                          radii
+            naif0011.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00010.tpc',
+                                'naif0011.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function lspcn_ex1()
+
+         %
+         % Load kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'lspcn_ex1.tm' )
+
+         et = <a href="cspice_str2et.html">cspice_str2et</a>('21 march 2006');
+         lspcn = <b>cspice_lspcn</b>( 'earth', et, 'none' ) * <a href="cspice_dpr.html">cspice_dpr</a>;
+         disp( lspcn )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+       0.23645
+
+
+   2) Compute the planetocentric longitude of the Sun as seen from
+      the Earth for a set of dates.
+
+      Use the meta-kernel from the first example load the required SPICE
+      kernels.
+
+      Example code begins here.
+
+
+      function lspcn_ex2()
+
+         %
+         % Load kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'lspcn_ex1.tm' )
+
+         et = <a href="cspice_str2et.html">cspice_str2et</a>('21 march 2005') + [0:1000000.:10000000.];
+         lspcn = <b>cspice_lspcn</b>( 'earth', et, 'none' ) * <a href="cspice_dpr.html">cspice_dpr</a>;
+
+         utcstr = <a href="cspice_et2utc.html">cspice_et2utc</a>(et, 'C', 0);
+
+
+         disp( '      UTC time           lspcn' )
+         disp( '--------------------   --------')
+         for i = 1:11
+            fprintf( '%s   %8.4f\n', utcstr(i,:), lspcn(i) )
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+            UTC time           lspcn
+      --------------------   --------
+      2005 MAR 21 00:00:00     0.4815
+      2005 APR 01 13:46:40    11.9353
+      2005 APR 13 03:33:20    23.3193
+      2005 APR 24 17:20:00    34.6294
+      2005 MAY 06 07:06:40    45.8611
+      2005 MAY 17 20:53:20    57.0476
+      2005 MAY 29 10:40:00    68.1626
+      2005 JUN 10 00:26:40    79.2509
+      2005 JUN 21 14:13:20    90.3058
+      2005 JUL 03 04:00:00   101.3366
+      2005 JUL 14 17:46:40   112.3833
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The direction of the vernal equinox for the central body is
+   determined from the instantaneous equatorial and orbital planes
+   of the central body. This equinox definition is specified in
+   reference [1]. The &quot;instantaneous orbital plane&quot; is interpreted
+   in this routine as the plane normal to the cross product of the
+   position and velocity of the central body relative to the sun.
+   The geometric state of the central body relative to the sun is
+   used for this normal vector computation. The &quot;instantaneous
+   equatorial plane&quot; is normal to the central body's north pole
+   at the requested epoch. The pole direction is determined from
+   rotational elements loaded via a PCK file.
+
+   The result returned by this routine will depend on the
+   ephemeris data and rotational elements used. The result may
+   differ from that given in any particular version of the
+   Astronomical Almanac, due to differences in these input data,
+   and due to differences in precision of the computations.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input body name cannot be translated to an ID code,
+       and if the name is not a string representation of an integer
+       (for example, '399'), the error SPICE(NOTRANSLATION) is
+       signaled by a routine in the call tree of this routine.
+
+   2)  If no SPK (ephemeris) file has been loaded prior to calling
+       this routine, or if the SPK data has insufficient coverage, an
+       error is signaled by a routine in the call tree of this
+       routine.
+
+   3)  If a PCK file containing rotational elements for the central
+       body has not been loaded prior to calling this routine, an
+       error is signaled by a routine in the call tree of this
+       routine.
+
+   4)  If the instantaneous angular velocity and spin axis of `body'
+       are parallel, an error is signaled by a
+       routine in the call tree of this routine.
+
+   5)  If any of the input arguments, `body', `et' or `abcorr', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   6)  If any of the input arguments, `body', `et' or `abcorr', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   Appropriate SPICE kernels must be loaded by the calling program
+   before this routine is called.
+
+   The following data are required:
+
+   -  An SPK file (or files) containing ephemeris data sufficient to
+      compute the geometric state of the central body relative to
+      the sun at `et' must be loaded before this routine is called. If
+      light time correction is used, data must be available that
+      enable computation of the state the sun relative to the solar
+      system barycenter at the light-time corrected epoch. If
+      stellar aberration correction is used, data must be available
+      that enable computation of the state the central body relative
+      to the solar system barycenter at `et'.
+
+   -  A PCK file containing rotational elements for the central body
+      must be loaded before this routine is called.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/abcorr.html">ABCORR.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  &quot;The Astronomical Almanac for the Year 2005,&quot; page L9,
+        United States Naval Observatory, U.S. Government Printing
+        Office, Washington, D.C., 2004.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 25-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       meta-kernel to example #1. Updated code examples to produce
+       formatted output and added a call to <a href="cspice_kclear.html">cspice_kclear</a>. Added the
+       problem statement to both examples.
+
+       Added -Parameters, -Particulars, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       square brackets to output argument in function declaration.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 10-NOV-2015 (EDW)
+
+       Script rewritten to call CSPICE interface.
+
+   -Mice Version 0.9.0, 23-OCT-2015 (EDW)
+
+       Pure Matlab script.
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   planetocentric longitude of sun
+   compute L_s
+   compute Ls
+   compute L_sub_s
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:25 2021</pre>
+
+</body>
+</html>
+

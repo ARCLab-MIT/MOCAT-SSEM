@@ -1,0 +1,315 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafgda</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafgda</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFGDA reads the double precision data bounded by two addresses
+   within a DAF.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   file handle referring to a DAF.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      baddr,
+      eaddr    initial and final addresses of a contiguous set of double
+               precision numbers within a DAF. Presumably, these make up
+               all or part of a particular array.
+
+               Note that DAF addresses begin at 1 as in the
+               FORTRAN version of the SPICE Toolkit.
+
+               [1,1] = size(baddr); int32 = class(baddr)
+               [1,1] = size(eaddr); int32 = class(eaddr)
+
+   the call:
+
+      data = <b>cspice_dafgda</b>( handle, baddr, eaddr )
+
+   returns:
+
+      data   are the double precision data contained between
+             the specified addresses within the specified file.
+
+             'data' has length = end - begin + 1.
+
+             [1,length] = size(data); double = class(data)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Open a type 8 SPK for read access, retrieve the data for
+      the first segment and identify the beginning and end addresses,
+      the number of data elements within, the size of the data array,
+      and print the first two records.
+
+      Use the SPK kernel below as input type 8 SPK file for the example.
+
+         mer1_ls_040128_iau2000_v1.bsp
+
+      Each segment contains only two records which provide the start
+      and end position for the MER-1 rover landing site in the IAU_MARS
+      frame. Since the landing site does not change over time, it is
+      expected that both records are equal.
+
+
+      Example code begins here.
+
+
+      function dafgda_ex1()
+
+         %
+         % Open the type 8 SPK for read access then read the
+         % data from the first segment.
+         %
+         handle = <a href="cspice_dafopr.html">cspice_dafopr</a>( 'mer1_ls_040128_iau2000_v1.bsp');
+
+         %
+         % Begin a forward search; find the first segment; read the
+         % segment summary.
+         %
+         <a href="cspice_dafbfs.html">cspice_dafbfs</a>( handle )
+         found    = <a href="cspice_daffna.html">cspice_daffna</a>;
+         [dc, ic] = <a href="cspice_dafgs.html">cspice_dafgs</a>( 2, 6 );
+
+         %
+         % Retrieve the data begin and end addresses.
+         %
+         baddr = ic(5);
+         eaddr = ic(6);
+
+         fprintf( 'Beginning address       : %d\n', baddr )
+         fprintf( 'Ending address          : %d\n', eaddr )
+         fprintf( 'Number of data elements : %d\n', eaddr - baddr + 1 )
+
+         %
+         % Extract all data bounded by the begin and end addresses.
+         %
+         data = <b>cspice_dafgda</b>( handle, baddr, eaddr );
+
+         %
+         % Check `data'. It should contain 2 * 6 + 4 elements.
+         %
+         fprintf( 'Size of data array      :(%d,%d)\n', size(data) )
+
+         %
+         % Check the data. Each set of 6 element records should possess the
+         % property:
+         %
+         %   record(6) = record(6)
+         %        i            i-1
+         %
+         fprintf( 'The first and second states stored in the segment:\n' );
+         fprintf( ' %9.3f ', data(1:6) )
+         fprintf('\n')
+
+         fprintf( ' %9.3f ', data(7:12) )
+         fprintf('\n')
+
+         %
+         % SAFELY close the file
+         %
+         <a href="cspice_dafcls.html">cspice_dafcls</a>(handle)
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Beginning address       : 897
+      Ending address          : 912
+      Number of data elements : 16
+      Size of data array      :(1,16)
+      The first and second states stored in the segment:
+        3376.422   -326.649   -115.392      0.000      0.000      0.000
+        3376.422   -326.649   -115.392      0.000      0.000      0.000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The principal reason that DAFs are so easy to use is that
+   the data in each DAF are considered to be one long contiguous
+   set of double precision numbers. You can grab data from anywhere
+   within a DAF without knowing (or caring) about the physical
+   records in which they are stored.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `baddr' is zero or negative, the error SPICE(DAFNEGADDR)
+       is signaled by a routine in the call tree of this routine.
+
+   2)  If baddr &gt; eaddr, the error SPICE(DAFBEGGTEND) is signaled by a
+       routine in the call tree of this routine.
+
+   3)  If `handle' is invalid, an error is signaled by a routine in the
+       call tree of this routine.
+
+   4)  If the range of addresses covered between `baddr' and `eaddr'
+       includes records that do not contain strictly double
+       precision data, then the values returned in `data' are
+       undefined. See the -Restrictions section below for details.
+
+   5)  If any of the input arguments, `handle', `baddr' or `eaddr',
+       is undefined, an error is signaled by the Matlab error
+       handling system.
+
+   6)  If any of the input arguments, `handle', `baddr' or `eaddr',
+       is not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  There are several types of records in a DAF. This routine
+       is only to be used to read double precision data bounded
+       between two DAF addresses. The range of addresses input
+       may not cross data and summary record boundaries.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 13-AUG-2021 (EDW) (JDR)
+
+       Edited -Examples section to comply with NAIF standard. Added
+       example's problem statement and a reference to required SPK file.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 17-JUL-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   read data from DAF address
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

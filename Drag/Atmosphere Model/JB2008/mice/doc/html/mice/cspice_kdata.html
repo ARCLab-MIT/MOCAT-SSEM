@@ -1,0 +1,430 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_kdata</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_kdata</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_KDATA returns data for the nth kernel that is among a list of
+   specified kernel types.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      which    the number of the kernel to fetch (matching the type
+               specified by `kind') from the list of kernels that have been
+               loaded through the routine <a href="cspice_furnsh.html">cspice_furnsh</a> but that have not
+               been unloaded through the routine <a href="cspice_unload.html">cspice_unload</a>.
+
+               [1,1] = size(which); int32 = class(which)
+
+               The range of `which' is 1 to `count', where `count' is the
+               number of kernels loaded via <a href="cspice_furnsh.html">cspice_furnsh</a> of type `kind'.
+               This count may be obtained by calling <a href="cspice_ktotal.html">cspice_ktotal</a>. See the
+               -Examples section for an illustrative example.
+
+      kind     a list of types of kernels to be considered when fetching
+               kernels from the list of loaded kernels.
+
+               [1,c1] = size(kind); char = class(kind)
+
+                  or
+
+               [1,1] = size(kind); cell = class(kind)
+
+               `kind' should consist of words from list of kernel types
+               given below.
+
+                  SPK  --- All SPK files are counted in the total.
+                  CK   --- All CK files are counted in the total.
+                  DSK  --- All DSK files are counted in the total.
+                  PCK  --- All binary PCK files are counted in the
+                           total.
+                  EK   --- All EK files are counted in the total.
+                  TEXT --- All text kernels that are not meta-text
+                           kernels are included in the total.
+                  META --- All meta-text kernels are counted in the
+                           total.
+                  ALL  --- Every type of kernel is counted in the
+                           total.
+
+               `kind' is case insensitive. If a word appears in `kind'
+               that is not one of those listed above, it is ignored.
+
+               When `kind' consists of multiple words, the words must
+               be separated by blanks. Examples of valid lists are the
+               strings
+
+                  'SPK CK TEXT'
+                  'SPK CK text'
+                  'PCK DSK'
+                  'CK'
+                  'ALL'
+
+               See the routine <a href="cspice_ktotal.html">cspice_ktotal</a> for examples of the use of
+               `kind'.
+
+   the call:
+
+      [file, filtyp, srcfil, handle, found] = <b>cspice_kdata</b>( which, kind )
+
+   returns:
+
+      file     the name of the file having index `which' in the sequence of
+               files of type `kind' that is currently loaded via
+               <a href="cspice_furnsh.html">cspice_furnsh</a>.
+
+               [1,c2] = size(file); char = class(file)
+
+               `file' will be empty if there is not such kernel loaded.
+
+      filtyp   the type of the kernel specified by `file'.
+
+               [1,c3] = size(filtyp); char = class(filtyp)
+
+               `file' will be empty if there is no file matching the
+               specification of `which' and `kind'.
+
+      srcfil   the name of the source file that was used to specify `file'
+               as one to load.
+
+               [1,c4] = size(srcfil); char = class(srcfil)
+
+               If `file' was loaded directly via a call to <a href="cspice_furnsh.html">cspice_furnsh</a>,
+               `srcfil' will be empty. If there is no file matching the
+               specification of `which' and `kind', `srcfil' will be empty.
+
+      handle   the handle attached to `file' if it is a binary kernel.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+               If `file' is a text kernel or meta-text kernel `handle'
+               will be zero. If there is no file matching the specification
+               of `which' and `kind', `handle' will be set to zero.
+
+      found    returned true if a `file' matching the specification of
+               `which' and `kind' exists.
+
+               [1,1] = size(found); logical = class(found)
+
+               If there is no such file, `found' will be set to false.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Load a meta-kernel with a PCK, an LSK and an SPK and loop over
+      the loaded kernels, outputting file information for each of
+      them.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: kdata_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00009.tpc',
+                                'naif0009.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function kdata_ex1()
+
+         %
+         % Load several kernel files.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'kdata_ex1.tm' )
+
+         %
+         % Count the number of loaded kernel files.
+         %
+         count = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'ALL' );
+
+         %
+         % Loop over the count, outputting file information as we loop.
+         % The loop tells us all files loaded via <a href="cspice_furnsh.html">cspice_furnsh</a>, their
+         % type, and how they were loaded.
+         %
+         for i = 1:count+1
+
+            [ file, type, srcfil, handle, found ] = ...
+                                             <b>cspice_kdata</b>( i, 'ALL');
+
+            if ( found )
+               fprintf( 'Index : %d\n',   i     );
+               fprintf( 'File  : %s\n',   file  );
+               fprintf( 'Type  : %s\n',   type  );
+               fprintf( 'Source: %s\n\n', srcfil);
+
+            else
+
+               fprintf( 'No kernel found with index: %d\n', i );
+
+            end
+
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Mice due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Index : 1
+      File  : kdata_ex1.tm
+      Type  : META
+      Source:
+
+      Index : 2
+      File  : de421.bsp
+      Type  : SPK
+      Source: kdata_ex1.tm
+
+      Index : 3
+      File  : pck00009.tpc
+      Type  : TEXT
+      Source: kdata_ex1.tm
+
+      Index : 4
+      File  : naif0009.tls
+      Type  : TEXT
+      Source: kdata_ex1.tm
+
+      No kernel found with index: 5
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine allows you to determine which kernels have been
+   loaded via <a href="cspice_furnsh.html">cspice_furnsh</a> and to obtain information sufficient to directly
+   query those files.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If a file is not loaded matching the specification of `which' and
+       `kind', `found' will be false, `file', `filtyp', and `srcfil' will be
+       empty and `handle' will be set to zero.
+
+   2)  If any of the input arguments, `which' or `kind', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `which' or `kind', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 2.1.0, 13-AUG-2021 (EDW) (JDR)
+
+       Changed output argument name &quot;source&quot; to &quot;srcfil&quot; for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard. Added example's
+       problem statement.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+       Updated -I/O description of input argument &quot;kind&quot;, to illustrate
+       use of multi-word lists. Added kernel.req and removed dsk.req to the
+       list of required readings.
+
+   -Mice Version 2.0.0, 20-JAN-2016 (EDW) (NJB)
+
+       Corrected &quot;Usage&quot; string to include 'found'.
+
+       Header update to expand argument descriptions and
+       reflect support for use of DSKs
+
+   -Mice Version 1.2.0, 12-MAR-2012 (EDW) (SCK)
+
+       &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+       -I/O descriptions edits to parallel the Icy version.
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+       Edits to Example section, proper description of &quot;standard.tm&quot;
+       meta kernel.
+
+   -Mice Version 1.0.1, 06-MAY-2009 (EDW)
+
+       Added mice.req reference to the Required Reading section.
+
+   -Mice Version 1.0.0, 30-MAR-2007 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Retrieve information on loaded SPICE kernels
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:25 2021</pre>
+
+</body>
+</html>
+

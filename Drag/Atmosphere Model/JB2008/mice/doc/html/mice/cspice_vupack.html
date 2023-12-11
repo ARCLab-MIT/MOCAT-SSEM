@@ -1,0 +1,292 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_vupack</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_vupack</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_VUPACK unpacks three scalar components from a vector.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      v        a double precision 3-dimensional vector.
+
+               [3,1] = size(v); double = class(v)
+
+   the call:
+
+      [x, y, z] = <b>cspice_vupack</b>( v )
+
+   returns:
+
+      x,
+      y,
+      z        the double precision scalar components of the vector `v'.
+
+               [1,1] = size(x); double = class(x)
+               [1,1] = size(y); double = class(y)
+               [1,1] = size(z); double = class(z)
+
+               The following equalities hold:
+
+                  x = v(1)
+                  y = v(2)
+                  z = v(3)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Suppose that you have an instrument kernel that provides,
+      within a single keyword, the three frequencies used by the
+      instrument, and that you want to use these frequencies
+      independently within your code.
+
+      The following code example demonstrates how to use <b>cspice_vupack</b>
+      to get these frequencies into independent scalar variables.
+
+      Use the kernel shown below, an IK defining the three
+      frequencies used by an instrument with NAIF ID -999001.
+
+
+         KPL/IK
+
+         File name: vupack_ex1.ti
+
+         The keyword below define the three frequencies used by a
+         hypothetical instrument (NAIF ID -999001). They correspond
+         to three filters: red, green and blue. Frequencies are
+         given in micrometers.
+
+         \begindata
+
+            INS-999001_FREQ_RGB   = (  0.65,  0.55, 0.475 )
+            INS-999001_FREQ_UNITS = ( 'MICROMETERS'       )
+
+         \begintext
+
+
+         End of IK
+
+
+      Example code begins here.
+
+
+      function vupack_ex1()
+
+         %
+         % Local parameters.
+         %
+         IKNAME = 'vupack_ex1.ti';
+         KEYWRD = 'INS-999001_FREQ_RGB';
+
+         %
+         % Load the instrument kernel.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( IKNAME );
+
+         %
+         % Get the frequency data from the kernel pool.
+         %
+         [ddata, found] = <a href="cspice_gdpool.html">cspice_gdpool</a>( KEYWRD, 1, 3 );
+
+         if ( found )
+
+            [red, green, blue] = <b>cspice_vupack</b>( ddata );
+            fprintf( 'Blue  (nm):  %5.2f\n', blue  * 1000.0 )
+            fprintf( 'Green (nm):  %5.2f\n', green * 1000.0 )
+            fprintf( 'Red   (nm):  %5.2f\n', red   * 1000.0 )
+
+         else
+
+            fprintf( 'No data found in the kernel pool for %s\n', KEYWRD )
+
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, the output was:
+
+
+      Blue  (nm):  475.00
+      Green (nm):  550.00
+      Red   (nm):  650.00
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Basically, this is just shorthand notation for the common
+   sequence
+
+      x = v(1)
+      y = v(2)
+      z = v(3)
+
+   The routine is useful largely for two reasons. First, it
+   reduces the chance that the programmer will make a &quot;cut and
+   paste&quot; mistake, like
+
+      x = v(1)
+      y = v(1)
+      z = v(1)
+
+   Second, it makes conversions between equivalent units simpler,
+   and clearer. For instance, the sequence
+
+      x = v(1) * <a href="cspice_rpd.html">cspice_rpd</a>()
+      y = v(2) * <a href="cspice_rpd.html">cspice_rpd</a>()
+      z = v(3) * <a href="cspice_rpd.html">cspice_rpd</a>()
+
+   can be replaced by the (nearly) equivalent sequence
+
+      v         = <a href="cspice_rpd.html">cspice_rpd</a>() * v;
+      [x, y, z] = <b>cspice_vupack</b>( v );
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input argument `v' is undefined, an error is signaled
+       by the Matlab error handling system.
+
+   2)  If the input argument `v' is not of the expected type, or it
+       does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 07-SEP-2020 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   unpack three scalar components from a vector
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,348 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_vprjpi</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_vprjpi</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_VPRJPI calculates the vector in a specified plane that
+   maps under orthogonal projection to a specified vector in
+   another plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      vin      an arbitrary 3-vector.
+
+               [3,1] = size(vin); double = class(vin)
+
+      projpl   a SPICE plane that represents the geometric plane containing
+               `vin'.
+
+               [1,1] = size(projpl); struct = class(projpl)
+
+               The structure has the fields:
+
+                 normal:   [3,1] = size(normal);   double = class(normal)
+                 constant: [1,1] = size(constant); double = class(constant)
+
+      invpl    a SPICE plane that represents the geometric plane containing
+               the inverse image of `vin' under orthogonal projection onto
+               `projpl'.
+
+               [1,1] = size(invpl); struct = class(invpl)
+
+               The structure has the fields:
+
+                 normal:   [3,1] = size(normal);   double = class(normal)
+                 constant: [1,1] = size(constant); double = class(constant)
+
+   the call:
+
+      [vout, found] = <b>cspice_vprjpi</b>( vin, projpl, invpl )
+
+   returns:
+
+      vout     inverse orthogonal projection of `vin'.
+
+               [3,1] = size(vout); double = class(vout)
+
+               This is the vector lying in the plane `invpl' whose orthogonal
+               projection onto the plane `projpl' is `vin'. `vout' is valid
+               only when `found' is true. Otherwise, `vout' is undefined.
+
+      found    flag(s) indicating whether the inverse orthogonal projection
+               of `vin' could be computed.
+
+               [1,1] = size(found); logical = class(found)
+
+               `found' is true if so, false otherwise.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Suppose
+
+         vin    =  ( 0.0, 1.0, 0.0 ),
+
+      and that `projpl', the SPICE plane that represents the geometric
+      plane containing `vin', the has normal vector
+
+         projn  =  ( 0.0, 0.0, 1.0 ).
+
+
+      Also, let's suppose that `invpl' has normal vector and constant
+
+         invn   =  ( 0.0, 2.0, 2.0 )
+         invc   =    4.0.
+
+      Then `vin' lies on the y-axis in the x-y plane, and we want to
+      find the vector `vout' lying in `invpl' such that the orthogonal
+      projection of `vout' the x-y plane is `vin'. Let the notation
+      &lt; a, b &gt; indicate the inner product of vectors a and b.
+      Since every point x in `invpl' satisfies the equation
+
+         &lt;  x,  (0.0, 2.0, 2.0)  &gt;  =  4.0,
+
+      we can verify by inspection that the vector
+
+         ( 0.0, 1.0, 1.0 )
+
+      is in `invpl' and differs from `vin' by a multiple of `projn'. So
+
+         ( 0.0, 1.0, 1.0 )
+
+      must be `vout'.
+
+      The following code example is used to find this result
+      using Mice.
+
+
+      Example code begins here.
+
+
+      function vprjpi_ex1()
+
+         %
+         % Define a vector in plane1...
+         %
+         vin = [ 0., 1., 0.]';
+
+         %
+         % Construct 2 planes. Define the normal vectors for both
+         % planes and constant for the inverse plane.
+         %
+         norm1 = [ 0., 0., 1.]';
+         norm2 = [ 0., 2., 2.]';
+         con2  = 4.0;
+
+         %
+         % Create the SPICE planes
+         %
+         plane1 = <a href="cspice_nvp2pl.html">cspice_nvp2pl</a>( norm1, vin  );
+         plane2 = <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>( norm2, con2 );
+
+         %
+         % Calculate the inverse projection to plane2.
+         %
+         [ vec_iproj, found] = <b>cspice_vprjpi</b>( vin, plane1, plane2);
+
+         if ( found )
+            disp( 'Found inverse vector:' )
+            fprintf('  %7.3f %7.3f %7.3f\n', vec_iproj )
+         else
+            disp( 'Could not find the inverse vector.' )
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Found inverse vector:
+          0.000   1.000   1.000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Projecting a vector orthogonally onto a plane can be thought of
+   as finding the closest vector in the plane to the original vector.
+   This &quot;closest vector&quot; always exists; it may be coincident with the
+   original vector. Inverting an orthogonal projection means finding
+   the vector in a specified plane whose orthogonal projection onto
+   a second specified plane is a specified vector. The vector whose
+   projection is the specified vector is the inverse projection of
+   the specified vector, also called the &quot;inverse image under
+   orthogonal projection&quot; of the specified vector. This routine
+   finds the inverse orthogonal projection of a vector onto a plane.
+
+   Related routines are <a href="cspice_vprjp.html">cspice_vprjp</a>, which projects a vector onto a plane
+   orthogonally, and <a href="cspice_vproj.html">cspice_vproj</a>, which projects a vector onto another
+   vector orthogonally.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the normal vector of either input plane does not have unit
+       length (allowing for round-off error), the error
+       SPICE(NONUNITNORMAL) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If the geometric planes defined by `projpl' and `invpl' are
+       orthogonal, or nearly so, the inverse orthogonal projection
+       of `vin' may be undefined or have magnitude too large to
+       represent with double precision numbers. In either such
+       case, `found' will be set to false.
+
+   3)  Even when `found' is true, `vout' may be a vector of extremely
+       large magnitude, perhaps so large that it is impractical to
+       compute with it. It's up to you to make sure that this
+       situation does not occur in your application of this routine.
+
+   4)  If any of the input arguments, `vin', `projpl' or `invpl', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   5)  If any of the input arguments, `vin', `projpl' or `invpl', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  It is recommended that the input planes be created by one of
+       the Mice routines
+
+          <a href="cspice_nvc2pl.html">cspice_nvc2pl</a> ( Normal vector and constant to plane )
+          <a href="cspice_nvp2pl.html">cspice_nvp2pl</a> ( Normal vector and point to plane    )
+          <a href="cspice_psv2pl.html">cspice_psv2pl</a> ( Point and spanning vectors to plane )
+
+       In any case each input plane must have a unit length normal
+       vector and a plane constant consistent with the normal
+       vector.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  G. Thomas and R. Finney, &quot;Calculus and Analytic Geometry,&quot;
+        7th Edition, Addison Wesley, 1988.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 25-AUG-2021 (EDW) (JDR)
+
+       Edited the -Examples section to comply with NAIF standard. Added
+       example's problem statement and modified code example to match
+       the input values used in the statement.
+
+       Added -Parameters, -Particulars, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 12-MAR-2012 (EDW) (SCK)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   vector projection onto plane
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

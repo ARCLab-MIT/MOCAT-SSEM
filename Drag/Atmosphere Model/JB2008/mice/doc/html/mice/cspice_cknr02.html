@@ -1,0 +1,410 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_cknr02</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_cknr02</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKNR02 returns the number of pointing records in a CK type 02
+   segment. The segment is identified by a CK file handle and segments
+   descriptor.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the handle of the binary CK file containing the segment.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+               The file should have been opened for read or write access,
+               by <a href="cspice_cklpf.html">cspice_cklpf</a>, <a href="cspice_dafopr.html">cspice_dafopr</a> or <a href="cspice_dafopw.html">cspice_dafopw</a>.
+
+      descr    the packed descriptor of a data type 2 CK segment.
+
+               [5,1] = size(descr); double = class(descr)
+
+   the call:
+
+      [nrec] = <b>cspice_cknr02</b>( handle, descr )
+
+   returns:
+
+      nrec     the number of pointing records in the type 2 segment
+               associated with `handle' and `descr'.
+
+               [1,1] = size(nrec); int32 = class(nrec)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) The following code example extracts the start and end SCLK
+      time, seconds per tick rate, platform's +Z axis direction,
+      and angular velocity vector for each pointing instance in
+      the first segment in a CK file that contains segments of data
+      type 2.
+
+      Use the CK kernel below, available in the Viking Orbiter PDS
+      archives, as input for the code example.
+
+         vo2_swu_ck2.bc
+
+      Example code begins here.
+
+
+      function cknr02_ex1()
+
+         %
+         % First load the file. (The file may also be opened by
+         % using <a href="cspice_cklpf.html">cspice_cklpf</a>).
+         %
+         [handle] = <a href="cspice_dafopr.html">cspice_dafopr</a>( 'vo2_swu_ck2.bc' );
+
+         %
+         % Begin forward search.  Find the first array.
+         %
+         <a href="cspice_dafbfs.html">cspice_dafbfs</a>( handle );
+         [found] = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+         %
+         % Get segment descriptor.
+         %
+         % Unpack the segment descriptor into its double precision
+         % and integer components.
+         %
+         [dcd, icd] = <a href="cspice_dafgs.html">cspice_dafgs</a>( 2,   6   );
+         [descr]    = <a href="cspice_dafps.html">cspice_dafps</a>( dcd, icd );
+
+         %
+         % The data type for a segment is located in the third
+         % integer component of the descriptor.
+         %
+         if ( icd(3) == 2 )
+
+            %
+            % How many records does this segment contain?
+            %
+            [nrec] = <b>cspice_cknr02</b>( handle, descr );
+
+            for i=1:nrec
+
+               %
+               % Get the ith record in the segment.
+               %
+               [record] = <a href="cspice_ckgr02.html">cspice_ckgr02</a>( handle, descr, i );
+
+               %
+               % Unpack `record' into the start and end time, rate in
+               % TDB seconds/tick, quaternion, and av.
+               %
+               sclks = record(1);
+               sclke = record(2);
+               sclkr = record(3);
+
+               quat  = record(4:7);
+               av    = record(8:10);
+
+               %
+               % The +Z axis direction is the third row of the
+               % C-matrix.
+               %
+               [cmat] = <a href="cspice_q2m.html">cspice_q2m</a>( quat );
+
+               z      = cmat(:,3);
+
+               %
+               % Write out the results.
+               %
+               fprintf( 'Record:  %1d\n', i )
+               fprintf( '   Start encoded SCLK: %20.6f\n', sclks )
+               fprintf( '   End encoded SCLK  : %20.6f\n', sclke )
+               fprintf( '   TDB Seconds/tick  : %20.6f\n', sclkr )
+               fprintf( '   +Z axis           : %12.8f %12.8f %12.8f\n', z  )
+               fprintf( '   Angular velocity  : %12.8f %12.8f %12.8f\n', av )
+               fprintf( '\n' )
+
+            end
+
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Record:  1
+         Start encoded SCLK:   32380393707.000015
+         End encoded SCLK  :   32380395707.000015
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.37100754  -0.58030627   0.72498141
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  2
+         Start encoded SCLK:   32380402605.999947
+         End encoded SCLK  :   32380404605.999947
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.36011140  -0.57851153   0.73187716
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  3
+         Start encoded SCLK:   32380412542.000053
+         End encoded SCLK  :   32380414542.000053
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.34654725  -0.57947579   0.73764003
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  4
+         Start encoded SCLK:   32827264875.000000
+         End encoded SCLK  :   32827266875.000000
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.52790086  -0.78142544   0.33270853
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  5
+         Start encoded SCLK:   32827403805.999992
+         End encoded SCLK  :   32827405805.999992
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.53591430  -0.75336795   0.38109395
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  6
+         Start encoded SCLK:   32827412705.000042
+         End encoded SCLK  :   32827414705.000042
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.52897927  -0.75383975   0.38975193
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  7
+         Start encoded SCLK:   32827417284.000038
+         End encoded SCLK  :   32827419284.000038
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.52739277  -0.75283638   0.39382008
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  8
+         Start encoded SCLK:   33793314593.000053
+         End encoded SCLK  :   33793316593.000053
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.54702960  -0.69406245   0.46801275
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  9
+         Start encoded SCLK:   33793332478.000046
+         End encoded SCLK  :   33793334478.000046
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.55111040  -0.67525183   0.49021658
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  10
+         Start encoded SCLK:   33793341463.000061
+         End encoded SCLK  :   33793343463.000061
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.55538431  -0.66374748   0.50098659
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  11
+         Start encoded SCLK:   33793350363.000034
+         End encoded SCLK  :   33793352363.000034
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.55830213  -0.65303671   0.51170478
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  12
+         Start encoded SCLK:   33984028250.000000
+         End encoded SCLK  :   33984030250.000000
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.56718006  -0.65737847   0.49614546
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  13
+         Start encoded SCLK:   33984046134.999992
+         End encoded SCLK  :   33984048134.999992
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.57392845  -0.63511679   0.51694564
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  14
+         Start encoded SCLK:   33984055121.000053
+         End encoded SCLK  :   33984057121.000053
+         TDB Seconds/tick  :             0.001000
+         +Z axis           :  -0.57600983  -0.62488782   0.52699894
+         Angular velocity  :   0.00000000   0.00000000   0.00000000
+
+      Record:  15
+         Start encoded SCLK:   33984220835.999966
+
+      [...]
+
+
+      Warning: incomplete output. Only 100 out of 875 lines have been
+      provided.
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   For a complete description of the internal structure of a type 2
+   segment, see the CK required reading.
+
+   This routine returns the number of pointing records contained
+   in the specified segment. It is normally used in conjunction
+   with <a href="cspice_ckgr02.html">cspice_ckgr02</a>, which returns the Ith record in the segment.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the segment indicated by `descr' is not a type 2 segment, the
+       error SPICE(CKWRONGDATATYPE) is signaled by a routine in the
+       call tree of this routine.
+
+   2)  If the specified handle does not belong to any file that is
+       currently known to be open, an error is signaled by a routine
+       in the call tree of this routine.
+
+   3)  If `descr' is not a valid descriptor of a segment in the CK
+       file specified by `handle', the results of this routine are
+       unpredictable.
+
+   4)  If any of the input arguments, `handle' or `descr', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   5)  If any of the input arguments, `handle' or `descr', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   The CK file specified by `handle' should be open for read or write
+   access.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  The binary CK file containing the segment whose descriptor was
+       passed to this routine must be opened for read or write access
+       by <a href="cspice_cklpf.html">cspice_cklpf</a>, <a href="cspice_dafopr.html">cspice_dafopr</a> or <a href="cspice_dafopw.html">cspice_dafopw</a>.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 01-NOV-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   number of CK type_2 records
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

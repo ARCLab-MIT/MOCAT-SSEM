@@ -1,0 +1,324 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkssb</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkssb</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKSSB returns the state (position and velocity) of a target body
+   relative to the solar system barycenter.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      targ     the standard NAIF ID code for a target body.
+
+               [1,1] = size(targ); int32 = class(targ)
+
+      et       the epoch (ephemeris time) at which the state of the target
+               body is to be computed.
+
+               [1,1] = size(et); double = class(et)
+
+      ref      the name of the reference frame to which the vectors returned
+               by the routine should be rotated.
+
+               [1,c1] = size(ref); char = class(ref)
+
+                  or
+
+               [1,1] = size(ref); cell = class(ref)
+
+               This may be any frame supported by the Mice frame system,
+               including dynamic and other non-inertial frames.
+
+   the call:
+
+      [starg] = <b>cspice_spkssb</b>( targ, et, ref )
+
+   returns:
+
+      starg    contains the position and velocity of the target body,
+               relative to the solar system barycenter, at epoch `et'.
+
+               [6,1] = size(starg); double = class(starg)
+
+               These vectors are rotated into the specified reference
+               frame. Units are always km and km/sec.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) In the following example, <b>cspice_spkssb</b> is used to display
+      the distance from Earth (Body 399) to Mars (body 499) at
+      a given epoch.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: spkssb_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de418.bsp                     Planetary ephemeris
+            naif0009.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de418.bsp',
+                                'naif0009.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function spkssb_ex1()
+
+         %
+         % Define parameters for a state lookup:
+         %
+         % Return the state vector of Mars (499)
+         % and Earth (399) with respect to the Solar System
+         % Barycenter in the J2000 frame at epoch
+         % July 4, 2003 11:00 AM PST.
+         %
+         EARTH = 399;
+         EPOCH = 'July 4, 2003 11:00 AM PST';
+         FRAME = 'J2000';
+         MARS  = 499;
+
+         %
+         % Load the required kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'spkssb_ex1.tm' );
+
+         %
+         % Convert the epoch to ephemeris time.
+         %
+         [et] = <a href="cspice_str2et.html">cspice_str2et</a>( EPOCH );
+
+         %
+         % Look-up the states for the defined parameters.
+         %
+         [searth] = <b>cspice_spkssb</b>( EARTH, et, FRAME );
+         [smars]  = <b>cspice_spkssb</b>( MARS, et, FRAME );
+
+         %
+         % What measure of distance separates the two bodies
+         % at epoch.
+         %
+         dist = <a href="cspice_vdist.html">cspice_vdist</a>( searth(1:3), smars(1:3) );
+
+         fprintf( 'The absolute distance (km)     : %23.10f\n', dist )
+         fprintf( 'between Mars and Earth at epoch:  %s\n', EPOCH )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      The absolute distance (km)     :     80854819.7017317861
+      between Mars and Earth at epoch:  July 4, 2003 11:00 AM PST
+
+
+      Note that the two <b>cspice_spkssb</b> calls could be replaced by
+
+         [state, lt] = <a href="cspice_spkgeo.html">cspice_spkgeo</a>( EARTH, et, frame, MARS );
+
+      or
+
+         [state, lt] = <a href="cspice_spkezr.html">cspice_spkezr</a>( 'EARTH', et,     ...
+                                      frame,   'NONE', ...
+                                      'MARS'           );
+
+      using the norm of the position components of the `state'
+      vector to compute the distance between the bodies.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   In order to compute the state of one body relative to another,
+   the states of the two bodies must be known relative to a third
+   body. One simple solution is to use the solar system barycenter
+   as the third body.
+
+   Ephemeris data from more than one segment may be required
+   to determine the state of a body relative to the barycenter.
+   <b>cspice_spkssb</b> reads as many segments as necessary, from as many
+   files as necessary, using files that have been loaded by
+   previous calls to <a href="cspice_furnsh.html">cspice_furnsh</a> or <a href="cspice_spklef.html">cspice_spklef</a> (load ephemeris file).
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If sufficient information has not been &quot;loaded&quot; via the routine
+       <a href="cspice_furnsh.html">cspice_furnsh</a>, <a href="cspice_spklef.html">cspice_spklef</a> or the PCK kernel loaders, an error is
+       signaled by a routine in the call tree of this routine.
+
+   2)  If any of the input arguments, `targ', `et' or `ref', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `targ', `et' or `ref', is not
+       of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   See -Restrictions.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  The ephemeris files to be used by <b>cspice_spkssb</b> must be loaded
+       by <a href="cspice_furnsh.html">cspice_furnsh</a> or <a href="cspice_spklef.html">cspice_spklef</a> before <b>cspice_spkssb</b> is called.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 09-AUG-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   state relative to solar system barycenter
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:27 2021</pre>
+
+</body>
+</html>
+

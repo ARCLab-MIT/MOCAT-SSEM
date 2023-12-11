@@ -1,0 +1,331 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dasrdd</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dasrdd</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DASRDD reads double precision data from a range of DAS logical
+   addresses.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   a file handle for an open DAS file.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      first,
+      last     the lower and upper bounds of a range of DAS double
+               precision logical addresses.
+
+               [1,1] = size(first); int32 = class(first)
+               [1,1] = size(last); int32 = class(last)
+
+               The range includes these bounds. `first' and `last' must be
+               greater than or equal to 1 and less than or equal to the
+               highest double precision DAS address in the DAS file
+               designated by `handle'.
+
+   the call:
+
+      [data] = <b>cspice_dasrdd</b>( handle, first, last )
+
+   returns:
+
+      data     an array of double precision numbers.
+
+               [n,1] = size(data); double = class(data)
+
+               `data' has length n = last - first + 1.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Create a new DAS file TEST.DAS and add 200 double
+      precision numbers to it. Close the file, then re-open
+      it and read the data back out.
+
+
+      Example code begins here.
+
+
+      function dasrdd_ex1()
+
+         %
+         % Local parameters.
+         %
+         FNAME =   'dasrdd_ex1.das';
+         TYPE  =   'TEST';
+
+         %
+         % Local variables.
+         %
+         data = zeros(100,1);
+
+         %
+         % Open a new DAS file. Use the file name as the internal
+         % file name, and reserve no records for comments.
+         %
+         [handle] = <a href="cspice_dasonw.html">cspice_dasonw</a>( FNAME, TYPE, FNAME, 0 );
+
+         %
+         % Fill the array `data' with the double precision
+         % numbers 1.0 through 100.0, and add this array
+         % to the file.
+         %
+         for i=1:100
+
+            data(i) = double(i);
+
+         end
+
+         <a href="cspice_dasadd.html">cspice_dasadd</a>( handle, data );
+
+         %
+         % Now append the array `data' to the file again.
+         %
+         <a href="cspice_dasadd.html">cspice_dasadd</a>( handle, data );
+
+         %
+         % Close the file.
+         %
+         <a href="cspice_dascls.html">cspice_dascls</a>( handle );
+
+         %
+         % Now verify the addition of data by opening the
+         % file for read access and retrieving the data.
+         %
+         [handle] = <a href="cspice_dasopr.html">cspice_dasopr</a>( FNAME );
+         [data]   = <b>cspice_dasrdd</b>( handle, 1, 200 );
+
+         %
+         % Dump the data to the screen.  We should see the
+         % sequence 1.0, 2.0, ..., 100.0, 1.0, 2.0, ..., 100.0.
+         % The numbers will be represented as double precision
+         % numbers in the output.
+         %
+         fprintf( '\n' )
+         fprintf( 'Data from &quot;%s&quot;:\n', FNAME )
+         fprintf( '\n' )
+         for i=0:24
+
+            for j=1:8
+
+               fprintf( '%7.1f', data(i*8+j) )
+
+            end
+            fprintf( '\n' )
+
+         end
+
+         %
+         % Close the file.
+         %
+         <a href="cspice_dascls.html">cspice_dascls</a>( handle );
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      We are here
+      But not here
+
+      Data from &quot;dasrdd_ex1.das&quot;:
+
+          1.0    2.0    3.0    4.0    5.0    6.0    7.0    8.0
+          9.0   10.0   11.0   12.0   13.0   14.0   15.0   16.0
+         17.0   18.0   19.0   20.0   21.0   22.0   23.0   24.0
+         25.0   26.0   27.0   28.0   29.0   30.0   31.0   32.0
+         33.0   34.0   35.0   36.0   37.0   38.0   39.0   40.0
+         41.0   42.0   43.0   44.0   45.0   46.0   47.0   48.0
+         49.0   50.0   51.0   52.0   53.0   54.0   55.0   56.0
+         57.0   58.0   59.0   60.0   61.0   62.0   63.0   64.0
+         65.0   66.0   67.0   68.0   69.0   70.0   71.0   72.0
+         73.0   74.0   75.0   76.0   77.0   78.0   79.0   80.0
+         81.0   82.0   83.0   84.0   85.0   86.0   87.0   88.0
+         89.0   90.0   91.0   92.0   93.0   94.0   95.0   96.0
+         97.0   98.0   99.0  100.0    1.0    2.0    3.0    4.0
+          5.0    6.0    7.0    8.0    9.0   10.0   11.0   12.0
+         13.0   14.0   15.0   16.0   17.0   18.0   19.0   20.0
+         21.0   22.0   23.0   24.0   25.0   26.0   27.0   28.0
+         29.0   30.0   31.0   32.0   33.0   34.0   35.0   36.0
+         37.0   38.0   39.0   40.0   41.0   42.0   43.0   44.0
+         45.0   46.0   47.0   48.0   49.0   50.0   51.0   52.0
+         53.0   54.0   55.0   56.0   57.0   58.0   59.0   60.0
+         61.0   62.0   63.0   64.0   65.0   66.0   67.0   68.0
+         69.0   70.0   71.0   72.0   73.0   74.0   75.0   76.0
+         77.0   78.0   79.0   80.0   81.0   82.0   83.0   84.0
+         85.0   86.0   87.0   88.0   89.0   90.0   91.0   92.0
+         93.0   94.0   95.0   96.0   97.0   98.0   99.0  100.0
+
+
+      Note that after run completion, a new DAS file exists in the
+      output directory.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine provides random read access to the double precision
+   data in a DAS file. This data are logically structured as a
+   one-dimensional array of double precision numbers.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input file handle is invalid, an error is signaled
+       by a routine in the call tree of this routine.
+
+   2)  If `first' or `last' are out of range, an error is signaled
+       by a routine in the call tree of this routine.
+
+   3)  If `first' is greater than `last', `data' is empty.
+
+   4)  If `data' is declared with length less than first - last + 1,
+       the error cannot be diagnosed by this routine.
+
+   5)  If a file read error occurs, the error is signaled by a
+       routine in the call tree of this routine.
+
+   6)  If any of the input arguments, `handle', `first' or `last', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   7)  If any of the input arguments, `handle', `first' or `last', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   See the description of the argument `handle' in -I/O.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/das.html">DAS.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 26-NOV-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   read double precision data from a DAS file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

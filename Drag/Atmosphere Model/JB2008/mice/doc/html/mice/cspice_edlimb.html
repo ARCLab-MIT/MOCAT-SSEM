@@ -1,0 +1,449 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_edlimb</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_edlimb</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EDLIMB calculates the limb of a triaxial ellipsoid
+   as viewed from a specified location.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a,
+      b,
+      c        the lengths of the semi-axes of a triaxial ellipsoid.
+
+               [1,1] = size(a); double = class(a)
+               [1,1] = size(b); double = class(b)
+               [1,1] = size(c); double = class(c)
+
+               The ellipsoid is centered at the origin and oriented so that
+               its axes lie on the x, y and z axes. `a', `b', and `c' are
+               the lengths of the semi-axes that respectively point in the
+               x, y, and z directions.
+
+      viewpt   a point from which the ellipsoid is viewed. `viewpt' must be
+               outside of the ellipsoid.
+
+               [3,1] = size(viewpt); double = class(viewpt)
+
+   the call:
+
+      [limb] = <b>cspice_edlimb</b>( a, b, c, viewpt )
+
+   returns:
+
+      limb   the SPICE ellipse that represents the limb of the ellipsoid
+             observed from `viewpt'.
+
+              [1,1] = size(limb); struct = class(limb)
+
+              The structure has the fields:
+
+                 center:    [3x1 double]
+                 semiMajor: [3x1 double]
+                 semiMinor: [3x1 double]
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given an ellipsoid and a viewpoint exterior to it, calculate
+      the limb ellipse as seen from that viewpoint.
+
+      Example code begins here.
+
+
+      function edlimb_ex1()
+
+         %
+         % Define an ellipsoid
+         %
+         a = sqrt(2.);
+         b = 2.*sqrt(2.);
+         c = sqrt(2.);
+
+         %
+         % Locate a viewpoint exterior to the ellipsoid.
+         %
+         viewpt = [ 2., 0.,  0. ]';
+
+         %
+         % Calculate the limb ellipse as seen by from the viewpoint.
+         %
+         limb = <b>cspice_edlimb</b>( a, b, c, viewpt );
+
+         %
+         % Output the structure components.
+         %
+         fprintf( 'Semiminor axis: %10.3f %10.3f %10.3f\n', ...
+                  limb.semiMinor                          );
+         fprintf( 'Semimajor axis: %10.3f %10.3f %10.3f\n', ...
+                  limb.semiMajor                          );
+         fprintf( 'Center:         %10.3f %10.3f %10.3f\n', ...
+                  limb.center                             );
+
+         %
+         % Check against expected values:
+         %
+         % Semiminor: 0., 0., -1.
+         % Semimajor: 0., 2.,  0.
+         % Center   : 1., 0.,  0.
+         %
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Semiminor axis:      0.000      0.000     -1.000
+      Semimajor axis:      0.000      2.000     -0.000
+      Center:              1.000      0.000      0.000
+
+
+   2) We'd like to find the apparent limb of Jupiter, corrected for
+      light time and stellar aberration, as seen from JUNO
+      spacecraft's position at a given UTC time.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: edlimb_ex2.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                           Contents
+            ---------                           --------
+            juno_rec_160522_160729_160909.bsp   JUNO s/c ephemeris
+            pck00010.tpc                        Planet orientation
+                                                and radii
+            naif0012.tls                        Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'juno_rec_160522_160729_160909.bsp',
+                                'pck00010.tpc',
+                                'naif0012.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function edlimb_ex2()
+
+         %
+         % Local parameters.
+         %
+         UTCSTR = '2016 Jul 14 19:45:00';
+
+         %
+         % Load the required kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'edlimb_ex2.tm' );
+
+         %
+         % Find the viewing point in Jupiter-fixed coordinates. To
+         % do this, find the apparent position of Jupiter as seen
+         % from the spacecraft in Jupiter-fixed coordinates and
+         % negate this vector. In this case we'll use light time
+         % and stellar aberration corrections to arrive at the
+         % apparent limb. `jpos' is the Jupiter's position as seen
+         % from the spacecraft.  `scpos' is the spacecraft's position
+         % relative to Jupiter.
+         %
+         [et]       = <a href="cspice_str2et.html">cspice_str2et</a>( UTCSTR );
+         [jpos, lt] = <a href="cspice_spkpos.html">cspice_spkpos</a>( 'JUPITER', et,    'J2000',           ...
+                                     'LT+S',    'JUNO'          );
+
+         scpos = -jpos;
+
+         %
+         % Get Jupiter's semi-axis lengths...
+         %
+         [rad] = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'JUPITER', 'RADII', 3 );
+
+         %
+         % ...and the transformation from J2000 to Jupiter
+         % equator and prime meridian coordinates. Note that we
+         % use the orientation of Jupiter at the time of
+         % emission of the light that arrived at the
+         % spacecraft at time `et'.
+         %
+         [tipm] = <a href="cspice_pxform.html">cspice_pxform</a>( 'J2000', 'IAU_JUPITER', et-lt );
+
+         %
+         % Transform the spacecraft's position into Jupiter-
+         % fixed coordinates.
+         %
+         scpjfc = tipm * scpos;
+
+         %
+         % Find the apparent limb.  `limb' is a SPICE ellipse
+         % representing the limb.
+         %
+         [limb] = <b>cspice_edlimb</b>( rad(1), rad(2), rad(3), scpjfc );
+
+         %
+         % `center', `smajor', and `sminor' are the limb's center,
+         % semi-major axis of the limb, and a semi-minor axis
+         % of the limb.  We obtain these from `limb' using the
+         % Mice routine <a href="cspice_el2cgv.html">cspice_el2cgv</a> ( Ellipse to center and
+         % generating vectors ).
+         %
+         [center, smajor, sminor] = <a href="cspice_el2cgv.html">cspice_el2cgv</a>( limb );
+
+         %
+         % Output the structure components.
+         %
+         fprintf( 'Apparent limb of Jupiter as seen from JUNO:\n' )
+         fprintf( '   UTC time       : %s\n', UTCSTR )
+         fprintf( '   Semi-minor axis: %13.6f %13.6f %13.6f\n',           ...
+                               sminor(1), sminor(2), sminor(3) )
+         fprintf( '   Semi-major axis: %13.6f %13.6f %13.6f\n',           ...
+                               smajor(1), smajor(2), smajor(3) )
+         fprintf( '   Center         : %13.6f %13.6f %13.6f\n',           ...
+                               center(1), center(2), center(3) )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Apparent limb of Jupiter as seen from JUNO:
+         UTC time       : 2016 Jul 14 19:45:00
+         Semi-minor axis:  12425.547643  -5135.572410  65656.053303
+         Semi-major axis:  27305.667297  66066.222576     -0.000000
+         Center         :    791.732472   -327.228993   -153.408849
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The limb of a body, as seen from a viewing point, is the boundary
+   of the portion of the body's surface that is visible from that
+   viewing point. In this definition, we consider a surface point
+   to be `visible' if it can be connected to the viewing point by a
+   line segment that doesn't pass through the body. This is a purely
+   geometrical definition that ignores the matter of which portions
+   of the surface are illuminated, or whether the view is obscured by
+   any additional objects.
+
+   If a body is modeled as a triaxial ellipsoid, the limb is always
+   an ellipse. The limb is determined by its center, a semi-major
+   axis vector, and a semi-minor axis vector.
+
+   We note that the problem of finding the limb of a triaxial
+   ellipsoid is mathematically identical to that of finding its
+   terminator, if one makes the simplifying assumption that the
+   terminator is the limb of the body as seen from the vertex of the
+   umbra. So, this routine can be used to solve this simplified
+   version of the problem of finding the terminator.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the length of any semi-axis of the ellipsoid is
+       non-positive, the error SPICE(INVALIDAXISLENGTH) is signaled
+       by a routine in the call tree of this routine. `limb' is not
+       modified.
+
+   2)  If the length of any semi-axis of the ellipsoid is zero after
+       the semi-axis lengths are scaled by the reciprocal of the
+       magnitude of the longest semi-axis and then squared, the error
+       SPICE(DEGENERATECASE) is signaled by a routine in the call
+       tree of this routine. `limb' is not modified.
+
+   3)  If the viewing point `viewpt' is inside the ellipse, the error
+       SPICE(INVALIDPOINT) is signaled by a routine in the call tree
+       of this routine. `limb' is not modified.
+
+   4)  If the geometry defined by the input ellipsoid and viewing
+       point is so extreme that the limb cannot be found, the error
+       SPICE(DEGENERATECASE) is signaled by a routine in the call
+       tree of this routine.
+
+   5)  If the shape of the ellipsoid and the viewing geometry are
+       such that the limb is an excessively flat ellipsoid, the
+       limb may be a degenerate ellipse. You must determine whether
+       this possibility poses a problem for your application.
+
+   6)  If any of the input arguments, `a', `b', `c' or `viewpt', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   7)  If any of the input arguments, `a', `b', `c' or `viewpt', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 13-AUG-2021 (EDW) (JDR)
+
+       Edited the -Examples section to comply with NAIF standard.
+       Added example's problem statement and added second example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 09-NOV-2012 (EDW) (SCK)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   ellipsoid limb
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

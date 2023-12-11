@@ -1,0 +1,439 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_xf2rav</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_xf2rav</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_XF2RAV determines the rotation matrix and angular velocity of the
+   rotation from a state transformation matrix.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      xform    a state transformation matri(x|ces) from one frame
+               FRAME1 to some other frame FRAME2.
+
+               Either [6,6]   = size(xform); double = class(xform)
+               or     [6,6,n] = size(xform); double = class(xform)
+
+   the call:
+
+      [rot, av] = <b>cspice_xf2rav</b>( xform )
+
+   returns:
+
+      rot      rotation matri(x|ces) that gives the transformation from
+               some frame FRAME1 to another frame FRAME2.
+
+               Either [3,3]   = size(rot); double = class(rot)
+               or     [3,3,n] = size(rot); double = class(rot)
+
+      av       the angular velocity vector(s) of the transformation.
+
+               Either [3,1] = size(av); double = class(av)
+               or     [3,n] = size(av); double = class(av)
+
+               In other words, if `p' is the position of a fixed point in
+               FRAME2, then from the point of view of FRAME1, `p' rotates
+               (in a right handed sense) about an axis parallel to `av'.
+               Moreover the rate of rotation in radians per unit time is
+               given by the length of `av'.
+
+               More formally, the velocity `v' of `p' in FRAME1 is
+               given by
+                                  T
+                   v  = av x ( rot  * p )
+
+               The components of `av' are given relative to FRAME1.
+
+               `rot' and `av' return with the same vectorization
+               measure, N, as `xform'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Suppose that you wanted to determine the angular velocity
+      of the Earth body-fixed reference frame with respect to
+      J2000 at a particular epoch ET. The following code example
+      illustrates a procedure for computing the angular velocity.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: xf2rav_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            earth_720101_070426.bpc       Earth historical
+                                          binary PCK
+            naif0012.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'earth_720101_070426.bpc',
+                                'naif0012.tls'            )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function xf2rav_ex1()
+
+         %
+         % Local parameters.
+         %
+         META   =   'xf2rav_ex1.tm';
+         UTCSTR =   '2005-OCT-10 16:00:00';
+
+         %
+         % Load SPICE kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( META );
+
+         %
+         % Convert the input time to seconds past J2000 TDB.
+         %
+         [et] = <a href="cspice_str2et.html">cspice_str2et</a>( UTCSTR );
+
+         %
+         % Get the transformation matrix from J2000 frame to
+         % ITRF93.
+         %
+         [ftmtrx] = <a href="cspice_sxform.html">cspice_sxform</a>( 'J2000', 'ITRF93', et );
+
+         %
+         % Now get the angular velocity by calling <b>cspice_xf2rav</b>
+         %
+         [rot, av] = <b>cspice_xf2rav</b>( ftmtrx );
+
+         %
+         % Display the results.
+         %
+         fprintf( 'Rotation matrix:\n' )
+         fprintf( '%16.11f %15.11f %15.11f\n', rot' )
+
+         fprintf( '\n' )
+         fprintf( 'Angular velocity:\n' )
+         fprintf( '%16.11f %15.11f %15.11f\n', av )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Rotation matrix:
+        -0.18603277688  -0.98254352801   0.00014659080
+         0.98254338275  -0.18603282936  -0.00053610915
+         0.00055402128   0.00004429795   0.99999984555
+
+      Angular velocity:
+         0.00000004025   0.00000000324   0.00007292114
+
+
+   2) Obtain the state transformation matrix from J2000 to IAU_MOON for
+      a set of 10001 ephemeris times based at July 1 2007, convert them
+      to the corresponding rotation matrices and angular velocity
+      vectors and back to state transformation matrices.
+
+      Compare the original state transformation matrices with those
+      computed, and output the maximum absolute difference between any
+      of them.
+
+      Numerical equivalence shall be expected.
+
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: xf2rav_ex2.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            pck00010.tpc                  Planet orientation and
+                                          radii
+            naif0012.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'pck00010.tpc',
+                                'naif0012.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function xf2rav_ex2()
+
+         %
+         % Load kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'xf2rav_ex2.tm')
+
+         %
+         % Create an array of 10001 ephemeris times based at July 1 2007.
+         %
+         et    = [0: 10000]* <a href="cspice_spd.html">cspice_spd</a> + <a href="cspice_str2et.html">cspice_str2et</a>( 'July 1 2007' );
+
+         %
+         % Calculate the state transformation matrices from J2000 to IAU_MOON
+         % for 'et'.
+         %
+         xform = <a href="cspice_sxform.html">cspice_sxform</a>( 'J2000', 'IAU_MOON', et );
+
+         %
+         % Convert the set of 'xform' matrices to the corresponding rotation
+         % matrices and angular velocity vectors.
+         %
+         [ rot, av ] = <b>cspice_xf2rav</b>(xform);
+
+         %
+         % Use the converted outputs from <b>cspice_xf2rav</b> to recompute a set
+         % of state transformation matrices.
+         %
+         strans = <a href="cspice_rav2xf.html">cspice_rav2xf</a>( rot, av );
+
+         %
+         % Calculate the maximum value of the absolute difference between
+         % 'xform' and 'strans'.
+         %
+         fprintf('Maximum absolute difference: %8.6e\n', ...
+                  max( max( max( abs(strans - xform) ) ) )   )
+
+         %
+         %  It's always good form to unload kernels after use,
+         %  particularly in MATLAB due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Maximum absolute difference: 2.117582e-21
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine is essentially a macro routine for converting
+   state transformation matrices into the equivalent representation
+   in terms of a rotation and angular velocity.
+
+   This routine is an inverse of the routine <a href="cspice_rav2xf.html">cspice_rav2xf</a>.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  No checks are performed on `xform' to ensure that it is indeed
+       a state transformation matrix.
+
+   2)  If the input argument `xform' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   3)  If the input argument `xform' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added first example,
+       and second example's problem statement and meta-kernel.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       extended -Particulars section. Added rotation.req to Required
+       readings.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.2, 09-MAR-2015 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.1, 06-MAY-2009 (EDW)
+
+       Added mice.req reference to the Required Reading section.
+
+   -Mice Version 1.0.0, 11-APR-2007 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   State transformation to rotation and angular velocity
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

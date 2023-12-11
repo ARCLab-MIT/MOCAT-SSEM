@@ -1,0 +1,297 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_repmc</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_repmc</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_REPMC replaces a marker with a character string.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      in       an arbitrary character string.
+
+               [1,c1] = size(in); char = class(in)
+
+                  or
+
+               [1,1] = size(in); cell = class(in)
+
+      marker   an arbitrary character string.
+
+               [1,c2] = size(marker); char = class(marker)
+
+                  or
+
+               [1,1] = size(marker); cell = class(marker)
+
+               The first occurrence of `marker' in the input string is to
+               be replaced by `value'.
+
+               Leading and trailing blanks in `marker' are NOT
+               significant. In particular, no substitution is performed
+               if `marker' is blank or empty.
+
+      value    the replacement character string.
+
+               [1,c3] = size(value); char = class(value)
+
+                  or
+
+               [1,1] = size(value); cell = class(value)
+
+               Leading and trailing blanks in `value' are NOT significant:
+               the portion of `value' that is substituted for `marker'
+               extends from its first non-blank character to its last
+               non-blank character.
+
+               However, if `value' is blank or empty, a single blank is
+               substituted for the first occurrence of `marker'.
+
+   the call:
+
+      [out] = <b>cspice_repmc</b>( in, marker, value )
+
+   returns:
+
+      out      the string obtained by substituting `value' (leading and
+               trailing blanks excepted) for the first occurrence of
+               `marker' in the input string.
+
+               [1,c4] = size(out); char = class(out)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) The following example illustrate the use of <b>cspice_repmc</b> to
+      replace a marker within a string with a character string
+      value.
+
+
+      Example code begins here.
+
+
+      function repmc_ex1()
+
+         %
+         % 1. Single marker
+         %
+         marker   = '#';
+         instr    = 'Invalid value. The value was:  #';
+
+         [outstr] = <b>cspice_repmc</b>( instr, marker, 'append' );
+
+         fprintf( 'Case 1: Single marker.\n' )
+         fprintf( '   Input : %s\n', instr )
+         fprintf( '   Output: %s\n', outstr )
+         fprintf( '\n' )
+
+         %
+         % 2. Multiple markers
+         %
+         marker   = ' XX ';
+         instr    = 'The token XX was not recognized. Was it XX?';
+
+         [outstr] = <b>cspice_repmc</b>( instr, marker, '  FND  ' );
+
+         fprintf( 'Case 2: Multiple markers.\n' )
+         fprintf( '   Input : %s\n', instr )
+         fprintf( '   Output: %s\n', outstr )
+         fprintf( '\n' )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Case 1: Single marker.
+         Input : Invalid value. The value was:  #
+         Output: Invalid value. The value was:  append
+
+      Case 2: Multiple markers.
+         Input : The token XX was not recognized. Was it XX?
+         Output: The token FND was not recognized. Was it XX?
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This is one of a family of related routines for inserting values
+   into strings. They are typically to construct messages that
+   are partly fixed, and partly determined at run time. For example,
+   a message like
+
+      'Fifty-one pictures were found in directory [USER.DATA].'
+
+   might be constructed from the fixed string
+
+      '#1 pictures were found in directory #2.'
+
+   by the calls
+
+      [string] = cspice_repmct( string, '#1', n_pics, 'C' );
+      [string] = <b>cspice_repmc</b>( string, '#2', DIR_NAME );
+
+   which substitute the cardinal text 'Fifty-one' and the character
+   string '[USER.DATA]' for the markers '#1' and '#2' respectively.
+
+   The complete list of routines is shown below.
+
+      <b>cspice_repmc</b>    ( Replace marker with character string value )
+      <a href="cspice_repmd.html">cspice_repmd</a>    ( Replace marker with double precision value )
+      <a href="cspice_repmf.html">cspice_repmf</a>    ( Replace marker with formatted d.p. value   )
+      <a href="cspice_repmi.html">cspice_repmi</a>    ( Replace marker with integer value          )
+      <a href="cspice_repml.html">cspice_repml</a>    ( Replace marker with logical value          )
+      cspice_repmct   ( Replace marker with cardinal text          )
+      <a href="cspice_repmot.html">cspice_repmot</a>   ( Replace marker with ordinal text           )
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `marker' is blank or empty, or if `marker' is not a substring of
+       `in', no substitution is performed. (`out' and `in' are identical.)
+
+   2)  If `value' is blank or empty, a single blank is substituted for the
+       first occurrence of `marker'.
+
+   3)  If any of the input arguments, `in', `marker' or `value', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   4)  If any of the input arguments, `in', `marker' or `value', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 22-JAN-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   replace marker with character_string
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

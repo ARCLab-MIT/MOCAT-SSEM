@@ -1,0 +1,524 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkobj</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkobj</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKOBJ finds the set of ID codes of all objects in a specified SPK
+   file.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      spkfnm   the name, or cell of names, of SPICE SPK file(s).
+
+               [n,c1] = size(spkfnm); char = class(spkfnm)
+
+                  or
+
+               [1,n] = size(spkfnm); cell = class(spkfnm)
+
+      room     a parameter specifying the maximum number of elements that
+               can be accommodated by the dynamically allocated workspace
+               cell used internally by this routine.
+
+               [1,1] = size(room); int32 = class(room)
+
+               It's not necessary to compute an accurate estimate of how
+               many elements will be returned in `ids'; rather, the
+               user can pick a size considerably larger than what's
+               really required.
+
+      ids_i    an optional input describing an (Nx1) array of SPK
+               ID codes.
+
+               [m,1] = size(ids_i); int32 = class(ids_i)
+
+                  or
+
+               [0,0] = size(ids_i); int32 = class(ids_i)
+
+               Inclusion of this array results in an output array consisting
+               of a union of the data retrieved from the `spkfnm' kernels and
+               the data in `ids_i'.
+
+   the call:
+
+      [ids] = <b>cspice_spkobj</b>( spkfnm, room, ids_i )
+
+         or
+
+      [ids] = <b>cspice_spkobj</b>( spkfnm, room )
+
+   returns:
+
+      ids      an array containing the set of unique NAIF ID codes for which
+               ephemeris data exists in `spkfnm'.
+
+               [p,1] = size(ids), int32 = class(ids)
+
+               If `ids_i' exists in the argument list, `ids' returns as a
+               union of the data found in `spkfnm' and the data in
+               `ids_i'. `ids' can overwrite `ids_i'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Use a simple function to display the SPK IDs found in an SPK or set of
+      SPKs, and the time coverage of the data corresponding to those IDs.
+
+      This example calls both <b>cspice_spkobj</b> and <a href="cspice_spkcov.html">cspice_spkcov</a>. In practice,
+      algorithms using <b>cspice_spkobj</b> will also use <a href="cspice_spkcov.html">cspice_spkcov</a> and
+      vice-versa.
+
+      Use the LSK kernel below to load the leap seconds and time
+      constants required for the time conversions.
+
+         naif0012.tls
+
+
+      Example code begins here.
+
+
+      function spkobj_ex1( spknam )
+
+         MAXIV  = 1000;
+         WINSIZ = 2 * MAXIV;
+         LSK    = 'naif0012.tls';
+
+         %
+         % Note, neither <a href="cspice_spkcov.html">cspice_spkcov</a> or <b>cspice_spkobj</b> requires this
+         % kernel to function. We need the data for output time
+         % conversion.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( LSK )
+
+         %
+         % Find the set of objects in the SPK file.
+         %
+         ids = <b>cspice_spkobj</b>( spknam, MAXIV );
+
+         %
+         % We want to display the coverage for each object. Loop over
+         % the contents of the ID code set, find the coverage for
+         % each item in the set, and display the coverage.
+         %
+         for i=1:numel(ids)
+
+            %
+            % Extract the coverage data for object ids(i).
+            %
+            cover     = <a href="cspice_spkcov.html">cspice_spkcov</a>( spknam, ids(i), WINSIZ );
+            [row,col] = size(cover);
+
+            %
+            % Display a simple banner.
+            %
+            fprintf( '========================================\n')
+            fprintf( 'Coverage for object %d\n', ids(i) )
+
+            %
+            %  'cover' has dimension 2Nx1, where 'row' has the value 2N with
+            %  each window defined as a pair of endpoints such that:
+            %
+            %  window 1 = cover(1:2)
+            %  window 2 = cover(3:4)
+            %  window 3 = cover(5:6)
+            %        ...
+            %  window N = cover(2N-1,2N)
+            %
+            % Loop from 1 to 'row' with step size 2.
+            %
+            for j=1:2:row
+
+               %
+               % Convert the endpoints to TDB calendar format time strings
+               % and display them. Pass the endpoints in an array,
+               % so <a href="cspice_timout.html">cspice_timout</a> returns an array of time strings.
+               %
+               % Recall a vectorized input has dimension 1xM so transpose
+               % the 'cover' slice.
+               %
+               timstr = <a href="cspice_timout.html">cspice_timout</a>( cover(j:j+1)', ...
+                                   'YYYY MON DD HR:MN:SC.### (TDB) ::TDB' );
+               fprintf('Interval: %d\n'  , (j+1)/2 )
+               fprintf('   Start: %s\n'  , timstr(1,:) )
+               fprintf('    Stop: %s\n\n', timstr(2,:) )
+
+            end
+
+         end
+
+         %
+         % Empty the kernel pool.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, with the following variable as input
+
+         spknam = { 'sat393.bsp', 'ura112.bsp' };
+
+      the output was:
+
+
+      ========================================
+      Coverage for object 3
+      Interval: 1
+         Start: 1900 JAN 01 00:00:41.183 (TDB)
+          Stop: 2099 DEC 24 00:01:07.183 (TDB)
+
+      ========================================
+      Coverage for object 6
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 7
+      Interval: 1
+         Start: 1900 JAN 01 00:00:41.183 (TDB)
+          Stop: 2099 DEC 24 00:01:07.183 (TDB)
+
+      ========================================
+      Coverage for object 10
+      Interval: 1
+         Start: 1900 JAN 01 00:00:41.183 (TDB)
+          Stop: 2099 DEC 24 00:01:07.183 (TDB)
+
+      ========================================
+      Coverage for object 399
+      Interval: 1
+         Start: 1900 JAN 01 00:00:41.183 (TDB)
+          Stop: 2099 DEC 24 00:01:07.183 (TDB)
+
+      ========================================
+      Coverage for object 610
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 611
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 612
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 613
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 614
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 615
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 616
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 617
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 632
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 633
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 634
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+          Stop: 2050 JAN 01 00:01:08.183 (TDB)
+
+      ========================================
+      Coverage for object 649
+      Interval: 1
+         Start: 1950 JAN 01 00:00:41.183 (TDB)
+
+      [...]
+
+
+      Warning: incomplete output. Only 100 out of 174 lines have been
+      provided.
+
+
+   2) When Example #1 was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, with the following variable as input
+
+         spknam = { 'mgs_ext12_ipng_mgs95j.bsp',                          ...
+                    'mgs_ext26_ipng_mgs95j.bsp' };
+
+      the output was:
+
+
+      ========================================
+      Coverage for object -94
+      Interval: 1
+         Start: 2003 JUL 23 00:00:00.000 (TDB)
+          Stop: 2003 OCT 15 01:00:00.000 (TDB)
+
+      Interval: 2
+         Start: 2006 OCT 11 00:00:00.000 (TDB)
+          Stop: 2006 NOV 08 01:00:00.000 (TDB)
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine provides an API via which applications can determine
+   the set of objects for which there are ephemeris data in a
+   specified SPK file.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input file has transfer format, the error
+       SPICE(INVALIDFORMAT) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If the input file is not a transfer file but has architecture
+       other than DAF, the error SPICE(INVALIDARCHTYPE) is signaled
+       by a routine in the call tree of this routine.
+
+   3)  If the input file is a binary DAF file of type other than SPK,
+       the error SPICE(INVALIDFILETYPE) is signaled by a routine in
+       the call tree of this routine.
+
+   4)  If the SPK file cannot be opened or read, an error is signaled
+       by a routine in the call tree of this routine.
+
+   5)  If the size of the output set argument `ids' is insufficient to
+       contain the actual number of ID codes of objects covered by
+       the indicated SPK file, an error is signaled by a routine in
+       the call tree of this routine.
+
+   6)  If any of the input arguments, `spkfnm', `room' or `ids_i', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   7)  If any of the input arguments, `spkfnm', `room' or `ids_i', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   This routine reads an SPK file.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  If an error occurs while this routine is updating the set
+       `ids', the set may be corrupted.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/cells.html">CELLS.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/naif_ids.html">NAIF_IDS.REQ</a>
+   <a href="../req/sets.html">SETS.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.4.0, 26-NOV-2021 (EDW) (JDR)
+
+       Changed the argument names &quot;spk&quot; and &quot;size&quot; to &quot;spkfnm&quot; and &quot;room&quot;,
+       for consistency with other routines.
+
+       Edited the header to comply with NAIF standard. Extended
+       -Index_Entries.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+       Updated description of argument &quot;room&quot;.
+
+   -Mice Version 1.3.0, 03-APR-2012 (EDW)
+
+      Edits to Example code and comments. No change to Example code
+      functionality.
+
+      Added error check on 'ids_i' to ensure the argument either has
+      shape [N,1] or is an empty array with shape [0,0].
+
+      Renamed the argument 'size' to 'room'. &quot;size&quot; is a Matlab function name
+      and it's seriously dumb to use a function name word as an argument
+      name.
+
+      Edited -I/O section to conform to NAIF standard for Mice documentation.
+
+   -Mice Version 1.2.0, 13-AUG-2009 (EDW)
+
+      The union of 'ids_i'  with the interface return argument 'ids'
+      again calculated using the &quot;unique&quot; function, replacing &quot;union.&quot;
+      This implementation results in the expected behavior of the
+      call in octave when 'ids_i' contains zero or one element.
+
+   -Mice Version 1.1.0, 29-DEC-2008 (EDW)
+
+      Corrected error in comment description for 'ids_i'.
+      Removed the line:
+
+         Note: 'ids_i' cannot be an empty array.
+
+      The argument can have the empty array value, [], on
+      input.
+
+      'ids_i' union with interface return call now calculated
+      using the &quot;union&quot; function instead of &quot;unique.&quot;
+
+   -Mice Version 1.0.0, 18-JUN-2007 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   find id codes of ephemeris objects in SPK file
+   find id codes of bodies in SPK file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:27 2021</pre>
+
+</body>
+</html>
+

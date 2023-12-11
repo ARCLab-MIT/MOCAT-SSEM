@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pltnp</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pltnp</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PLTNP finds the nearest point on a triangular plate to a
+   given point.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      point    an arbitrary point in 3-dimensional space.
+
+               [3,1] = size(point); double = class(point)
+
+      v1,
+      v2,
+      v3       3-vectors constituting the vertices of
+               a triangular plate.
+
+               The plate is allowed to be degenerate: it may
+               consist of a line segment or of a single point.
+
+               [3,1] = size(v1); double = class(v1)
+               [3,1] = size(v2); double = class(v2)
+               [3,1] = size(v3); double = class(v3)
+
+   the call:
+
+      [pnear, dist] = <b>cspice_pltnp</b>( point, v1, v2, v3 )
+
+   returns:
+
+      pnear    the closest point on the plate to `point'.
+               `pnear' is unique, since the plate is convex.
+
+               [3,1] = size(pnear); double = class(pnear)
+
+      dist     the distance between `point' and `pnear'.
+
+               [1,1] = size(dist); double = class(dist)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Find the nearest point to the point (2,2,2) on a plate having
+      vertices at the unit basis vectors that lie along the positive
+      X, Y, and Z coordinate axes.
+
+
+      Example code begins here.
+
+
+      function pltnp_ex1()
+
+         point = [2.0, 2.0, 2.0]';
+         v1    = [1.0, 0.0, 0.0]';
+         v2    = [0.0, 1.0, 0.0]';
+         v3    = [0.0, 0.0, 1.0]';
+
+         [pnear, dist] = <b>cspice_pltnp</b>(point, v1, v2, v3);
+
+
+         fprintf ( [ '\n' ...
+                     'Plate vertex 1 = %14.7e %14.7e %14.7e\n' ...
+                     'Plate vertex 2 = %14.7e %14.7e %14.7e\n' ...
+                     'Plate vertex 3 = %14.7e %14.7e %14.7e\n' ...
+                     'Input point    = %14.7e %14.7e %14.7e\n' ...
+                     '\n'                                      ...
+                     'Near point     = %14.7e %14.7e %14.7e\n' ...
+                     'Distance       = %14.7e\n'               ...
+                     '\n'],                                    ...
+                     v1(1),    v1(2),    v1(3),                ...
+                     v2(1),    v2(2),    v2(3),                ...
+                     v3(1),    v3(2),    v3(3),                ...
+                     point(1), point(2), point(3),             ...
+                     pnear(1), pnear(2), pnear(3),             ...
+                     dist                                    )
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, the output was:
+
+
+      Plate vertex 1 =  1.0000000e+00  0.0000000e+00  0.0000000e+00
+      Plate vertex 2 =  0.0000000e+00  1.0000000e+00  0.0000000e+00
+      Plate vertex 3 =  0.0000000e+00  0.0000000e+00  1.0000000e+00
+      Input point    =  2.0000000e+00  2.0000000e+00  2.0000000e+00
+
+      Near point     =  3.3333333e-01  3.3333333e-01  3.3333333e-01
+      Distance       =  2.8867513e+00
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  The input plate is allowed to be degenerate: it may be
+       a line segment or a single point.
+
+   2)  If any of the input arguments, `point', `v1', `v2' or `v3', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `point', `v1', `v2' or `v3', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/dsk.html">DSK.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 07-AUG-2020 (EDW) (JDR)
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections. Fixed
+       minor typos in header.
+
+       Edited the header to comply with NAIF standard.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 16-MAR-2016 (EDW) (NJB)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   nearest point on triangular plate
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

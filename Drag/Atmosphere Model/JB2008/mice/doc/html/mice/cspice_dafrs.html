@@ -1,0 +1,325 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafrs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafrs</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFRS changes the summary for the current array in the current
+   DAF.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      dc       the double precision components of the summary.
+
+               [1,nd] = size(dc); double = class(dc)
+
+      ic       the integer components of the summary.
+
+               [1,ni] = size(ic); int32 = class(ic)
+
+   the call:
+
+      <b>cspice_dafrs</b>( dc, ic )
+
+   returns:
+
+      None.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Replace the body ID code 301 (Moon) with a test body ID,
+      e.g. -999, in every descriptor of an SPK file.
+
+
+      Example code begins here.
+
+
+      function dafrs_ex1()
+
+         %
+         % Local parameters.
+         %
+         MAXOBJ  = 1000;
+
+         ND      = 2;
+         NI      = 6;
+
+         NEWCODE = ( -999 );
+         OLDCODE = ( 301 );
+
+         %
+         % Get the SPK file name.
+         %
+         fname = input( 'Enter name of the SPK file &gt; ', 's' );
+
+         %
+         % Open for writing the SPK file.
+         %
+         [handle] = <a href="cspice_dafopw.html">cspice_dafopw</a>( fname );
+
+         %
+         % Search the file in forward order.
+         %
+         <a href="cspice_dafbfs.html">cspice_dafbfs</a>( handle );
+         [found] = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+         while found
+
+            %
+            % Fetch and unpack the descriptor (aka summary)
+            % of the current segment.
+            %
+            [dc, ic] = <a href="cspice_dafgs.html">cspice_dafgs</a>( ND, NI );
+
+            %
+            % Replace ID codes if necessary.
+            %
+            if ( ic(1) == OLDCODE )
+               ic(1) = NEWCODE;
+            end
+            if ( ic(2) == OLDCODE )
+               ic(2) = NEWCODE;
+            end
+
+            %
+            % Re-pack the descriptor; replace the descriptor
+            % in the file.
+            %
+            <b>cspice_dafrs</b>( dc, ic );
+
+            %
+            % Find the next segment.
+            %
+            [found] = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+         end
+
+         %
+         % Close the file.
+         %
+         <a href="cspice_dafcls.html">cspice_dafcls</a>( handle );
+
+         %
+         % Find the set of objects in the SPK file.
+         %
+         [ids] = <a href="cspice_spkobj.html">cspice_spkobj</a>( fname, MAXOBJ );
+
+         fprintf( 'Objects in the DAF file:\n' )
+         fprintf( '\n' )
+         for i=1:numel( ids )
+
+            obj =  ids(i);
+            fprintf( '%4d', obj )
+
+         end
+
+         fprintf( '\n' )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, using the SPK file named de430.bsp, the output was:
+
+
+      Enter name of the SPK file &gt; de430.bsp
+      Objects in the DAF file:
+
+      -999   1   2   3   4   5   6   7   8   9  10 199 299 399
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This function writes the contents of `dc' and `ic' to the current
+   DAF segment summary.
+
+   A single call to <b>cspice_dafrs</b> equates to the C calls:
+
+      dafps_c ( nd, ni, dc, ic, sum );
+      dafrs_c ( sum );
+
+   without use of the `sum' variable.
+
+   The summary of the current array in the current DAF can
+   be updated by providing new ones through <b>cspice_dafrs</b>. This feature
+   should not be used except to correct errors that occurred during
+   the creation of a file. Note that changes can only be made to
+   files opened for write access.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `nd' is zero or negative, no double precision components are
+       stored.
+
+   2)  If `ni' is zero or negative, no integer components are stored.
+
+   3)  If the total size of the summary, computed as
+
+               (ni - 1)
+          nd + -------- + 1
+                   2
+
+       is greater than 125 double precision words, some components may
+       not be stored.
+
+   4)  If this routine is called when no search is in progress in the
+       the current DAF, the error SPICE(DAFNOSEARCH) is signaled by a
+       routine in the call tree of this routine.
+
+   5)  If the DAF containing the &quot;current&quot; array has actually been
+       closed, an error is signaled by a routine in the call tree of
+       this routine.
+
+   6)  If the DAF containing the &quot;current&quot; array is not open for
+       writing, an error is signaled by a routine in the call tree of
+       this routine.
+
+   7)  If no array is current in the current DAF, the error
+       SPICE(NOCURRENTARRAY) is signaled by a routine in the call tree
+       of this routine. There is no current array when a search is
+       started by <a href="cspice_dafbfs.html">cspice_dafbfs</a> or <a href="cspice_dafbbs.html">cspice_dafbbs</a>, but no calls to
+       <a href="cspice_daffna.html">cspice_daffna</a> or <a href="cspice_daffpa.html">cspice_daffpa</a> have been made yet, or whenever
+       <a href="cspice_daffna.html">cspice_daffna</a> or <a href="cspice_daffpa.html">cspice_daffpa</a> return the value False.
+
+   8)  If any of the input arguments, `nd', `ni', `dc' or `ic', is
+       undefined, an error is signaled by the Matlab error handling system.
+
+   9)  If any of the input arguments, `nd', `ni', `dc' or `ic', is not
+       of the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/daf.html">DAF.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 26-NOV-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   replace DAF summary
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,384 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_eknelt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_eknelt</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EKNELT returns the number of elements in a specified column entry
+   in the current row.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      selidx   the index of the column in the SELECT from which to retrieve
+               data. The range of 'selidx' is 1:nsel inclusive, where
+               'nsel' is the number of items in the SELECT clause of the
+               current query.
+
+               [1,1] = size(inst); int32 = class(inst)
+
+      row      the index of the row containing the element.
+
+               [1,1] = size(inst); int32 = class(inst)
+
+               This number refers to a member of the set of rows matching
+               a query. 'row' must be in the range
+
+                  1:nmrows
+
+               where 'nmrows' is the matching row count returned
+               by <a href="cspice_ekfind.html">cspice_ekfind</a>.
+
+   the call:
+
+       [nelt] = <b>cspice_eknelt</b>( selidx, row )
+
+   returns:
+
+      nelt    the number of elements in the column entry belonging to the
+              specified column in the specified row.
+
+               [1,1] = size(inst); int32 = class(inst)
+
+
+              Null entries in variable-size columns are considered to have
+              size 1.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Perform a query on an EK file that contains a database with
+      the different commands of the Deep Impact spacecraft subsystem,
+      and a table with the commands, their parameter names and the
+      parameters' ranges. The parameter's ranges are provided in a
+      a character column with variable number of items. Obtain the
+      parameter ranges for given parameter name for all commands that
+      use that parameter.
+
+      Use the EK kernel below to load the Deep Impact spacecraft
+      subsystem commands dictionary.
+
+         dif_cmdict_128_20050620.bdb
+
+
+      Example code begins here.
+
+
+      function eknelt_ex1()
+
+         %
+         % Assign an EK file to load.
+         %
+         EK = 'dif_cmdict_128_20050620.bdb';
+         MAXSTR = 1025;
+
+         %
+         % Load the EK.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( EK )
+
+         %
+         % The file &quot;test_file.EK&quot; contains the table 'vector_1', and
+         % 'vector_1' has the column named 'd_col_1', a vector of double
+         % precision values.
+         %
+
+         %
+         % Define a set of constraints to perform a query on all
+         % loaded EK files (the SELECT clause). In this case select
+         % the column &quot;d_col_1&quot; from table &quot;vector_1.&quot;
+         %
+         query = [ 'Select COMMAND, PARAMETER_RANGE from DIF_COMMANDS ',  ...
+                   'where PARAMETER_NAME=&quot;DEVICE_SELECT&quot;' ];
+
+         %
+         % Query the EK system for data rows matching the
+         % SELECT restraints.
+         %
+         [nmrows, ok, errmsg] = <a href="cspice_ekfind.html">cspice_ekfind</a>( query );
+
+         %
+         % Check whether an error occurred while processing the
+         % SELECT clause. If so, output the error message.
+         %
+         if ( ok )
+            printf( 'SELECT clause error: %s\n', errmsg );
+         end
+
+         %
+         % Loop over each row found matching the query.
+         %
+         for rowno = 1:nmrows
+
+            %
+            % Fetch the command name. We know it's only one element.
+            %
+            selidx = 1;
+            [cdata, isnull, found] = <a href="cspice_ekgc.html">cspice_ekgc</a>( selidx, rowno, 1, MAXSTR );
+
+            if  ~isnull
+               fprintf( 'Row: %d\nCommand: %s\n', rowno, cdata );
+            end
+
+
+            %
+            % Fetch now the parameter range data. We know the query
+            % returned these data in the second column, which may have
+            % multiple elements.
+            %
+            selidx = 2;
+            nelt   = <b>cspice_eknelt</b>( selidx, rowno);
+
+            %
+            % Use <a href="cspice_ekgc.html">cspice_ekgc</a> to retrieve the value from
+            % row/column position.
+            %
+            for eltidx = 1:nelt
+
+               [cdata, isnull, found] = <a href="cspice_ekgc.html">cspice_ekgc</a>( selidx, rowno,       ...
+                                                     eltidx, MAXSTR );
+
+               %
+               % Output the value, if non-null data exist at the
+               % requested position.
+               %
+               if  ~isnull
+                  fprintf( '  Range (elm %d): %s\n', eltidx, cdata );
+               end
+
+            end
+
+         end
+
+         %
+         % Clear the kernel pool and database. Note, you don't normally
+         % unload an EK after a query, rather at the end of a program.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Row: 1
+      Command: PWFPSW_PRI_SEL
+        Range (elm 1): 'RW_SET'='7', 'INST_SET'='21', 'SBAND_RX'='18', 'SBA***
+        Range (elm 2): 'IMPACTOR_SOH'='23'
+      Row: 2
+      Command: PWFPSW_AVAIL
+        Range (elm 1): 'PI'='0', 'CTB'='1', 'RIU'='2', 'XBT'='3', 'HTRS_ESB***
+        Range (elm 2): 'HTRS_NEB'='6', 'RW1'='7', 'RW2'='8', 'RW3'='9', 'RW***
+        Range (elm 3): 'STRTKR'='12', 'THRSTRS'='13', 'LVALVES'='14', 'SPAR***
+        Range (elm 4): 'TWTA'='17', 'SBANDRX'='18', 'SBANDTX'='19', 'SPARE2***
+        Range (elm 5): 'HRI'='22', 'IMP_SOH'='23'
+      Row: 3
+      Command: PWFCTL_CTB
+        Range (elm 1): 'CTB_A'='2', 'CTB_B'='3'
+      Row: 4
+      Command: PWFCTL_HTRS_ESB
+        Range (elm 1): 'SRVHTR_A'='2', 'SRVHTR_B'='3'
+      Row: 5
+      Command: PWFCTL_SCUCPU
+        Range (elm 1): 'SCUCPU_A'='2', 'SCUCPU_B'='3'
+      Row: 6
+      Command: PWFCTL_HTRS_NEB
+        Range (elm 1): 'HTRS_NEB_A'='2', 'HTRS_NEB_B'='3'
+
+
+      Warning: incomplete output. 5 lines extended past the right
+      margin of the header and have been truncated. These lines are
+      marked by &quot;***&quot; at the end of each line.
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine is meant to be used in conjunction with the EK fetch
+   entry points <a href="cspice_ekgc.html">cspice_ekgc</a>, <a href="cspice_ekgd.html">cspice_ekgd</a>, and <a href="cspice_ekgi.html">cspice_ekgi</a>. This routine
+   allows the caller of those routines to determine appropriate
+   loop bounds to use to fetch each column entry in the current row.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If this routine is called when no E-kernels have been loaded,
+       the error SPICE(NOLOADEDFILES) is signaled by a routine in the
+       call tree of this routine.
+
+   2)  If `selidx' is outside of the range established by the last query
+       passed to the EK search engine, the error SPICE(INVALIDINDEX) is
+       signaled by a routine in the call tree of this routine.
+
+   3)  If `row' is outside of the range established by the last query passed
+       to the EK search engine, the error SPICE(INVALIDINDEX) is signaled by
+       a routine in the call tree of this routine.
+
+   4)  If any of the input arguments, `selidx' or `row', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   5)  If any of the input arguments, `selidx' or `row', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   This routine reads binary &quot;sequence component&quot; EK files.
+   In order for a binary EK file to be accessible to this routine,
+   the file must be &quot;loaded&quot; via a call to the routine <a href="cspice_furnsh.html">cspice_furnsh</a>.
+
+   Text format EK files cannot be used by this routine; they must
+   first be converted by binary format by the NAIF Toolkit utility
+   SPACIT.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ek.html">EK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Changed the example
+       code to work with Deep Impact PDS archived data, and added the
+       corresponding problem statement.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 03-NOV-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 10-APR-2010 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   return the number of elements in a column entry
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

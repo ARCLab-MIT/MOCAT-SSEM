@@ -1,0 +1,345 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_wnsumd</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_wnsumd</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_WNSUMD summarizes the contents of a double precision window.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      window   SPICE window containing zero or more intervals.
+
+               [2n,1] = size(window); double = class(window)
+
+   the call:
+
+      [meas, avg, stddev, idxsml, idxlon] = <b>cspice_wnsumd</b>( window )
+
+   returns:
+
+      meas     total measure of the intervals in the input  window. This is
+               just the sum of the measures of the individual intervals.
+
+               [1,1] = size(meas); double = class(meas)
+
+      avg      average measure of the intervals in the input window.
+
+               [1,1] = size(avg); double = class(avg)
+
+      stddev   standard deviation of the measures of the intervals in the
+               input window.
+
+               [1,1] = size(stddev); double = class(stddev)
+
+      idxsml,
+      idxlon   indices of the left endpoint of, respectively, the shortest
+               and longest intervals in the data contained in `window'.
+
+               [1,1] = size(idxlon); int32 = class(idxlon)
+               [1,1] = size(idxsml); int32 = class(idxsml)
+
+               The following algorithm describes the relation of
+               `idxsml' and `idxlon' to the window data:
+
+                  The shortest interval:
+
+                     [ window(idxsml), window(idxsml+1) ]
+
+                  The longest interval:
+
+                     [ window(idxlon), window(idxlon+1) ]
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Define an array representing a window with six intervals, and
+      calculate the summary for that window.
+
+      Example code begins here.
+
+
+      function wnsumd_ex1()
+
+         %
+         % Define an array representing a window with six intervals.
+         % The values in `window' have correct order for a
+         % SPICE window.
+         %
+         window = [ [  1.;  3.]; ...
+                    [  7.; 11.]; ...
+                    [ 18.; 18.]; ...
+                    [ 23.; 27.]; ...
+                    [ 30.; 69.]; ...
+                    [ 72.; 80.] ];
+
+         %
+         % Calculate the summary for `window'.
+         %
+         [meas, avg, stddev, idxsml, idxlon] = <b>cspice_wnsumd</b>( window );
+
+         %
+         % `idxsml' and `idxlon' refer to the indices of
+         % the &quot;cell&quot; data array.
+         %
+         intrvl_short= (idxsml+1)/2;
+         intrvl_long = (idxlon+1)/2;
+
+         fprintf( 'Measure           : %f\n', meas        )
+         fprintf( 'Average           : %f\n', avg         )
+         fprintf( 'Standard Dev      : %f\n', stddev      )
+         fprintf( 'Index shortest    : %i\n', idxsml      )
+         fprintf( 'Index longest     : %i\n', idxlon      )
+         fprintf( 'Interval shortest : %i\n', intrvl_short)
+         fprintf( 'Interval longest  : %i\n', intrvl_long )
+
+         fprintf( 'Shortest interval : %f %f\n', window(idxsml),  ...
+                                                 window(idxsml+1) )
+
+         fprintf( 'Longest interval  : %f %f\n', window(idxlon), ...
+                                                 window(idxlon+1) )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Measure           : 57.000000
+      Average           : 9.500000
+      Standard Dev      : 13.413302
+      Index shortest    : 5
+      Index longest     : 9
+      Interval shortest : 3
+      Interval longest  : 5
+      Shortest interval : 18.000000 18.000000
+      Longest interval  : 30.000000 69.000000
+
+
+   2) Let A contain the intervals
+
+         [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ]
+
+      Let B contain the singleton intervals
+
+         [ 2, 2 ]  [ 9, 9 ]  [ 27, 27 ]
+
+      The measures of A and B are
+
+         (3-1) + (11-7) + (27-23) = 10
+
+      and
+
+         (2-2) + (9-9) + (27-27) = 0
+
+      respectively. Each window has three intervals; thus, the average
+      measures of the windows are 10/3 and 0. The standard deviations
+      are
+
+           ------------------------------------------
+          |       2         2          2
+          |  (3-1)  + (11-7)  + (27-23)           2           1/2
+          |  ---------------------------  - (10/3)     = (8/9)
+          |             3
+        \ |
+         \|
+
+      and 0. Neither window has one &quot;shortest&quot; interval or &quot;longest&quot;
+      interval; so the first ones found are returned: `idxsml' and
+      `idxlon' are 0 and 2 for A, 0 and 0 for B.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine provides a summary of the input window, consisting
+   of the following items:
+
+   -  The measure of the window.
+
+   -  The average and standard deviation of the measures
+      of the individual intervals in the window.
+
+   -  The indices of the left endpoints of the shortest
+      and longest intervals in the window.
+
+   All of these quantities are zero if the window contains no
+   intervals.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `window' has odd cardinality, the error
+       SPICE(INVALIDCARDINALITY) is signaled by a routine in the call
+       tree of this routine.
+
+   2)  Left endpoints of stored intervals must be strictly greater
+       than preceding right endpoints. Right endpoints must be
+       greater than or equal to corresponding left endpoints.
+       Invalid window data are not diagnosed by this routine and may
+       lead to unpredictable results.
+
+   3)  If the input argument `window' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   4)  If the input argument `window' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Changed output argument names &quot;shortest&quot; and &quot;longest&quot; to &quot;idxsml&quot;
+       and &quot;idxlon&quot;.
+
+       Edited the header to comply with NAIF standard. Added
+       example's problem statement, and a second example.
+
+       Corrected error message format.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 12-MAR-2012 (EDW) (SCK)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 15-DEC-2008 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   summary of a d.p. window
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

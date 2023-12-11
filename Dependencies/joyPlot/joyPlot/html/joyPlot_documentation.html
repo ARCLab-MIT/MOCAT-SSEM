@@ -1,0 +1,474 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>joyPlot documentation</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-04-23"><meta name="DC.source" content="joyPlot_documentation.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><tt>joyPlot</tt> documentation</h1><!--introduction--><p>The <tt>joyPlot</tt> function plots your data in a ridgeline representation, just like in the cover of Joy Divisions' Unknown Pleasures (and in many other newspapers, journals, etc.). The function is very simple and only uses the MATLAB&reg; built-in functions <tt>fill</tt> and <tt>plot</tt>. I am actually amazed that this wasn't programmed before, but there you go.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">Examples</a></li><li><a href="#13">Name-Value Pair Arguments</a></li><li><a href="#14">See also</a></li><li><a href="#15">About</a></li></ul></div><h2 id="1">Syntax</h2><p><tt>joyPlot(data,x,offset)</tt></p><p><tt>joyPlot(data,x,offset,overlapMethod)</tt></p><p><tt>joyPlot(data,x,offset,overlapMethod,reverse)</tt></p><p><tt>joyPlot(_,Name,Value)</tt></p><p><tt>[hf,hl] = joyPlot(_)</tt></p><p><tt>[hs,hf,hl] = joyPlot(_)</tt></p><p><tt>[hs,hf,hl,hvl] = joyPlot(_)</tt></p><h2 id="2">Description</h2><p><tt>joyPlot(data,x,offset)</tt> Plots the information in the m by n matrix <tt>data</tt>, where n is the number of datasets and m is the sampling. <tt>x</tt> is a vector containing the <img src="joyPlot_documentation_eq12428413953531653171.png" alt="$x$" style="width:8px;height:7px;">-coordinates of <tt>data</tt>. <tt>offset</tt> is the relative vertical distance between datasets. By default, the first row is plotted at the top and the last one at the bottom.</p><p><tt>joyPlot(data,x,offset,overlapMethod)</tt> If <tt>overlapMethod</tt> is set to <tt>'variable'</tt>, <tt>offset</tt> is the relative overlap in percent between datasets.</p><p><tt>joyPlot(data,x,offset,overlapMethod,reverse)</tt> If <tt>reverse</tt> is set to <tt>'true'</tt>, the first row of <tt>data</tt> will be plotted at the bottom and the last at the bottom.</p><p><tt>joyPlot(_,Name,Value)</tt> Specifies patch and line properties using one or more <tt>'Name,Value'</tt> pairs. For a list see Properties below.</p><p><tt>[hf,hl] = joyPlot(_)</tt> Returns the patch and line handles.</p><p><tt>[hs,hf,hl] = joyPlot(_)</tt> If the stroke is requested, its handle can be returned as well.</p><p><tt>[hs,hf,hl,hvl] = joyPlot(_)</tt> If additional vertical lines are plotted, their handles can be returned too.</p><h2 id="3">Examples</h2><p><b>Joy Division's Unknown Pleasures album cover by Peter Saville</b></p><p>You can find online a LOT of information about this, so <a href="https://www.vice.com/en_us/article/gvd9aj/the-story-behind-joy-divisions-iconic-iunknown-pleasuresi-album-cover">here</a> is a link if you want to read the back story. I found the dataset (or at least a similar one) online. More details <a href="https://observablehq.com/@mbostock/psr-b1919-21">here</a> and <a href="https://www.r-bloggers.com/recreating-unknown-pleasures-graphic/">here</a> .</p><pre class="codeinput"><span class="comment">% Save the data from the web</span>
+filename = websave(<span class="string">'pulsar.csv'</span>,[<span class="string">'https://gist.githubusercontent.com/borgar/'</span>,<span class="keyword">...</span>
+    <span class="string">'31c1e476b8e92a11d7e9/raw/0fae97dab6830ecee185a63c1cee0008f6778ff6/'</span>,<span class="keyword">...</span>
+    <span class="string">'pulsar.csv'</span>]);
+<span class="comment">% Import it into MATLAB(R)</span>
+data = readmatrix(filename);
+x = linspace(0,93,size(data,2));
+<span class="comment">% Create the figure and show the magic</span>
+figure
+joyPlot(data',x,4)
+set(gcf,<span class="string">'position'</span>,[500,100,560,680])
+set(gca,<span class="string">'Visible'</span>,<span class="string">'off'</span>, <span class="string">'box'</span>,<span class="string">'off'</span>,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[])
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_01.png" alt=""> <p><b>Add some customization</b></p><p>Don't get me wrong, I don't think that this piece of art needs any more color, detail or anything. But for the sake of showing off the algorithm let's add some options.</p><pre class="codeinput"><span class="comment">% Add face colors as a function of the mean value of each dataset</span>
+figure
+joyPlot(data',x,4,<span class="string">'FaceColor'</span>,mean(data,2))
+set(gcf,<span class="string">'position'</span>,[500,100,560,680])
+set(gca,<span class="string">'Visible'</span>,<span class="string">'off'</span>, <span class="string">'box'</span>,<span class="string">'off'</span>,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[])
+<span class="comment">% Add a colorbar to show the propertiy value</span>
+colorbar
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_02.png" alt=""> <p>One last example with this data set: change the line color and add a stroke. Why anyone would do something like this is beyond me, though.</p><pre class="codeinput">figure
+joyPlot(data',x,4,<span class="string">'FaceColor'</span>,mean(data,2),<span class="string">'StrokeColor'</span>,<span class="string">'k'</span>,<span class="string">'LineColor'</span>,<span class="string">'w'</span>)
+set(gcf,<span class="string">'position'</span>,[500,100,560,680])
+set(gca,<span class="string">'Visible'</span>,<span class="string">'off'</span>, <span class="string">'box'</span>,<span class="string">'off'</span>,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[])
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_03.png" alt=""> <p><b>Plot some distributions</b></p><p>Let's face it, we are not goint to plot interesting things like that pulsar. Let's go with some simple distributions. I will use this example to show how to reverse the data representation and use variable offset of the datasets.</p><pre class="codeinput"><span class="comment">% Create the datasets from normal distributions</span>
+<span class="comment">% Number of datasets</span>
+n = 10;
+<span class="comment">% Sampling</span>
+N = 100;
+<span class="comment">% Min and max values in x</span>
+xmin = 0;
+xmax = 18;
+x = linspace(xmin,xmax,N);
+<span class="comment">% Allocate a matrix to store the datasets and medians,</span>
+data = zeros(N,n);
+medians = zeros(1,n);
+<span class="comment">% Create the distributions and the data with changing shape and scale.</span>
+<span class="comment">% Save the median for later use</span>
+distName = <span class="string">'gamma'</span>;
+a = linspace(2,7,n);
+b = linspace(0.5,1.5,n);
+<span class="keyword">for</span> ii = 1:n
+    dist = makedist(distName,<span class="string">'a'</span>,a(ii),<span class="string">'b'</span>,b(ii));
+    data(:,ii) = pdf(dist,x);
+    medians(ii) = dist.median;
+<span class="keyword">end</span>
+figure
+<span class="comment">% Set overlapMethod to 'variable' and reverse to 'true'.</span>
+joyPlot(data,x,0.4,<span class="string">'variable'</span>,false,<span class="string">'FaceColor'</span>,<span class="string">'k'</span>,<span class="string">'StrokeColor'</span>,<span class="string">'w'</span>)
+<span class="comment">% Some axes settings</span>
+set(gca,<span class="string">'Color'</span>,[0.93 0.93 0.93])
+set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>)
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_04.png" alt=""> <p><b>Change the color of the stroke as a function of the height</b></p><p>This is achieved with the stroke of the diagram and therefore the line has to be hidden. This is the case because the stroke is created with a patch. See more details in the <a href="https://de.mathworks.com/help/matlab/ref/patch.html#bur94a4-1">documentation</a>. The 'FaceColor' value has to be set to 'interp'.</p><pre class="codeinput">figure
+<span class="comment">% For more clarity, 'LineColor' was set to 'none'</span>
+joyPlot(data,x,0.3,<span class="string">'variable'</span>,true,<span class="string">'FaceColor'</span>,<span class="string">'k'</span>,<span class="keyword">...</span>
+    <span class="string">'StrokeColor'</span>,<span class="string">'interp'</span>,<span class="string">'LineColor'</span>,<span class="string">'none'</span>)
+<span class="comment">% Some axes settings</span>
+set(gca,<span class="string">'Color'</span>,[0.93 0.93 0.93])
+set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>)
+<span class="comment">% Change the colormap, you know, for fun.</span>
+colormap(jet)
+colorbar
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_05.png" alt=""> <p><b>Other useful combinations</b></p><p>If the overall shape of a distribution is important but its maximum value isn't, normalizing the data is the way to go. We will use the same dataset as before, but we will normalize it.</p><pre class="codeinput"><span class="comment">% Normalize the data</span>
+dataN = normalize(data,1,<span class="string">'range'</span>);
+<span class="comment">% Plot with the position as color</span>
+figure
+joyPlot(dataN,x,0.3,<span class="string">'variable'</span>,true,<span class="string">'FaceColor'</span>,<span class="string">'position'</span>,<span class="string">'FaceAlpha'</span>,0.6)
+<span class="comment">% Some axes settings</span>
+set(gca,<span class="string">'Color'</span>,[0.93 0.93 0.93])
+set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>)
+<span class="comment">% Change the colormap, you know, for fun.</span>
+colormap(spring)
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_06.png" alt=""> <p>Other possibility is to change the y-axis labels</p><pre class="codeinput"><span class="comment">% Create a char array with alphabet</span>
+alph = <span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'</span>;
+<span class="comment">% Formatting</span>
+ylbls = sprintfc(<span class="string">'Data %c'</span>,alph(1:n));
+<span class="comment">% Apply</span>
+yticklabels(ylbls)
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_07.png" alt=""> <p><b>Modify plots after creation</b></p><p>We will also add modal indicators. For the gamma distribution the mode is computed like this: <img src="joyPlot_documentation_eq08753605527855192828.png" alt="$M = (a-1)*b$" style="width:100px;height:15px;"></p><pre class="codeinput"><span class="comment">% Compute the modes</span>
+M = (a-1).*b;
+<span class="comment">% Insert them in the joyPlot and return the handles of all objects</span>
+<span class="comment">% By defining the offset as a negative number with overlapMethod</span>
+<span class="comment">% 'variable', the plots now are apart.</span>
+figure
+[hf,hl,hvl] = joyPlot(dataN,x,-0.2,<span class="string">'variable'</span>,true,<span class="string">'FaceColor'</span>,M,<span class="string">'VLines'</span>,M);
+<span class="comment">% Change the colormap</span>
+colormap(<span class="string">'autumn'</span>)
+<span class="comment">% Now change the vertical line style</span>
+set(hvl,<span class="string">'LineStyle'</span>,<span class="string">'-.'</span>)
+<span class="comment">% And the line color</span>
+set(hl,<span class="string">'Color'</span>,[0.5,0.5,0.5])
+<span class="comment">% And the face alpha</span>
+set(hf,<span class="string">'FaceAlpha'</span>,0.6)
+<span class="comment">% And you could keep going with all possible patch and line methods.</span>
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_08.png" alt=""> <p><b>Use everything at the same time</b></p><p>Why not? In the following example we will be showing 3 different properties of the curves simultaneously: the median, the scale and the local density value.</p><pre class="codeinput"><span class="comment">% Note that I removed the handle to the line because I set LineColor to</span>
+<span class="comment">% 'none'.</span>
+figure
+[hs,hf,hvl] = joyPlot(data,x,0.3,<span class="string">'variable'</span>,true,<span class="string">'FaceColor'</span>,b,<span class="keyword">...</span>
+    <span class="string">'VLines'</span>,medians,<span class="string">'StrokeColor'</span>,<span class="string">'interp'</span>,<span class="string">'LineColor'</span>,<span class="string">'none'</span>);
+cbar = colorbar;
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_09.png" alt=""> <p>Notice how the lines do not change colors with the height? That is because we are using the same colormap for both the face and the edge. In MATLAB&reg; it's impossible to use two maps for an axis, so we have to go with a workaround. Find more information <a href="https://de.mathworks.com/matlabcentral/answers/101346-how-do-i-use-multiple-colormaps-in-a-single-figure">here</a>.</p><pre class="codeinput"><span class="comment">% Split the colormap</span>
+colormap([parula(64);spring(64)]);
+<span class="comment">% Get the CData of the strokes</span>
+sCData = cell2mat(get(hs,<span class="string">'CData'</span>)');
+<span class="comment">% Change the values of the stroke CData</span>
+sCDataN = reshape(normalize(sCData(:),<span class="string">'range'</span>),size(sCData));
+<span class="comment">% Set the new CData in the handle</span>
+set(hs,{<span class="string">'CData'</span>},num2cell(sCDataN',2))
+<span class="comment">% Get the CData of the faces</span>
+fCData = cell2mat(get(hf,<span class="string">'CData'</span>));
+<span class="comment">% Change the values of the faces CData. The 1e-4 value is there to assure</span>
+<span class="comment">% that the two datasets do not overlap.</span>
+fCDataN = normalize(fCData,<span class="string">'range'</span>) + 1 + 1e-4;
+<span class="comment">% Set the new CData in the handle</span>
+set(hf,{<span class="string">'CData'</span>},num2cell(fCDataN,2))
+<span class="comment">% Set the axis of the colorbar</span>
+caxis([min(sCDataN(:)) max(fCDataN(:))])
+<span class="comment">% Change the labels</span>
+slabels = num2cell(linspace(min(sCData(:)),max(sCData(:)),6));
+flabels = num2cell(linspace(min(fCData(:)),max(fCData(:)),6));
+cbar.TickLabels = [slabels(1:end-1),<span class="string">'-'</span>,flabels(2:end)];
+</pre><img vspace="5" hspace="5" src="joyPlot_documentation_10.png" alt=""> <h2 id="13">Name-Value Pair Arguments</h2><p>Specify optional comma-separated pairs of Name,Value arguments. Name is the argument name and Value is the corresponding value. Name must appear inside quotes. You can specify several name and value pair arguments in any order as Name1,Value1,...,NameN,ValueN.</p><p>- <tt>'FaceColor'</tt>: works just like the color in the <tt>patch</tt> function. It additionally accepts the input 'position', which colors the faces according to the position in the y-axis.</p><p>- <tt>'FaceAlpha'</tt>: works just like <tt>'FaceAlpha'</tt> in the function <tt>patch</tt>.</p><p>- <tt>'LineColor'</tt>: works just like the color of function <tt>plot</tt>.</p><p>- <tt>'LineWidth'</tt>: works just like <tt>'LineWidth'</tt> in the function <tt>plot</tt>.</p><p>- <tt>'StrokeColor'</tt>: adds a stroke to each dataset with the specified color. Here, the color works just like in the funciton <tt>patch</tt>.</p><p>- <tt>'StrokeWidth'</tt>: adds a stroke to each dataset with the specified width. Again, this works like in the function <tt>patch</tt>.</p><p>- <tt>'VLines'</tt>: adds vertical lines in each dataset corresponding to the x-coordinates provided. This is useful to plot median, mean or mode values for example.</p><p>- <tt>'VLinesColor'</tt>: works just like the color of function <tt>plot</tt>.</p><p>- <tt>'VLinesWidth'</tt>: works just like <tt>'LineWidth'</tt> in the function <tt>plot</tt>.</p><h2 id="14">See also</h2><p><tt>plot</tt>, <tt>patch</tt>, <tt>fill</tt></p><h2 id="15">About</h2><p>Programmed by Santiago M. Benito at the Chair of Materials Technology of the Ruhr-Universit&auml;t Bochum.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% |joyPlot| documentation
+% The |joyPlot| function plots your data in a ridgeline representation,
+% just like in the cover of Joy Divisions' Unknown Pleasures (and in many
+% other newspapers, journals, etc.). The function is very simple and only
+% uses the MATLAB(R) built-in functions |fill| and |plot|. I am actually
+% amazed that this wasn't programmed before, but there you go.
+%
+%% Syntax
+% |joyPlot(data,x,offset)| 
+% 
+% |joyPlot(data,x,offset,overlapMethod)|
+%
+% |joyPlot(data,x,offset,overlapMethod,reverse)| 
+%
+% |joyPlot(___,Name,Value)| 
+%
+% |[hf,hl] = joyPlot(___)| 
+%
+% |[hs,hf,hl] = joyPlot(___)| 
+%
+% |[hs,hf,hl,hvl] = joyPlot(___)| 
+% 
+%% Description
+% |joyPlot(data,x,offset)| Plots the information in the m by n matrix
+% |data|, where n is the number of datasets and m is the sampling. |x| is a
+% vector containing the $x$-coordinates of |data|. |offset| is the relative
+% vertical distance between datasets. By default, the first row is plotted
+% at the top and the last one at the bottom.
+% 
+% |joyPlot(data,x,offset,overlapMethod)| If |overlapMethod| is set to
+% |'variable'|, |offset| is the relative overlap in percent between
+% datasets.
+%
+% |joyPlot(data,x,offset,overlapMethod,reverse)| If |reverse| is set to
+% |'true'|, the first row of |data| will be plotted at the bottom and the
+% last at the bottom. 
+%
+% |joyPlot(___,Name,Value)| Specifies patch and line properties using one
+% or more |'Name,Value'| pairs. For a list see Properties below.
+%
+% |[hf,hl] = joyPlot(___)| Returns the patch and line handles.
+%
+% |[hs,hf,hl] = joyPlot(___)| If the stroke is requested, its handle can be
+% returned as well.
+%
+% |[hs,hf,hl,hvl] = joyPlot(___)| If additional vertical lines are plotted,
+% their handles can be returned too.
+%
+%% Examples
+% *Joy Division's Unknown Pleasures album cover by Peter Saville*
+%
+% You can find online a LOT of information about this, so 
+% <https://www.vice.com/en_us/article/gvd9aj/the-story-behind-joy-divisions-iconic-iunknown-pleasuresi-album-cover
+% here>
+% is a link if you want to read the back story.
+% I found the dataset (or at least a similar one) online.
+% More details
+% <https://observablehq.com/@mbostock/psr-b1919-21
+% here>
+% and 
+% <https://www.r-bloggers.com/recreating-unknown-pleasures-graphic/
+% here>
+% .
+
+% Save the data from the web
+filename = websave('pulsar.csv',['https://gist.githubusercontent.com/borgar/',...
+    '31c1e476b8e92a11d7e9/raw/0fae97dab6830ecee185a63c1cee0008f6778ff6/',...
+    'pulsar.csv']);
+% Import it into MATLAB(R)
+data = readmatrix(filename);
+x = linspace(0,93,size(data,2));
+% Create the figure and show the magic
+figure
+joyPlot(data',x,4)
+set(gcf,'position',[500,100,560,680])
+set(gca,'Visible','off', 'box','off','XTick',[],'YTick',[])
+%%
+% *Add some customization*
+%
+% Don't get me wrong, I don't think that this piece of art needs any more
+% color, detail or anything. But for the sake of showing off the algorithm
+% let's add some options.
+
+% Add face colors as a function of the mean value of each dataset
+figure
+joyPlot(data',x,4,'FaceColor',mean(data,2))
+set(gcf,'position',[500,100,560,680])
+set(gca,'Visible','off', 'box','off','XTick',[],'YTick',[])
+% Add a colorbar to show the propertiy value
+colorbar
+%%
+% One last example with this data set: change the line color and add a
+% stroke. Why anyone would do something like this is beyond me, though.
+
+figure
+joyPlot(data',x,4,'FaceColor',mean(data,2),'StrokeColor','k','LineColor','w')
+set(gcf,'position',[500,100,560,680])
+set(gca,'Visible','off', 'box','off','XTick',[],'YTick',[])
+%%
+% *Plot some distributions*
+%
+% Let's face it, we are not goint to plot interesting things like that
+% pulsar. Let's go with some simple distributions. I will use this example
+% to show how to reverse the data representation and use variable offset of
+% the datasets.
+
+% Create the datasets from normal distributions
+% Number of datasets
+n = 10;
+% Sampling
+N = 100;
+% Min and max values in x
+xmin = 0;
+xmax = 18;
+x = linspace(xmin,xmax,N);
+% Allocate a matrix to store the datasets and medians,
+data = zeros(N,n);
+medians = zeros(1,n);
+% Create the distributions and the data with changing shape and scale.
+% Save the median for later use
+distName = 'gamma';
+a = linspace(2,7,n);
+b = linspace(0.5,1.5,n);
+for ii = 1:n
+    dist = makedist(distName,'a',a(ii),'b',b(ii));
+    data(:,ii) = pdf(dist,x);
+    medians(ii) = dist.median;
+end
+figure
+% Set overlapMethod to 'variable' and reverse to 'true'.
+joyPlot(data,x,0.4,'variable',false,'FaceColor','k','StrokeColor','w')
+% Some axes settings
+set(gca,'Color',[0.93 0.93 0.93])
+set(gca,'XGrid','on')
+%%
+% *Change the color of the stroke as a function of the height*
+%
+% This is achieved with the stroke of the diagram and therefore the line
+% has to be hidden. This is the case because the stroke is created with
+% a patch. See more details in the
+% <https://de.mathworks.com/help/matlab/ref/patch.html#bur94a4-1
+% documentation>.
+% The 'FaceColor' value has to be set to 'interp'.
+
+figure
+% For more clarity, 'LineColor' was set to 'none'
+joyPlot(data,x,0.3,'variable',true,'FaceColor','k',...
+    'StrokeColor','interp','LineColor','none')
+% Some axes settings
+set(gca,'Color',[0.93 0.93 0.93])
+set(gca,'XGrid','on')
+% Change the colormap, you know, for fun.
+colormap(jet)
+colorbar
+%%
+% *Other useful combinations*
+%
+% If the overall shape of a distribution is important but its maximum
+% value isn't, normalizing the data is the way to go. We will use the same
+% dataset as before, but we will normalize it.
+
+% Normalize the data
+dataN = normalize(data,1,'range');
+% Plot with the position as color
+figure
+joyPlot(dataN,x,0.3,'variable',true,'FaceColor','position','FaceAlpha',0.6)
+% Some axes settings
+set(gca,'Color',[0.93 0.93 0.93])
+set(gca,'XGrid','on')
+% Change the colormap, you know, for fun.
+colormap(spring)
+%%
+% Other possibility is to change the y-axis labels
+
+% Create a char array with alphabet
+alph = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+% Formatting
+ylbls = sprintfc('Data %c',alph(1:n));
+% Apply
+yticklabels(ylbls)
+%%
+% *Modify plots after creation*
+%
+% We will also add modal indicators. For the gamma distribution the mode is
+% computed like this: $M = (a-1)*b$
+
+% Compute the modes
+M = (a-1).*b;
+% Insert them in the joyPlot and return the handles of all objects
+% By defining the offset as a negative number with overlapMethod
+% 'variable', the plots now are apart.
+figure
+[hf,hl,hvl] = joyPlot(dataN,x,-0.2,'variable',true,'FaceColor',M,'VLines',M);
+% Change the colormap
+colormap('autumn')
+% Now change the vertical line style
+set(hvl,'LineStyle','-.')
+% And the line color
+set(hl,'Color',[0.5,0.5,0.5])
+% And the face alpha
+set(hf,'FaceAlpha',0.6)
+% And you could keep going with all possible patch and line methods.
+
+%%
+% *Use everything at the same time*
+%
+% Why not? In the following example we will be showing 3 different
+% properties of the curves simultaneously: the median, the scale
+% and the local density value.
+
+% Note that I removed the handle to the line because I set LineColor to
+% 'none'.
+figure
+[hs,hf,hvl] = joyPlot(data,x,0.3,'variable',true,'FaceColor',b,...
+    'VLines',medians,'StrokeColor','interp','LineColor','none');
+cbar = colorbar;
+%%
+% Notice how the lines do not change colors with the height? That is
+% because we are using the same colormap for both the face and the edge.
+% In MATLAB(R) it's impossible to use two maps for an axis, so we have to
+% go with a workaround. Find more information
+% <https://de.mathworks.com/matlabcentral/answers/101346-how-do-i-use-multiple-colormaps-in-a-single-figure
+% here>.
+
+% Split the colormap
+colormap([parula(64);spring(64)]);
+% Get the CData of the strokes
+sCData = cell2mat(get(hs,'CData')'); 
+% Change the values of the stroke CData
+sCDataN = reshape(normalize(sCData(:),'range'),size(sCData));
+% Set the new CData in the handle
+set(hs,{'CData'},num2cell(sCDataN',2))
+% Get the CData of the faces
+fCData = cell2mat(get(hf,'CData'));
+% Change the values of the faces CData. The 1e-4 value is there to assure
+% that the two datasets do not overlap.
+fCDataN = normalize(fCData,'range') + 1 + 1e-4;
+% Set the new CData in the handle
+set(hf,{'CData'},num2cell(fCDataN,2))
+% Set the axis of the colorbar
+caxis([min(sCDataN(:)) max(fCDataN(:))])
+% Change the labels
+slabels = num2cell(linspace(min(sCData(:)),max(sCData(:)),6));
+flabels = num2cell(linspace(min(fCData(:)),max(fCData(:)),6));
+cbar.TickLabels = [slabels(1:end-1),'-',flabels(2:end)];
+%% Name-Value Pair Arguments
+%
+% Specify optional comma-separated pairs of Name,Value arguments. Name is
+% the argument name and Value is the corresponding value. Name must appear
+% inside quotes. You can specify several name and value pair arguments in
+% any order as Name1,Value1,...,NameN,ValueN.
+%
+% - |'FaceColor'|: works just like the color in the |patch| function. It
+% additionally accepts the input 'position', which colors the faces
+% according to the position in the y-axis.
+%
+% - |'FaceAlpha'|: works just like |'FaceAlpha'| in the function |patch|.
+%
+% - |'LineColor'|: works just like the color of function |plot|.
+%
+% - |'LineWidth'|: works just like |'LineWidth'| in the function |plot|.
+%
+% - |'StrokeColor'|: adds a stroke to each dataset with the specified color.
+% Here, the color works just like in the funciton |patch|.
+%
+% - |'StrokeWidth'|: adds a stroke to each dataset with the specified width.
+% Again, this works like in the function |patch|.
+%
+% - |'VLines'|: adds vertical lines in each dataset corresponding to the
+% x-coordinates provided. This is useful to plot median, mean or mode
+% values for example.
+%
+% - |'VLinesColor'|: works just like the color of function |plot|.
+%
+% - |'VLinesWidth'|: works just like |'LineWidth'| in the function |plot|.
+%
+%% See also
+% |plot|, |patch|, |fill|
+%
+%% About
+% Programmed by Santiago M. Benito at the Chair of Materials Technology of
+% the Ruhr-Universität Bochum.
+##### SOURCE END #####
+--></body></html>

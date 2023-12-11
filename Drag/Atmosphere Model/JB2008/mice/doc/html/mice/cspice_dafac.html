@@ -1,0 +1,397 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafac</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafac</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFAC adds comments from a buffer of character strings to the
+   comment area of a binary DAF file, appending them to any comments which
+   are already present in the file's comment area.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   file handle referring to a DAF.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      buffer   vector containing comments which to write into
+               the comment area of the binary DAF attached to `handle'.
+
+               [n,c1] = size(buffer); char = class(buffer)
+
+                  or
+
+               [1,n] = size(buffer); cell = class(buffer)
+
+               Each element of `buffer' should contain one comment line.
+
+   the call:
+
+      <b>cspice_dafac</b>( handle, buffer )
+
+   adds the contents of `buffer' to the DAF referred to by `handle'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) This example demonstrates how to append new comments to the
+      comment area of a DAF file.
+
+      Use the SPK kernel below as input DAF file for the program.
+
+         earthstns_itrf93_201023.bsp
+
+
+      Example code begins here.
+
+
+      function dafac_ex1()
+
+         %
+         % Local parameters
+         %
+         KERNEL = 'earthstns_itrf93_201023.bsp';
+         BUFFSZ = 25;
+         CMTSIZ = 7;
+         LINLEN = 1000;
+
+         %
+         % Set the new comments to be added to the DAF file.
+         %
+         newcmt = {                                                       ...
+                  '================== NEW COMMENTS ==================',   ...
+                  '',                                                     ...
+                  '   New comments can be appended to the end of the',    ...
+                  '   comment area of a DAF file, with a single',         ...
+                  '   operation.',                                        ...
+                  '',                                                     ...
+                  '================ END NEW COMMENTS ================' };
+
+
+         %
+         % Open a DAF for write. Return a `handle' referring to the
+         % file.
+         %
+         [handle] = <a href="cspice_dafopw.html">cspice_dafopw</a>( KERNEL );
+
+         %
+         % Print the end of comment area from the DAF file.
+         % (Maximum 15 lines.)
+         %
+         done = false;
+
+         while ( ~ done )
+
+            [buffer, done] = <a href="cspice_dafec.html">cspice_dafec</a>( handle, 15, LINLEN );
+
+            if ( done )
+
+               fprintf( [ 'End of comment area of input DAF file (max.',  ...
+                          ' 15 lines):\n' ]                              )
+               fprintf( ['--------------------------------',              ...
+                         '--------------------------------\n'] )
+
+               for i=1:size(buffer,1)
+                  fprintf( '%s\n', buffer(i,:) )
+               end
+
+               fprintf( ['--------------------------------',              ...
+                         '--------------------------------\n'] )
+
+            end
+         end
+
+         %
+         % Append the new comments to the DAF file.
+         %
+         <b>cspice_dafac</b>( handle, newcmt );
+
+         %
+         % Safely close the DAF.
+         %
+         <a href="cspice_dafcls.html">cspice_dafcls</a>( handle );
+
+         %
+         % Check if the comments have indeed appended.
+         %
+         % Open a DAF for read.
+         %
+         [handle] = <a href="cspice_dafopr.html">cspice_dafopr</a>( KERNEL );
+         done     = false;
+
+         while ( ~ done )
+
+            [buffer, done] = <a href="cspice_dafec.html">cspice_dafec</a>( handle, BUFFSZ, LINLEN );
+
+            if ( done )
+
+               fprintf( [ 'End of comment area of input DAF file (max.',  ...
+                          ' 25 lines):\n' ]                              )
+               fprintf( ['--------------------------------',              ...
+                         '--------------------------------\n'] )
+
+               for i=1:size(buffer,1)
+                  fprintf( '%s\n', buffer(i,:) )
+               end
+
+               fprintf( ['--------------------------------',              ...
+                         '--------------------------------\n'] )
+
+            end
+         end
+
+         %
+         % Safely close the DAF.
+         %
+         <a href="cspice_dafcls.html">cspice_dafcls</a>( handle );
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      End of comment area of input DAF file (max. 15 lines):
+      ----------------------------------------------------------------
+         DSS-65_DXYZ       =    (    -0.0100          0.0242          0.015***
+         DSS-65_TOPO_EPOCH =       @2020-OCT-23/00:00
+         DSS-65_UP         =       'Z'
+         DSS-65_NORTH      =       'X'
+
+      \begintext
+      ----------------------------------------------------------------
+      End of comment area of input DAF file (max. 25 lines):
+      ----------------------------------------------------------------
+         DSS-65_DXYZ       =    (    -0.0100          0.0242          0.015***
+         DSS-65_TOPO_EPOCH =       @2020-OCT-23/00:00
+         DSS-65_UP         =       'Z'
+         DSS-65_NORTH      =       'X'
+
+      \begintext
+      ================== NEW COMMENTS ==================
+
+         New comments can be appended to the end of the
+         comment area of a DAF file, with a single
+         operation.
+
+      ================ END NEW COMMENTS ================
+      ----------------------------------------------------------------
+
+
+      Warning: incomplete output. 2 lines extended past the right
+      margin of the header and have been truncated. These lines are
+      marked by &quot;***&quot; at the end of each line.
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A binary DAF contains a data area which is reserved for storing
+   annotations or descriptive textual information about the data
+   contained in a file. This area is referred to as the &quot;comment
+   area&quot; of the file. The comment area of a DAF is a line oriented
+   medium for storing textual information. The comment area preserves
+   leading or embedded white space in the line(s) of text which are
+   stored so that the appearance of the information will be unchanged
+   when it is retrieved (extracted) at some other time. Trailing
+   blanks, however, are NOT preserved, due to the way that character
+   strings are represented in standard Fortran 77.
+
+   This routine will take a buffer of text lines and add (append) them
+   to the comment area of a binary DAF. If there are no comments in the
+   comment area of the file, then space will be allocated and the text
+   lines in `buffer' will be placed into the comment area. The text lines
+   may contain only printable ASCII characters (decimal values 32 -
+   126).
+
+   There is NO maximum length imposed on the significant portion of a
+   text line that may be placed into the comment area of a DAF. The
+   maximum length of a line stored in the comment area should be
+   reasonable, however, so that they may be easily extracted. A good
+   maximum value for this would be 255 characters, as this can easily
+   accommodate &quot;screen width&quot; lines as well as long lines which may
+   contain some other form of information.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the number of comments to be added is not positive, the
+       error SPICE(INVALIDARGUMENT) is signaled by a routine in the
+       call tree of this routine.
+
+   2)  If a non printing ASCII character is encountered in the
+       comments, the error SPICE(ILLEGALCHARACTER) is signaled by a
+       routine in the call tree of this routine.
+
+   3)  If the binary DAF file attached to `handle' is not open with
+       write access, an error is signaled by a routine in the call
+       tree of this routine.
+
+   4)  If the end of the comments cannot be found, i.e., the end of
+       comments marker is missing on the last comment record, the
+       error SPICE(BADCOMMENTAREA) is signaled by a routine in the
+       call tree of this routine.
+
+   5)  If any of the input arguments, `handle' or `buffer', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   6)  If any of the input arguments, `handle' or `buffer', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   See argument `handle' in -I/O.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  This routine uses constants that are specific to the ASCII
+       character sequence. The results of using this routine with
+       a different character sequence are unpredictable.
+
+   2)  This routine is only used to extract records on environments
+       whose characters are a single byte in size. Updates to this
+       routine and routines in its call tree may be required to
+       properly handle other cases.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 25-NOV-2020 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 20-JUL-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   add comments to a binary DAF
+   append comments to a DAF comment area
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

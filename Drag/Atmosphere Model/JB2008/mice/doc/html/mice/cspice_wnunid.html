@@ -1,0 +1,281 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_wnunid</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_wnunid</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_WNUNID returns the window array union of two double
+   precision window arrays.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a        SPICE window containing zero or more intervals.
+
+               [2l,1] = size(a); double = class(a)
+
+      b        SPICE window containing zero or more intervals.
+
+               [2m,1] = size(b); double = class(b)
+
+   the call:
+
+      [c] = <b>cspice_wnunid</b>( a, b )
+
+   returns:
+
+      c        SPICE window resulting from the union (in the SPICE sense)
+               of `a' and `b'.
+
+               [2n,1] = size(c); double = class(c)
+
+               The function output can overwrite either `a' or `b'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given a set of SPK files, compute the total coverage of the
+      ephemeris data for the Earth system barycenter.
+
+      Use the SPK kernel below as input for Earth system barycenter's
+      ephemeris data covering from 01 Jan 1996 to 02 Jan 2111.
+
+         de403.bsp
+
+      Use the SPK kernel below as input for Earth system barycenter's
+      ephemeris data covering from 01 Jan 1050 to 01 Jan 2050.
+
+         de405.bsp
+
+
+      Example code begins here.
+
+
+      function wnunid_ex1()
+
+         SPK1 = 'de403.bsp';
+         SPK2 = 'de405.bsp';
+
+         %
+         % Retrieve the coverage for body 3 from SPK1
+         %
+         cov1 = <a href="cspice_spkcov.html">cspice_spkcov</a>( SPK1, 3, 10 );
+         fprintf( '%s coverage:\n', SPK1 )
+         fprintf( '   %25.12f   %25.12f\n', cov1)
+
+         %
+         % Retrieve the coverage for body 3 from SPK2
+         %
+         cov2 = <a href="cspice_spkcov.html">cspice_spkcov</a>( SPK2, 3, 10 );
+         fprintf( '%s coverage:\n', SPK2 )
+         fprintf( '   %25.12f   %25.12f\n', cov2)
+
+         %
+         % Perform a windows array union on 'cov1' and 'cov2'
+         %
+         cov3 = <b>cspice_wnunid</b>( cov1, cov2 );
+         fprintf( '\nCombined coverage:\n' )
+         fprintf( '   %25.12f   %25.12f\n', cov3)
+
+         %
+         % The output can overwrite the input.
+         %
+         cov1 = <b>cspice_wnunid</b>( cov1, cov2 );
+         fprintf( '\nCombined coverage (overwriting input):\n' )
+         fprintf( '   %25.12f   %25.12f\n', cov1)
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      de403.bsp coverage:
+           -126273537.816086068749     3502872062.183888912201
+      de405.bsp coverage:
+          -1577879958.816058635712     1577880064.183913230896
+
+      Combined coverage:
+          -1577879958.816058635712     3502872062.183888912201
+
+      Combined coverage (overwriting input):
+          -1577879958.816058635712     3502872062.183888912201
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The union of two windows contains every point contained in the
+   first window, or the second window, or both.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  The cardinality of the input windows must be even. Left
+       endpoints of stored intervals must be strictly greater than
+       preceding right endpoints. Right endpoints must be greater
+       than or equal to corresponding left endpoints. Invalid window
+       data are not diagnosed by this routine and may lead to
+       unpredictable results.
+
+   2)  If any of the input arguments, `a' or `b', is undefined, an
+       error is signaled by the Matlab error handling system.
+
+   3)  If any of the input arguments, `a' or `b', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Edited the -Examples section to comply with NAIF standard. Added
+       example's problem statement and modified code example to produce
+       formatted output.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 08-NOV-2012 (EDW) (SCK)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 26-JUN-2007 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   union two d.p. windows
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

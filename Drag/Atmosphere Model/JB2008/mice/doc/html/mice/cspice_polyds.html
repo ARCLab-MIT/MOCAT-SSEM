@@ -1,0 +1,296 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_polyds</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_polyds</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_POLYDS computes the value of a polynomial and its first
+   `nderiv' derivatives at the value `t'.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      coeffs   the coefficients of the polynomial that is to be evaluated.
+
+               [deg+1,1] = size(coeffs); double = class(coeffs)
+
+               The first element of this array should be the constant
+               term, the second element the linear coefficient, the third
+               term the quadratic coefficient, and so on. The number of
+               coefficients supplied should be one more than `deg'.
+
+                  f(x) =   coeffs(1) + coeffs(2)*x + coeffs(3)*x^2
+
+                         + coeffs(4)*x^4 + ... + coeffs(deg+1)*x^deg
+
+      deg      the degree of the polynomial to be evaluated.
+
+               [1,1] = size(deg); int32 = class(deg)
+
+               `deg' should be one less than the number of coefficients
+               supplied.
+
+      nderiv   the number of derivatives to compute.
+
+               [1,1] = size(nderiv); int32 = class(nderiv)
+
+               If `nderiv' is zero, only the polynomial will be evaluated.
+               If nderiv = 1, then the polynomial and its first derivative
+               will be evaluated, and so on. If the value of `nderiv' is
+               negative, the routine returns immediately.
+
+      t        the point at which the polynomial and its derivatives should
+               be evaluated.
+
+               [1,1] = size(t); double = class(t)
+
+   the call:
+
+      [p] = <b>cspice_polyds</b>( coeffs, deg, nderiv, t )
+
+   returns:
+
+      p        an array containing the value of the polynomial and its
+               derivatives evaluated at `t'.
+
+               [nderiv+1,1] = size(p); double = class(p)
+
+               The first element of the array contains the value of `p' at
+               `t'. The second element of the array contains the value of
+               the first derivative of `p' at `t' and so on. The `nderiv' +
+               1'st element of the array contains the nderiv'th derivative
+               of `p' evaluated at `t'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) For the polynomial
+
+         f(x) = 1 + 3*x + 0.5*x^2 + x^3 + 0.5*x^4 - x^5 + x^6
+
+      the coefficient set
+
+         Degree  coeffs
+         ------  ------
+         0       1
+         1       3
+         2       0.5
+         3       1
+         4       0.5
+         5      -1
+         6       1
+
+      Compute the value of the polynomial and it's first
+      3 derivatives at the value `t' = 1.0. We expect:
+
+         Derivative Number     t = 1
+         ------------------    -----
+         f(x)         0        6
+         f'(x)        1        10
+         f''(x)       2        23
+         f'''(x)      3        78
+
+
+      Example code begins here.
+
+
+      function polyds_ex1()
+
+         %
+         % Local constants.
+         %
+         NDERIV =   3;
+
+         %
+         % Local variables.
+         %
+
+         coeffs = [1.0,3.0,0.5,1.0,0.5,-1.0,1.0]';
+
+         t      = 1.0;
+         deg    = 6;
+
+         [p]    = <b>cspice_polyds</b>( coeffs, deg, NDERIV, t );
+
+         for i=1:NDERIV+1
+
+            fprintf( 'P = %f\n', p(i) )
+
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      P = 6.000000
+      P = 10.000000
+      P = 23.000000
+      P = 78.000000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine uses the user supplied coefficients (coeffs)
+   to evaluate a polynomial (having these coefficients) and its
+   derivatives at the point `t'. The zero'th derivative of the
+   polynomial is regarded as the polynomial itself.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `nderiv' is less than zero, an error is signaled by the Mice
+       interface.
+
+   2)  If the degree of the polynomial is less than 0, an error is
+       signaled by the Mice interface.
+
+   3)  If any of the input arguments, `coeffs', `deg', `nderiv' or
+       `t', is undefined, an error is signaled by the Matlab error
+       handling system.
+
+   4)  If any of the input arguments, `coeffs', `deg', `nderiv' or
+       `t', is not of the expected type, or it does not have the
+       expected dimensions and size, an error is signaled by the Mice
+       interface.
+
+   5)  If the number of elements in `coeffs' is less than deg+1, an error
+       is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  Depending on the coefficients the user should be careful when
+       taking high order derivatives. As the example shows, these
+       can get big in a hurry. In general the coefficients of the
+       derivatives of a polynomial grow at a rate greater
+       than N! (N factorial).
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 19-JUL-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   compute a polynomial and its derivatives
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

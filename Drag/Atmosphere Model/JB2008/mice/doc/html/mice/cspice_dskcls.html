@@ -1,0 +1,450 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dskcls</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dskcls</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DSKCLS closes a DSK file opened for read or write.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the file handle for an open DSK file.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      optmiz   is a logical flag indicating whether the DSK
+               should be segregated before it is closed. This
+               option applies only to files open for write
+               access. The value of `optmiz' has no effect for
+               files opened for read access.
+
+               [1,1] = size(optmiz); logical = class(optmiz)
+
+   the call:
+
+      <b>cspice_dskcls</b>( handle, optmiz )
+
+   returns:
+
+   The routine closes the file indicated by 'handle'. The close operation
+   tests the file to ensure the presence of data segments.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Create a three-segment DSK file using plate model data for
+      Phobos. Use latitudinal, rectangular, and planetodetic
+      coordinates in the respective segments. This is not a
+      realistic example, but it serves to demonstrate use of
+      the supported coordinate systems.
+
+      Use the DSK kernel below to provide, for simplicity, the input
+      plate and vertex data. This file has one segment only.
+
+         phobos_3_3.bds
+
+
+      Example code begins here.
+
+
+      function dskcls_ex1()
+
+         %
+         % MiceUser globally defines DSK parameters.
+         % For more information, please see MiceDSK.m.
+         %
+         MiceUser
+
+         NSEG = 3;
+
+         cornam = { 'radius', 'Z-coordinate', 'Z-coordinate', 'altitude'};
+
+         %
+         % Assign names of input and output DSK files.
+         %
+         indsk = 'phobos_3_3.bds';
+         dsk   = 'phobos_3_3_3seg.bds';
+
+         if ( exist( dsk, 'file' ) == 2 )
+            delete( dsk )
+         end
+
+
+         %
+         % Open input DSK for read access; find first segment.
+         %
+         inhan           = <a href="cspice_dasopr.html">cspice_dasopr</a>( indsk );
+         [dladsc, found] = <a href="cspice_dlabfs.html">cspice_dlabfs</a>( inhan );
+
+
+         %
+         % Fetch vertices and plates from input DSK file.
+         %
+         % Note that vertex and plate indices are 1-based.
+         %
+         disp( 'Reading input data...' )
+
+         vrtces = <a href="cspice_dskv02.html">cspice_dskv02</a>( inhan, dladsc, 1, SPICE_DSK02_MAXVRT );
+         plates = <a href="cspice_dskp02.html">cspice_dskp02</a>( inhan, dladsc, 1, SPICE_DSK02_MAXPLT );
+
+         disp( 'Done.' )
+
+
+         %
+         % Set input array sizes required by <a href="cspice_dskmi2.html">cspice_dskmi2</a>.
+         %
+         voxpsz = SPICE_DSK02_MAXVXP;
+         voxlsz = SPICE_DSK02_MXNVLS;
+         worksz = SPICE_DSK02_MAXCEL;
+         spaisz = SPICE_DSK02_SPAISZ;
+         makvtl = true;
+
+         %
+         % Set fine and coarse voxel scales. (These usually
+         % need to determined by experimentation.)
+         %
+         finscl = 5.0;
+         corscl = 4;
+
+         %
+         % Open a new DSK file.
+         %
+         handle = <a href="cspice_dskopn.html">cspice_dskopn</a>( dsk, dsk, 0 );
+
+         for segno=1:NSEG
+
+            %
+            % Create spatial index. We won't generate a
+            % vertex-plate mapping, so we set the flag
+            % for creating this map to &quot;false.&quot;
+            %
+            fprintf( 'Creating segment %d\n', segno )
+            fprintf( 'Creating spatial index...\n' )
+
+            [spaixd, spaixi] = <a href="cspice_dskmi2.html">cspice_dskmi2</a>( vrtces, plates, finscl, ...
+                                              corscl, worksz, voxpsz, ...
+                                              voxlsz, makvtl,         ...
+                                              spaisz );
+
+            fprintf( 'Done.\n')
+
+            %
+            % Set up inputs describing segment attributes:
+            %
+            % - Central body: Phobos
+            % - Surface ID code: user's choice.
+            %   We use the segment number here.
+            % - Data class: general (arbitrary) shape
+            % - Body-fixed reference frame
+            % - Time coverage bounds (TBD)
+            %
+            center = 401;
+            surfid = segno;
+            dclass = SPICE_DSK_GENCLS;
+            frame  = 'IAU_PHOBOS';
+
+            first = -50. * <a href="cspice_jyear.html">cspice_jyear</a>();
+            last  =  50. * <a href="cspice_jyear.html">cspice_jyear</a>();
+
+            %
+            % Set the coordinate system and coordinate system
+            % bounds based on the segment index.
+            %
+            % Zero out the coordinate parameters to start.
+            %
+            corpar = zeros(SPICE_DSK_NSYPAR,1);
+
+            switch segno
+
+               case 1
+
+                  %
+                  % Use planetocentric latitudinal coordinates. Set
+                  % the longitude and latitude bounds.
+                  %
+                  corsys = SPICE_DSK_LATSYS;
+
+                  mncor1 = -<a href="cspice_pi.html">cspice_pi</a>();
+                  mxcor1 =  <a href="cspice_pi.html">cspice_pi</a>();
+                  mncor2 = -<a href="cspice_halfpi.html">cspice_halfpi</a>();
+                  mxcor2 =  <a href="cspice_halfpi.html">cspice_halfpi</a>();
+
+               case 2
+
+                  %
+                  % Use rectangular coordinates. Set the
+                  % X and Y bounds.
+                  %
+                  % The bounds shown here were derived from
+                  % the plate data. They lie slightly outside
+                  % of the range spanned by the plates.
+                  %
+                  corsys = SPICE_DSK_RECSYS;
+
+                  mncor1 = -1.3;
+                  mxcor1 =  1.31;
+                  mncor2 = -1.21;
+                  mxcor2 =  1.2;
+
+               case 3
+
+                  %
+                  % Set the coordinate system to planetodetic.
+                  %
+                  corsys    = SPICE_DSK_PDTSYS;
+
+                  mncor1    = -<a href="cspice_pi.html">cspice_pi</a>();
+                  mxcor1    =  <a href="cspice_pi.html">cspice_pi</a>();
+                  mncor2    = -<a href="cspice_halfpi.html">cspice_halfpi</a>();
+                  mxcor2    =  <a href="cspice_halfpi.html">cspice_halfpi</a>();
+
+                  %
+                  % We'll use equatorial and polar radii from
+                  % pck00010.tpc. These normally would be fetched
+                  % at run time, but for simplicity, we'll use
+                  % hard-coded values.
+                  %
+                  re        = 13.0;
+                  rp        =  9.1;
+                  f         = ( re - rp ) / re;
+
+                  corpar = [ re, f ]';
+
+               otherwise
+
+                  error( 'Mice(BUG)' )
+
+            end
+
+            %
+            % Compute plate model radius bounds.
+            %
+            fprintf( 'Computing %s bounds of plate set...\n', ...
+                                            char(cornam(corsys)) )
+
+            [mncor3, mxcor3] = <a href="cspice_dskrb2.html">cspice_dskrb2</a>( vrtces, plates, ...
+                                              corsys, corpar );
+
+            fprintf ( 'Done.\n' )
+
+            %
+            % Write the segment to the file.
+            %
+            fprintf( 'Writing segment...\n' )
+
+            <a href="cspice_dskw02.html">cspice_dskw02</a>( handle, center, surfid, dclass, frame,   ...
+                           corsys, corpar, mncor1, mxcor1, mncor2,  ...
+                           mxcor2, mncor3, mxcor3, first,  last,    ...
+                           vrtces, plates, spaixd, spaixi        )
+
+         end
+
+         %
+         % Close the input DSK.
+         %
+         <a href="cspice_dascls.html">cspice_dascls</a>( inhan )
+         <b>cspice_dskcls</b>( handle, true )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Reading input data...
+      Done.
+      Creating segment 1
+      Creating spatial index...
+      Done.
+      Computing radius bounds of plate set...
+      Done.
+      Writing segment...
+      Creating segment 2
+      Creating spatial index...
+      Done.
+      Computing Z-coordinate bounds of plate set...
+      Done.
+      Writing segment...
+      Creating segment 3
+      Creating spatial index...
+      Done.
+      Computing altitude bounds of plate set...
+      Done.
+      Writing segment...
+
+
+      Note that after run completion, a new DSK exists in the output
+      directory.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A <b>cspice_dskcls</b> call should balance every <a href="cspice_dskopn.html">cspice_dskopn</a>
+   call.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If an error occurs when the file is closed, the error is
+       signaled by a routine in the call tree of this routine.
+
+   2)  If any of the input arguments, `handle' or `optmiz', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `handle' or `optmiz', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   See argument `handle'.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  This routine should not be called by user applications that have
+       loaded a DSK file via <a href="cspice_furnsh.html">cspice_furnsh</a>. Such applications should call
+       the KEEPER routines <a href="cspice_unload.html">cspice_unload</a> or <a href="cspice_kclear.html">cspice_kclear</a> instead.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/das.html">DAS.REQ</a>
+   <a href="../req/dsk.html">DSK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Changed input argument name &quot;optimz&quot; to &quot;optmiz&quot;.
+
+       Edited the -Examples section to comply with NAIF standard.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 02-FEB-2016 (EDW) (NJB)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   close a DSK file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

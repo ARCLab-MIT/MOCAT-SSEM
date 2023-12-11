@@ -1,0 +1,248 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_edpnt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_edpnt</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_EDPNT scales a point so that it lies on the surface of a specified
+   triaxial ellipsoid that is centered at the origin and aligned
+   with the Cartesian coordinate axes.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      p        a non-zero point in three-dimensional space.
+
+               [3,1] = size(p); double = class(p)
+
+      a,
+      b,
+      c        respectively, the semi-axis lengths of a triaxial
+               ellipsoid in the X, Y, and Z directions.
+
+               [1,1] = size(a); double = class(a)
+               [1,1] = size(b); double = class(b)
+               [1,1] = size(c); double = class(c)
+
+               The axes of the ellipsoid are aligned with the axes of the
+               Cartesian coordinate system.
+
+   the call:
+
+      [ep] = <b>cspice_edpnt</b>( p, a, b, c )
+
+   returns:
+
+      ep       the result of scaling the input point `p' so that it lies on
+               the surface of the triaxial ellipsoid defined by the input
+               semi-axis lengths.
+
+               [3,1] = size(ep); double = class(ep)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Find the surface intercept point on an ellipsoid having radii
+
+          ( 3, 2, 1 )
+
+      of the ray emanating from the origin and having direction
+      vector
+
+          ( 1, 1, 1 )
+
+
+      Example code begins here.
+
+
+      function edpnt_ex1()
+
+         a    = 3.0;
+         b    = 2.0;
+         c    = 1.0;
+
+         v    = [ 1.0, 1.0, 1.0 ]';
+
+         [ep] = <b>cspice_edpnt</b>( v, a, b, c );
+
+         fprintf( 'EP    =  %17.14f %17.14f %17.14f\n', ...
+                                    ep(1), ep(2), ep(3) )
+
+         %
+         % Verify that `ep' is on the ellipsoid.
+         %
+         level =   (ep(1)/a) ^ 2 + (ep(2)/b) ^ 2 + (ep(3)/c) ^ 2;
+
+         fprintf( 'LEVEL =  %17.14f\n', level )
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, the output was:
+
+
+      EP    =   0.85714285714286  0.85714285714286  0.85714285714286
+      LEVEL =   1.00000000000000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine efficiently computes the ellipsoid surface point
+   corresponding to a specified ray emanating from the origin.
+   Practical examples of this computation occur in the Mice
+   routines <a href="cspice_latsrf.html">cspice_latsrf</a> and <a href="cspice_srfrec.html">cspice_srfrec</a>.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If any of the target ellipsoid's semi-axis lengths is
+       non-positive, the error SPICE(INVALIDAXES) is signaled by a
+       routine in the call tree of this routine.
+
+   2)  If `p' is the zero vector, the error SPICE(ZEROVECTOR) is
+       signaled by a routine in the call tree of this routine.
+
+   3)  If the level surface parameter of the input point underflows,
+       the error SPICE(POINTTOOSMALL) is signaled by a routine in the
+       call tree of this routine.
+
+   4)  If any of the input arguments, `p', `a', `b' or `c', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   5)  If any of the input arguments, `p', `a', `b' or `c', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 09-AUG-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   scale point to lie on ellipsoid
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

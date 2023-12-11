@@ -1,0 +1,414 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>mice_nearpt</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>mice_nearpt</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   MICE_NEARPT calculates the point on the surface of an
+   ellipsoid nearest to a specified off-ellipsoid position.
+   The routine also returns the altitude of the position
+   above the ellipsoid
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      positn   the array(s) defining the Cartesian position of a point with
+               respect to the center of an ellipsoid.
+
+               [3,n] = size(rectan); double = class(rectan)
+
+               The vector is expressed in a body-fixed reference frame. The
+               semi-axes of the ellipsoid are aligned with the x, y, and
+               z-axes of the body-fixed frame.
+
+      a,
+      b,
+      c        values of the ellipsoid's triaxial radii ellipsoid, where:
+
+               `a' is length in kilometers of the semi-axis of the ellipsoid
+               parallel to the x-axis of the body-fixed reference frame.
+
+               [1,1] = size(a); double = class(a)
+
+               `b' is length in kilometers of the semi-axis of the ellipsoid
+               parallel to the y-axis of the body-fixed reference frame.
+
+               [1,1] = size(b); double = class(b)
+
+               `c' is length in kilometers of the semi-axis of the ellipsoid
+               parallel to the z-axis of the body-fixed reference frame.
+
+               [1,1] = size(c); double = class(c)
+
+   the call:
+
+      [npoint] = <b>mice_nearpt</b>( positn, a, b, c )
+
+   returns:
+
+      npoint   the structure(s) containing the results of the calculation.
+
+               [1,n] = size(npoint); struct = class(npoint)
+
+               Each structure consists of the fields:
+
+                  pos      the double precision 3-vector defining the
+                           location in the body-fixed frame on the ellipsoid
+                           closest to `positn'.
+
+                           [3,1]  = size(npoint.pos);
+                           double = class(npoint.pos)
+
+                  alt      the double precision scalar altitude of `positn'
+                           above the ellipsoid.
+
+                           [1,1]  = size(npoint.alt);
+                           double = class(npoint.alt)
+
+                           If `positn' is inside the ellipsoid, `alt' will be
+                           negative and have magnitude equal to the distance
+                           between `pos' and `positn'.
+
+               `npoint' returns with the same vectorization measure, N, as
+               `positn'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given a point outside an ellipsoid, compute the nearest point
+      on its surface.
+
+      Example code begins here.
+
+
+      function nearpt_ex1()
+         %
+         % Define the radii of an ellipsoid.
+         %
+         a  =  1.;
+         b  =  2.;
+         c  =  3.;
+
+         %
+         % Use point on the X axis, outside the ellipsoid.
+         %
+         point = [ 3.5; 0.; 0. ];
+         pnear = <b>mice_nearpt</b>( point, a, b, c);
+
+         fprintf('Nearest point: %6.2f %6.2f %6.2f\n', pnear.pos )
+         fprintf('Altitude:      %6.2f\n',             pnear.alt )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Nearest point:   1.00   0.00   0.00
+      Altitude:        2.50
+
+
+   2) Compute the point on the Earth nearest to the Moon at ephemeris
+      time 0.0 (Jan 1 2000, 12:00 TBD).
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: nearpt_ex2.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00010.tpc                  Planet orientation and
+                                          radii
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00010.tpc' )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function nearpt_ex2()
+         %
+         % Load a meta kernel containing SPK and leapseconds kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'nearpt_ex2.tm' )
+
+         %
+         % Retrieve the position of the Moon wrt the Earth at
+         % ephemeris time 0.d (Jan 1 2000 12:00 TDB) in the Earth-fixed
+         % reference frame.
+         %
+         epoch  = 0.;
+         abcorr = 'LT+S';
+         loc    = <a href="mice_spkpos.html">mice_spkpos</a>( 'moon', epoch, 'IAU_EARTH', abcorr, 'earth' );
+
+         %
+         % Retrieve the triaxial radii for Earth (body ID 399).
+         %
+         radii = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'EARTH', 'RADII', 3);
+
+         %
+         % Now calculate the point on the Earth nearest to the Moon
+         % given LT+S aberration correction at the epoch time.
+         %
+         npoint = <b>mice_nearpt</b>( loc.pos, radii(1), radii(2), radii(3) );
+
+         fprintf('Epoch:         %15.8f\n', epoch                    )
+         fprintf('Nearest point: %15.8f %15.8f %15.8f\n', npoint.pos )
+         fprintf('Altitude:      %15.8f\n',               npoint.alt )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Epoch:              0.00000000
+      Nearest point:   3347.08204098  -5294.53585186  -1198.28264121
+      Altitude:      396037.22419372
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A sister version of this routine exists named <a href="cspice_nearpt.html">cspice_nearpt</a> that returns
+   the structure field data as separate arguments.
+
+   Many applications of this routine are more easily performed
+   using the higher-level Mice routine <a href="cspice_subpnt.html">cspice_subpnt</a>. This routine
+   is the mathematical workhorse on which <a href="cspice_subpnt.html">cspice_subpnt</a> relies.
+
+   This routine solves for the location, N, on the surface of an
+   ellipsoid nearest to an arbitrary location, P, relative to that
+   ellipsoid.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If any of the axis lengths `a', `b' or `c' are non-positive, the
+       error SPICE(BADAXISLENGTH) is signaled by a routine in the
+       call tree of this routine.
+
+   2)  If the ratio of the longest to the shortest ellipsoid axis
+       is large enough so that arithmetic expressions involving its
+       squared value may overflow, the error SPICE(BADAXISLENGTH)
+       is signaled by a routine in the call tree of this routine.
+
+   3)  If any of the expressions
+
+          a * abs( positn(1) ) / m^2
+          b * abs( positn(2) ) / m^2
+          c * abs( positn(3) ) / m^2
+
+       where `m' is the minimum of { `a', `b', `c' }, is large enough so
+       that arithmetic expressions involving these sub-expressions
+       may overflow, the error SPICE(INPUTSTOOLARGE) is signaled by a
+       routine in the call tree of this routine.
+
+   4)  If the axes of the ellipsoid have radically different
+       magnitudes, for example if the ratios of the axis lengths vary
+       by 10 orders of magnitude, the results may have poor
+       precision. No error checks are done to identify this problem.
+
+   5)  If the axes of the ellipsoid and the input point `positn' have
+       radically different magnitudes, for example if the ratio of
+       the magnitude of `positn' to the length of the shortest axis is
+       1.E25, the results may have poor precision. No error checks
+       are done to identify this problem.
+
+   6)  If any of the input arguments, `positn', `a', `b' or `c', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   7)  If any of the input arguments, `positn', `a', `b' or `c', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   See -Exceptions section.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 2.0.0, 10-AUG-2021 (NJB) (JDR) (EDW)
+
+       Edit to logic to reduce unneeded operations when
+       error or projection vectors equal zero. Addition
+       of details concerning the &quot;ellipsoid near point&quot;
+       problem and solution.
+
+       Edited the header to comply with NAIF standard. Added
+       examples' problem statement, and meta-kernel for code example #2.
+       Updated code examples to produce formatted output and added
+       <a href="cspice_kclear.html">cspice_kclear</a> to code example #2.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions, -Particulars,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 03-DEC-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 21-DEC-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   distance from point to ellipsoid
+   nearest point on an ellipsoid
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

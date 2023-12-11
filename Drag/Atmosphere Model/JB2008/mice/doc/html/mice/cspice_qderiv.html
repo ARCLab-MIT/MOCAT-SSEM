@@ -1,0 +1,265 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_qderiv</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_qderiv</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_QDERIV estimates the derivative of a function by finding the
+   derivative of a quadratic approximating function. This derivative
+   estimate is equivalent to that found by computing the average of forward
+   and backward differences.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      f0       an array of `ndim' function values at a point on the real
+               line; we'll refer to this point as `x0'.
+
+               [ndim,1] = size(f0); double = class(f0)
+
+      f2       an array of `ndim' function values at a second point on the
+               real line; we'll refer to this point as `x2'.
+
+               [ndim,1] = size(f2); double = class(f2)
+
+               The points `x0' and `x2' must satisfy
+
+                  x2 = x0 + 2 * delta
+
+
+      delta    one half of the difference between `x2' and `x0':
+
+                  delta = ( x2 - x0 ) / 2
+
+               `delta' may be negative but must be non-zero.
+
+               [1,1] = size(delta); double = class(delta)
+
+   the call:
+
+      [dfdt] = <b>cspice_qderiv</b>( f0, f2, delta )
+
+   returns:
+
+      dfdt     an N-dimensional vector representing an estimate of the
+               derivative of the input function at the midpoint `x1' of the
+               interval between `x0' and `x2'.
+
+               [ndim,1] = size(dfdt); double = class(dfdt)
+
+               The ith component of `dfdt' is
+
+                  ( 1 / (2*delta) ) * ( f2(i) - f0(i) )
+
+               We may regard this estimate as the derivative
+               at `x1' of a parabola fitted to the points
+
+                   ( x0, f0(i) ),  ( x2, f2(i) )
+
+               We may also regard this derivative as the average
+               of the forward and backward first-order
+               differences of the input function defined by
+               f0(i), f2(i), and `delta'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Estimate the derivative of x**2 at x = 2.
+
+      Example code begins here.
+
+
+      function qderiv_ex1()
+
+         f0     = zeros(1,1);
+         f2     = zeros(1,1);
+
+         delta  = 1.e-3;
+         f0(1)  = ( 2.0 - delta ) ^ 2.0;
+         f2(1)  = ( 2.0 + delta ) ^ 2.0;
+
+         [dfdt] = <b>cspice_qderiv</b>( f0, f2, delta );
+
+         fprintf( ' 4 - DFDT(1) =  %24.16e\n', 4 - dfdt(1) )
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, the output was:
+
+
+       4 - DFDT(1) =    4.5474735088646412e-13
+
+
+      Note that the difference displayed is platform-dependent, but
+      should be on the order of 1.E-12.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine estimates the derivative of a vector-valued function
+   using the average of forward and backward differences.
+
+   The derivative estimate computed by this routine is equivalent to
+   that obtained by fitting each component of the function with a
+   parabola at the points
+
+      (x0, f(x0)), (x1, f(x1)), (x2, f(x2))
+
+   where
+
+       x0  =  x1 - delta
+       x2  =  x1 + delta
+
+   and finding the derivative of the parabolas at `x1'.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `delta' is zero, the error SPICE(DIVIDEBYZERO) is signaled by
+       a routine in the call tree of this routine.
+
+   2)  If any of the input arguments, `f0', `f2' or `delta', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `f0', `f2' or `delta', is not
+       of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+   4)  If the input vector arguments `f0' and `f2' do not have the
+       same dimension (N), an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 09-AUG-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Estimate function derivative using quadratic fit
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

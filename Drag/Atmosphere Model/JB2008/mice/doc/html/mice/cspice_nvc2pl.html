@@ -1,0 +1,363 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_nvc2pl</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_nvc2pl</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_NVC2PL constructs a SPICE plane from a normal vector
+   and a constant.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      normal,
+      konst    respectively, a normal vector and constant defining a
+               plane.
+
+               [3,1] = size(normal); double = class(normal)
+               [1,1] = size(konst);  double = class(konst)
+
+               `normal' need not be a unit vector.
+
+               Let the symbol &lt; a, b &gt; indicate the inner product of
+               vectors a and b; then the geometric plane is the set of
+               vectors x in three-dimensional space that satisfy
+
+                    &lt; x,  normal &gt;  =  konst.
+
+   the call:
+
+      plane = <b>cspice_nvc2pl</b>( normal, konst )
+
+   returns:
+
+      plane    a structure describing a SPICE plane defined by
+               `normal' and `konst'
+
+               [1,1] = size(plane); struct = class(plane)
+
+               The structure has the fields:
+
+                  normal:   [3,1] = size(normal);   double = class(normal)
+                  constant: [1,1] = size(constant); double = class(constant)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Construct a SPICE plane from a normal vector and a constant.
+
+      Example code begins here.
+
+
+      function nvc2pl_ex1()
+
+         %
+         % Define an arbitrary normal and constant...
+         %
+         normal    = [ 1.; 1.; 1. ];
+         konst  = 23.;
+         fprintf( 'Inputs:\n' );
+         fprintf( '  Normal vector: %15.12f %15.12f %15.12f\n', ...
+                                                  normal       )
+         fprintf( '  Constant     : %15.12f\n\n', konst        )
+
+         %
+         % ...then construct the plane.
+         %
+         plane = <b>cspice_nvc2pl</b>( normal, konst );
+
+         fprintf( 'Generated plane:\n' )
+         fprintf( '  Normal vector: %15.12f %15.12f %15.12f\n', ...
+                                                       plane.normal   )
+         fprintf( '  Constant     : %15.12f\n\n',      plane.constant )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Inputs:
+        Normal vector:  1.000000000000  1.000000000000  1.000000000000
+        Constant     : 23.000000000000
+
+      Generated plane:
+        Normal vector:  0.577350269190  0.577350269190  0.577350269190
+        Constant     : 13.279056191361
+
+
+   2) Apply a linear transformation represented by a matrix to
+      a plane represented by a normal vector and a constant.
+
+      Find a normal vector and constant for the transformed plane.
+
+
+      Example code begins here.
+
+
+      function nvc2pl_ex2()
+
+         %
+         % Set the normal vector and the constant defining the
+         % initial plane.
+         %
+         normal = [-0.1616904, 0.8084521, -0.5659165]';
+         konst  =   4.8102899;
+
+         %
+         % Define a transformation matrix to the right-handed
+         % reference frame having the +i unit vector as primary
+         % axis, aligned to the original frame's +X axis, and
+         % the -j unit vector as second axis, aligned to the +Y
+         % axis.
+         %
+         axdef  = [1.0,  0.0,  0.0]';
+         plndef = [0.0, -1.0,  0.0]';
+
+         [m]    = <a href="cspice_twovec.html">cspice_twovec</a>( axdef, 1, plndef, 2 );
+
+         %
+         % Make a SPICE plane from `normal' and `konst', and then
+         % find a point in the plane and spanning vectors for the
+         % plane.  `normal' need not be a unit vector.
+         %
+         [plane]               = <b>cspice_nvc2pl</b>( normal, konst );
+         [point, span1, span2] = <a href="cspice_pl2psv.html">cspice_pl2psv</a>( plane );
+
+         %
+         % Apply the linear transformation to the point and
+         % spanning vectors.  All we need to do is multiply
+         % these vectors by `m', since for any linear
+         % transformation T,
+         %
+         %       T ( point  +  t1 * span1     +  t2 * span2 )
+         %
+         %    =  T (point)  +  t1 * T(span1)  +  t2 * T(span2),
+         %
+         % which means that T(point), T(span1), and T(span2)
+         % are a point and spanning vectors for the transformed
+         % plane.
+         %
+         tpoint = m * point;
+         tspan1 = m * span1;
+         tspan2 = m * span2;
+
+         %
+         % Make a new SPICE plane `tplane' from the
+         % transformed point and spanning vectors, and find a
+         % unit normal and constant for this new plane.
+         %
+         [tplane]         = <a href="cspice_psv2pl.html">cspice_psv2pl</a>( tpoint, tspan1, tspan2 );
+         [tnorml, tkonst] = <a href="cspice_pl2nvc.html">cspice_pl2nvc</a>( tplane );
+
+         %
+         % Print the results.
+         %
+         fprintf( 'Unit normal vector: %11.7f %11.7f %11.7f\n',           ...
+                                tnorml(1), tnorml(2), tnorml(3) )
+         fprintf( 'Constant          : %11.7f\n', tkonst )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Unit normal vector:  -0.1616904  -0.8084521   0.5659165
+      Constant          :   4.8102897
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Mice geometry routines that deal with planes use the `plane'
+   data type to represent input and output planes. This data type
+   makes the subroutine interfaces simpler and more uniform.
+
+   The Mice routines that produce SPICE planes from data that
+   define a plane are:
+
+      <b>cspice_nvc2pl</b> ( Normal vector and constant to plane )
+      <a href="cspice_nvp2pl.html">cspice_nvp2pl</a> ( Normal vector and point to plane    )
+      <a href="cspice_psv2pl.html">cspice_psv2pl</a> ( Point and spanning vectors to plane )
+
+   The Mice routines that convert SPICE planes to data that
+   define a plane are:
+
+      <a href="cspice_pl2nvc.html">cspice_pl2nvc</a> ( Plane to normal vector and constant )
+      <a href="cspice_pl2nvp.html">cspice_pl2nvp</a> ( Plane to normal vector and point    )
+      <a href="cspice_pl2psv.html">cspice_pl2psv</a> ( Plane to point and spanning vectors )
+
+   Any of these last three routines may be used to convert this
+   routine's output, 'plane', to another representation of a
+   geometric plane.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input vector `normal' is the zero vector, the error
+       SPICE(ZEROVECTOR) is signaled by a routine in the call tree of
+       this routine.
+
+   2)  If any of the input arguments, `normal' or `konst', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `normal' or `konst', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  No checking is done to prevent arithmetic overflow.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/planes.html">PLANES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  G. Thomas and R. Finney, &quot;Calculus and Analytic Geometry,&quot;
+        7th Edition, Addison Wesley, 1988.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 24-AUG-2021 (EDW) (JDR)
+
+       Changed the argument name &quot;constant&quot; to &quot;konst&quot; for consistency
+       with other routines.
+
+       Edited -Examples section to comply with NAIF standard. Added
+       example's problem statement, modified code example to produce
+       formatted output and added second example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 27-AUG-2012 (EDW)
+
+      Edited -I/O section to conform to NAIF standard for Mice documentation.
+
+   -Mice Version 1.0.0, 30-DEC-2008 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   normal vector and constant to plane
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

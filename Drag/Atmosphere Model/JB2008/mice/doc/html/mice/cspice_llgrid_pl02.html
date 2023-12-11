@@ -1,0 +1,549 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_llgrid_pl02</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_llgrid_pl02</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   Deprecated: This routine has been superseded by the Mice routine
+   <a href="cspice_latsrf.html">cspice_latsrf</a>. This routine is supported for purposes of backward
+   compatibility only.
+
+   CSPICE_LLGRID_PL02, given the planetocentric longitude and latitude
+   values of a set of surface points on a specified target body, compute
+   the corresponding rectangular coordinates of those points. The
+   target body's surface is represented by a triangular plate model
+   contained in a type 2 DSK segment.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the DAS file handle of a DSK file open for read
+               access.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+               This kernel must contain a type 2 segment that provides a
+               plate model representing the entire surface of the target
+               body.
+
+      dladsc   the DLA descriptor of a DSK segment representing
+               the surface of a target body.
+
+               [SPICE_DLA_DSCSIZ,1] = size(dladsc); int32 = class(dladsc)
+
+      grid     an array of planetocentric longitude/latitude pairs
+               to be mapped to surface points on the target body.
+
+               [2,n] = size(grid); double = class(grid)
+
+               Elements
+
+                  grid(1,i)
+                  grid(2,i)
+
+               are, respectively, the planetocentric longitude and
+               latitude of the ith grid point.
+
+               Units are radians.
+
+   the call:
+
+      [srfpts, pltids] = <b>cspice_llgrid_pl02</b>( handle, dladsc, grid )
+
+   returns:
+
+      srfpts   an array containing the rectangular (Cartesian)
+               coordinates of the surface points on the target body,
+               expressed relative to the body-fixed reference frame of
+               the target body, corresponding to the input grid points.
+
+               [3,n] = size(srfpts); double = class(srfpts)
+
+      pltids   an array of integer ID codes of the plates on which
+               the surface points are located.
+
+               [1,n] = size(pltids); int32 = class(pltids)
+
+               The ith plate ID corresponds to the ith surface point. These
+               ID codes can be use to look up data associated with the
+               plate, such as the plate's vertices or outward normal vector.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Find the surface points on a target body corresponding to a given
+      planetocentric longitude/latitude grid.
+
+
+      Use the DSK kernel below to provide the plate model representation
+      of the surface of Phobos.
+
+         phobos_3_3.bds
+
+
+
+      Example code begins here.
+
+
+      function llgrid_pl02_ex1( dsknam )
+
+         %
+         % Constants
+         %
+         NLAT     =  9;
+         NLON     =  9;
+         MAXGRID  =  NLAT * NLON;
+         TOL      =  1.d-12;
+
+         %
+         % Open the DSK file for read access.
+         % We use the DAS-level interface for
+         % this function.
+         %
+         handle = <a href="cspice_dasopr.html">cspice_dasopr</a>( dsknam );
+
+         %
+         % Begin a forward search through the
+         % kernel, treating the file as a DLA.
+         % In this example, it's a very short
+         % search.
+         %
+         [dladsc, found] = <a href="cspice_dlabfs.html">cspice_dlabfs</a>( handle );
+
+         if ~found
+
+            %
+            % We arrive here only if the kernel
+            % contains no segments. This is
+            % unexpected, but we're prepared for it.
+            %
+            fprintf( 'No segments found in DSK file %s\n', dsknam )
+            return
+
+         end
+
+         %
+         % If we made it this far, DLADSC is the
+         % DLA descriptor of the first segment.
+         %
+         % Now generate the grid points.  We generate
+         % points along latitude bands, working from
+         % north to south.  The latitude range is selected
+         % to range from +80 to -80 degrees.  Longitude
+         % ranges from 0 to 320 degrees.  The increment
+         % is 20 degrees for latitude and 40 degrees for
+         % longitude.
+         %
+
+         grid = zeros(2,MAXGRID);
+         n    = 1;
+
+         for  i = 0:(NLAT-1)
+
+            lat = <a href="cspice_rpd.html">cspice_rpd</a>() * ( 80.0 - 20.0*i );
+
+            for  j = 0:(NLON-1)
+
+               lon = <a href="cspice_rpd.html">cspice_rpd</a>() * 40.0*j;
+
+               grid(1,n) = lon;
+               grid(2,n) = lat;
+
+               n = n + 1;
+
+            end
+
+         end
+
+         npoints = n - 1;
+
+         %
+         % Find the surface points corresponding to the grid points.
+         %
+         [srfpts, pltids] = <b>cspice_llgrid_pl02</b>( handle, dladsc, grid );
+
+         %
+         % fprintf out the surface points in latitudinal
+         % coordinates and compare the derived lon/lat values
+         % to those of the input grid.
+         %
+         for  i = 1:npoints
+
+            %
+            % Use recrad_c rather than reclat_c to produce
+            % non-negative longitudes.
+            %
+            [ xr, xlon, xlat] = <a href="cspice_recrad.html">cspice_recrad</a>( srfpts(:,i) );
+
+            fprintf( '\n\nIntercept for grid point  %d\n', i )
+            fprintf( '   Plate ID:              %d\n', pltids(i) )
+            fprintf( '   Cartesian Coordinates: %f  %f  %f\n', srfpts(:,i))
+            fprintf( '   Latitudinal Coordinates:\n')
+            fprintf( '   Longitude (deg): %f\n', xlon * <a href="cspice_dpr.html">cspice_dpr</a>() )
+            fprintf( '   Latitude  (deg): %f\n', xlat * <a href="cspice_dpr.html">cspice_dpr</a>() )
+            fprintf( '   Radius     (km): %f\n', xr )
+
+            fprintf( '\nOriginal grid coordinates:\n' )
+            fprintf( '   Longitude (deg): %f\n', grid(1,i) * <a href="cspice_dpr.html">cspice_dpr</a>() )
+            fprintf( '   Latitude  (deg): %f\n', grid(2,i) * <a href="cspice_dpr.html">cspice_dpr</a>() )
+
+            %
+            % Perform sanity checks on the intercept
+            % coordinates.  Stop the program if any error
+            % is larger than our tolerance value.
+            %
+            lon = grid(1,i);
+            lat = grid(2,i);
+
+            if ( abs(xlat-lat) &gt; TOL )
+
+               fprintf( 'Latitude error!' )
+               return
+
+            end
+
+            if ( abs(xlon - lon) &gt; <a href="cspice_pi.html">cspice_pi</a>() )
+
+               if ( xlon &gt; lon )
+                  xlon = xlon - <a href="cspice_twopi.html">cspice_twopi</a>()
+               else
+                  xlon = xlon + <a href="cspice_twopi.html">cspice_twopi</a>()
+               end
+
+            end
+
+            if  ( abs(xlon - lon)  &gt; TOL )
+
+               fprintf( 'Longitude error!\n' )
+               return
+
+            end
+
+         end
+
+         %
+         % Close the kernel.
+         %
+         <a href="cspice_dascls.html">cspice_dascls</a>( handle )
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, with the following variables as inputs
+
+         dsknam = 'phobos_3_3.bds';
+
+      the output was:
+
+
+      Intercept for grid point  1
+         Plate ID:              306238
+         Cartesian Coordinates: 1.520878  0.000000  8.625327
+         Latitudinal Coordinates:
+         Longitude (deg): 0.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 8.758387
+
+      Original grid coordinates:
+         Longitude (deg): 0.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point  2
+         Plate ID:              317112
+         Cartesian Coordinates: 1.189704  0.998280  8.807772
+         Latitudinal Coordinates:
+         Longitude (deg): 40.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 8.943646
+
+      Original grid coordinates:
+         Longitude (deg): 40.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point  3
+         Plate ID:              324141
+         Cartesian Coordinates: 0.277775  1.575341  9.072029
+         Latitudinal Coordinates:
+         Longitude (deg): 80.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.211980
+
+      Original grid coordinates:
+         Longitude (deg): 80.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point  4
+         Plate ID:              327994
+         Cartesian Coordinates: -0.810824  1.404388  9.196823
+         Latitudinal Coordinates:
+         Longitude (deg): 120.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.338699
+
+      Original grid coordinates:
+         Longitude (deg): 120.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point  5
+         Plate ID:              329431
+         Cartesian Coordinates: -1.478202  0.538022  8.921321
+         Latitudinal Coordinates:
+         Longitude (deg): 160.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.058947
+
+      Original grid coordinates:
+         Longitude (deg): 160.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point  6
+         Plate ID:              196042
+         Cartesian Coordinates: -1.498548  -0.545427  9.044113
+         Latitudinal Coordinates:
+         Longitude (deg): 200.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.183633
+
+      Original grid coordinates:
+         Longitude (deg): 200.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point  7
+         Plate ID:              235899
+         Cartesian Coordinates: -0.782405  -1.355164  8.874473
+         Latitudinal Coordinates:
+         Longitude (deg): 240.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 9.011376
+
+      Original grid coordinates:
+         Longitude (deg): 240.000000
+         Latitude  (deg): 80.000000
+
+
+      Intercept for grid point  8
+         Plate ID:              266998
+         Cartesian Coordinates: 0.264512  -1.500123  8.638862
+         Latitudinal Coordinates:
+         Longitude (deg): 280.000000
+         Latitude  (deg): 80.000000
+         Radius     (km): 8.772130
+
+      [...]
+
+
+      Warning: incomplete output. Only 100 out of 1053 lines have
+      been provided.
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   See the headers of the Mice routines
+
+      <a href="cspice_reclat.html">cspice_reclat</a>
+      <a href="cspice_latrec.html">cspice_latrec</a>
+
+   for detailed definitions of Planetocentric coordinates.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   If any of the listed errors occur, the output arguments are
+   left unchanged.
+
+   1)  If a DSK providing a DSK type 2 plate model has not been
+       loaded prior to calling llgrid_pl02, an error is signaled by a
+       routine in the call tree of this routine.
+
+   2)  If the segment associated with the input DLA descriptor is not
+       of data type 2, the error SPICE(WRONGDATATYPE) is signaled by a
+       routine in the call tree of this routine.
+
+   3)  If a surface point cannot be computed because the ray corresponding
+       to a longitude/latitude pair fails to intersect the target
+       surface as defined by the plate model, the error
+       SPICE(NOINTERCEPT) is signaled by a routine in the call tree of this
+       routine.
+
+   4)  If any of the input arguments, `handle', `dladsc', or `grid',
+       is undefined, an error is signaled by the Matlab error handling
+       system.
+
+   5)  If any of the input arguments, `handle', `dladsc', or `grid',
+       is not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   The following data are required:
+
+   -  DSK data:  a DSK file containing a plate model representing the
+      target body's surface must be loaded. This kernel must contain
+      a type 2 segment that contains data for the entire surface of
+      the target body.
+
+   In all cases, kernel data are normally loaded once per program
+   run, NOT every time this routine is called.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  This routine assumes that the origin of the body-fixed reference
+       frame associated with the target body is located in the interior
+       of that body.
+
+   2)  The results returned by this routine may not be meaningful
+       if the target surface has multiple surface points associated
+       with some (longitude, latitude) coordinates.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/dsk.html">DSK.REQ</a>
+   <a href="../req/pck.html">PCK.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 26-OCT-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Changed the output
+       argument names &quot;spoints&quot; and &quot;plateIDs&quot; to &quot;srfpts&quot; and &quot;pltids&quot;
+       for consistency with other functions.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+       Index lines now state that this routine is deprecated.
+
+   -Mice Version 1.0.0, 25-JUL-2016 (NJB) (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   DEPRECATED map latitudinal grid to DSK type 2 plate model
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:25 2021</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,13 @@
+.env
+/MOCAT-SSEM/Private Repo/*
+/MOCAT-SSEM/Drag/Atmosphere Model/JB2008/Jacchia-Bowman Atmospheric Density Model
+/MOCAT-SSEM/Drag/Atmosphere Model/JB2008/mice/
+/MOCAT-SSEM/Drag/Atmosphere Model/JB2008/JB2008_dens_field_generation/Data/de430.bsp
+/MOCAT-SSEM/Drag/Launch/Launch Traffic/x0_launch_repeatlaunch_2018to2022_megaconstellationLaunches_Constellations.csv
+/MOCAT-6RD/Large Files/
+*.asv
+*.bak
+*.pyc
+ws_*.mat
+ws_*.mat
+MOCAT-SSEM/Launch/Launch Traffic/x0_launch_repeatlaunch_2018to2022_megaconstellationLaunches_Constellations.csv

@@ -1,0 +1,11 @@
+This program displays a progress bar indicating where the ode integrator is in the specified time scale.  The program allows the premature termination of an integration without loss of data.  Ellapsed time and estimated time to completion are displayed below the integration bar.
+
+This is very simple to add to existing code.  Simply add the following to your ode options:
+('OutputFcn',@odeprog,'Events',@odeabort)
+and place the two files in the same directory as the running program.
+
+A progress bar will display on the far left of your screen.  Pressing the 'ABORT' button prematurely exits the integration while retaining the data up to the point of termination.
+
+An example implementation is included with the program (main.m)
+
+Jesse Norris contributed to this work.

@@ -1,0 +1,318 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_invstm</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_invstm</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_INVSTM returns the inverse of a state transformation matrix.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      mat      a state transformation matrix for converting states relative
+               to one frame to states relative to another.
+
+               [6,6] = size(mat); double = class(mat)
+
+               The state transformation of a state vector, `s', is
+               performed by the matrix-vector product.
+
+                  mat * s.
+
+               For `mat' to be a &quot;true&quot; state transformation matrix
+               it must have the form
+
+                   .-            -.
+                   |       :      |
+                   |   r   :   0  |
+                   |.......:......|
+                   |       :      |
+                   |  w*r  :   r  |
+                   |       :      |
+                   `-            -'
+
+               where `r' is a 3x3 rotation matrix, 0 is the 3x3 zero
+               matrix and `w' is a 3x3 skew-symmetric matrix.
+
+               NOTE: no checks are performed on `mat' to ensure that it
+                     does indeed have the form described above.
+
+   the call:
+
+      [invmat] = <b>cspice_invstm</b>( mat )
+
+   returns:
+
+      invmat   the inverse of `mat' under the operation of matrix
+               multiplication.
+
+               [6,6] = size(invmat); double = class(invmat)
+
+               If `mat' has the form described above, then `invmat' has
+               the form shown below.
+
+                  .-             -.
+                  |     t  :      |
+                  |    r   :   0  |
+                  |........:......|
+                  |      t :    t |
+                  | (w*r)  :   r  |
+                  |        :      |
+                  `-             -'
+
+               (The superscript &quot;t&quot; denotes the matrix transpose
+               operation.)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Suppose you have a geometric state of a spacecraft in Earth
+      body-fixed reference frame and wish to express this state
+      relative to an Earth centered J2000 frame. The following
+      example code illustrates how to carry out this computation.
+
+      Use the PCK kernel below to load the required high precision
+      orientation of the ITRF93 Earth body-fixed reference frame.
+      Note that the body ID code used in this file for the Earth is
+      3000.
+
+         earth_720101_070426.bpc
+
+
+      Example code begins here.
+
+
+      function invstm_ex1()
+
+         %
+         % Define the state of the spacecraft, in km and
+         % km/s, and the `et' epoch, in seconds past J2000.
+         %
+         et    = 0.0;
+         state = [ 175625246.29100420, 164189388.12540060,                ...
+                   -62935198.26067264,     11946.73372264,                ...
+                      -12771.29732556,        13.84902914 ]';
+
+         %
+         % Load the required high precision Earth PCK.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'earth_720101_070426.bpc' );
+
+         %
+         % First get the state transformation from J2000 frame
+         % to Earth body-fixed frame at the time of interest `et'.
+         % The body ID code used in high precision PCK files for
+         % the Earth is 3000; this number indicates that the
+         % terrestrial frame used is ITRF93.
+         %
+         earth = 3000;
+         [mat] = <a href="cspice_tisbod.html">cspice_tisbod</a>( 'J2000', earth, et );
+
+         %
+         % Get the inverse of `mat'.
+         %
+         [invmat] = <b>cspice_invstm</b>( mat );
+
+         %
+         % Transform from bodyfixed state to inertial state.
+         %
+         istat1 = invmat * state;
+
+         %
+         % Print the resulting state.
+         %
+         fprintf( [ 'Input state in Earth centered J2000 frame, using',   ...
+                    ' <b>cspice_invstm</b>:\n' ]                               )
+         fprintf( '   Position: %15.3f %15.3f %15.3f\n', istat1(1:3) )
+         fprintf( '   Velocity: %15.3f %15.3f %15.3f\n', istat1(4:6) )
+
+         %
+         % Compute the same state using <a href="cspice_sxform.html">cspice_sxform</a>.
+         %
+         [xmat] = <a href="cspice_sxform.html">cspice_sxform</a>( 'ITRF93', 'J2000', et );
+         istat2 = xmat * state;
+
+         fprintf( '\n' )
+         fprintf( [ 'Input state in Earth centered J2000 frame, using',   ...
+                    ' <a href="cspice_sxform.html">cspice_sxform</a>:\n' ]                               )
+         fprintf( '   Position: %15.3f %15.3f %15.3f\n', istat2(1:3) )
+         fprintf( '   Velocity: %15.3f %15.3f %15.3f\n', istat2(4:6) )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Input state in Earth centered J2000 frame, using <b>cspice_invstm</b>:
+         Position:   192681395.921  -143792821.383   -62934296.473
+         Velocity:          30.312          32.007          13.876
+
+      Input state in Earth centered J2000 frame, using <a href="cspice_sxform.html">cspice_sxform</a>:
+         Position:   192681395.921  -143792821.383   -62934296.473
+         Velocity:          30.312          32.007          13.876
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Given a matrix for transforming states relative frame 1 to
+   states relative frame 2, the routine produces the inverse
+   matrix. That is, it returns the matrix for transforming states
+   relative to frame 2 to states relative to frame 1.
+
+   This special routine exists because unlike the inverse of a
+   rotation matrix, the inverse of a state transformation matrix,
+   is NOT simply the transpose of the matrix.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  No checks are performed to ensure that the input matrix is
+       indeed a state transformation matrix.
+
+   2)  If the input argument `mat' is undefined, an error is signaled
+       by the Matlab error handling system.
+
+   3)  If the input argument `mat' is not of the expected type, or it
+       does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 25-NOV-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   inverse of state transformation matrix
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:25 2021</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,375 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafps</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafps</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFPS packs (assembles) an array summary from its double precision
+   and integer components.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      dc       the double precision components of the summary.
+
+               [1,nd] = size(dc); double = class(dc)
+
+      ic       the integer components of the summary.
+
+               [1,ni] = size(ic); int32 = class(ic)
+
+   the call:
+
+      [sum] = <b>cspice_dafps</b>( dc, ic )
+
+   returns:
+
+      sum      an array summary containing the components in `dc' and `ic'.
+
+               [n,1] = size(sum); double = class(sum)
+
+               This identifies the contents and location of a single array
+               within a DAF.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) The following code example extracts the SCLK time, boresight
+      vector, and angular velocity vector for each pointing instance
+      in the first segment in a CK file that contains segments of
+      data type 3.
+
+      Use the CK kernel below, available in the Venus Express PDS
+      archives, as input for the code example.
+
+         VEX_BOOM_V01.BC
+
+      Example code begins here.
+
+
+      function cknr03_ex1()
+
+         %
+         % First load the file (it may also be opened by
+         % using <a href="cspice_cklpf.html">cspice_cklpf</a>).
+         %
+         [handle] = <a href="cspice_dafopr.html">cspice_dafopr</a>( 'VEX_BOOM_V01.BC' );
+
+         %
+         % Begin forward search.  Find the first array.
+         %
+         <a href="cspice_dafbfs.html">cspice_dafbfs</a>( handle );
+         [found] = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+         %
+         % Get segment descriptor.
+         %
+         % Unpack the segment descriptor into its double precision
+         % and integer components.
+         %
+         [dcd, icd] = <a href="cspice_dafgs.html">cspice_dafgs</a>( 2, 6 );
+         [descr]    = <b>cspice_dafps</b>( dcd, icd );
+
+         %
+         % The data type for a segment is located in the third
+         % integer component of the descriptor.
+         %
+         if ( icd(3) == 3 )
+
+            %
+            % Does the segment contain `av' data?
+            %
+            avseg =  ( icd(4) == 1 );
+
+            %
+            % How many records does this segment contain?
+            %
+            [nrec] = <a href="cspice_cknr03.html">cspice_cknr03</a>( handle, descr );
+
+            for i=1:nrec
+
+               %
+               % Get the ith pointing instance in the segment.
+               %
+               [record] = <a href="cspice_ckgr03.html">cspice_ckgr03</a>( handle, descr, i );
+
+               %
+               % Unpack `record' into the time, quaternion, and av.
+               %
+               sclkdp = record(1);
+               quat   = record(2:5);
+
+               if ( avseg )
+
+                  av = record(6:8);
+
+               end
+
+               %
+               % The boresight vector is the third row of the
+               % C-matrix.
+               %
+               [cmat] = <a href="cspice_q2m.html">cspice_q2m</a>( quat );
+               bore   = cmat(3,:);
+
+               %
+               % Write out the results.
+               %
+               fprintf( 'Record: %2d\n', i )
+               fprintf( '   SCLK time       : %24.6f\n', sclkdp )
+               fprintf( '   Boresight       : %13.9f %13.9f %13.9f\n',    ...
+                                                                  bore )
+
+               if ( avseg )
+
+                  fprintf( '   Angular velocity: %13.9f %13.9f %13.9f\n', ...
+                                                                      av  )
+
+               end
+               fprintf( '\n' )
+
+            end
+
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Record:  1
+         SCLK time       :           2162686.710986
+         Boresight       :  -0.999122830   0.000000000   0.041875654
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record:  2
+         SCLK time       :       54160369751.715164
+         Boresight       :  -0.999122830   0.000000000   0.041875654
+         Angular velocity:   0.000000000   1.176083393   0.000000000
+
+      Record:  3
+         SCLK time       :       54160454948.487686
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record:  4
+         SCLK time       :      299264885854.937805
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record:  5
+         SCLK time       :     2366007685832.532227
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record:  6
+         SCLK time       :     4432750485810.126953
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record:  7
+         SCLK time       :     6505155594828.757812
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record:  8
+         SCLK time       :     8571898394806.352539
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record:  9
+         SCLK time       :    10638641194783.947266
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record: 10
+         SCLK time       :    12705383994761.541016
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record: 11
+         SCLK time       :    14777789103780.169922
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record: 12
+         SCLK time       :    16844531903757.763672
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+      Record: 13
+         SCLK time       :    18911274703735.359375
+         Boresight       :   0.000000000   0.000000000   1.000000000
+         Angular velocity:   0.000000000   0.000000000   0.000000000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The components of array summaries are packed into double precision arrays
+   for reasons outlined in the DAF required reading. Two routines,
+   <b>cspice_dafps</b> (pack summary) and <a href="cspice_dafus.html">cspice_dafus</a> (unpack summary) are
+   provided for packing and unpacking summaries.
+
+   The total size of the summary is
+
+            (ni - 1)
+      nd + ---------- + 1
+               2
+
+   double precision words (where the sizes of `dc' and `ic', nd and ni,
+   are non-negative).
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `nd', the number of double precision components, is zero or
+       negative, no DP components are stored.
+
+   2)  If `ni', the number of integer components, is zero or
+       negative, no integer components are stored.
+
+   3)  If the total size of the summary is greater than 125 double
+       precision words, some components may not be stored. See
+       -Particulars for details.
+
+   4)  If any of the input arguments, `dc' or `ic', is undefined, an
+       error is signaled by the Matlab error handling system.
+
+   5)  If any of the input arguments, `dc' or `ic', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/daf.html">DAF.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 26-NOV-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   pack DAF summary
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

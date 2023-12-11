@@ -1,0 +1,395 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_gnpool</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_gnpool</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_GNPOOL returns the names of kernel variables matching a
+   specified template.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      name     the template to use when searching for variable names
+               in the kernel pool.
+
+               [1,c1] = size(name); char = class(name)
+
+                  or
+
+               [1,1] = size(name); cell = class(name)
+
+               The characters '*' and '%' are used for the wild card string
+               and wild card character respectively. For details of string
+               pattern matching see the header of the CSPICE routine <a href="../cspice/matchi_c.html">matchi_c</a>.
+
+      start    value for the index indicating the first component of the data
+               vector assigned to `name' for return (index 1 for all
+               elements).
+
+               [1,1] = size(start); int32 = class(start)
+
+      room     value specifying the maximum number of components that can
+               return for `name'.
+
+               [1,1] = size(room); int32 = class(room)
+
+   the call:
+
+      [cvals, found] = <b>cspice_gnpool</b>( name, start, room )
+
+   returns:
+
+      cvals    the values assigned to `name' beginning at index `start'.
+
+               [n,c2] = size(cvals); char = class(cvals)
+
+               `cvals' returns empty if variables described by `name' does
+               not exist in the kernel pool.
+
+               n &lt;= room, p = length of longest string in return array
+               `cvals'.
+
+      found    the flag indicating true if variables matching the `name'
+               template exist in the kernel pool, false otherwise.
+
+               [1,1] = size(found); logical = class(found)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Load a PCK kernel, create a template for Jupiter kernel
+      variables, and after performing a query for them, output all the
+      variable names found in the kernel pool that match that template.
+
+      Use the PCK kernel below to load the triaxial ellipsoidal shape
+      model and orientation data for Jupiter.
+
+         pck00010.tpc
+
+
+      Example code begins here.
+
+
+      function gnpool_ex1()
+
+         %
+         % Load a PCK kernel.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'pck00010.tpc' )
+
+         %
+         % A template for Jupiter kernel variables.
+         %
+         VAR = 'BODY599*';
+
+         %
+         % Query for the variable name, return all matches from
+         % index 1.
+         %
+         INDEX  = 1;
+         ROOM   = 10;
+
+         [kervar, found] = <b>cspice_gnpool</b>( VAR, INDEX, ROOM );
+
+         if( found )
+
+            n_elements = size(kervar, 1);
+
+            %
+            % Output the returned variable names.
+            %
+            for n=1: n_elements
+               txt = sprintf( 'Variable %d matching %s: %s', n, VAR, ...
+                              kervar(n,:));
+               disp( txt )
+            end
+
+         else
+            txt = sprintf( ['Failed to find  ' VAR ' in the kernel pool.'] );
+            disp( txt )
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Variable 1 matching BODY599*: BODY599_PM
+      Variable 2 matching BODY599*: BODY599_LONG_AXIS
+      Variable 3 matching BODY599*: BODY599_RADII
+      Variable 4 matching BODY599*: BODY599_NUT_PREC_DEC
+      Variable 5 matching BODY599*: BODY599_NUT_PREC_PM
+      Variable 6 matching BODY599*: BODY599_POLE_RA
+      Variable 7 matching BODY599*: BODY599_POLE_DEC
+      Variable 8 matching BODY599*: BODY599_NUT_PREC_RA
+
+
+   2) Obtain from the kernel pool the names of the first
+      10 variables stored. Use the * wildcard character
+      as a template to indicate a request for all kernel
+      variables.
+
+      Use the PCK kernel below to load the triaxial ellipsoidal shape
+      model and orientation data for all the Solar System planets.
+
+         pck00010.tpc
+
+
+      Example code begins here.
+
+
+      function gnpool_ex2()
+
+         %
+         % Load a PCK kernel.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'pck00010.tpc' )
+         %
+         % Return all matches from 'INDEX' 1.
+         %
+         INDEX  = 1;
+         ROOM   = 10;
+         VAR    = '*';
+
+         [kervar, found] = <b>cspice_gnpool</b>( VAR, INDEX, ROOM );
+
+         if ( found )
+
+            n_elements = size(kervar, 1);
+
+            %
+            % Output the returned variable names.
+            %
+            for n=1: n_elements
+               txt = sprintf( 'Variable %d matching %s: %s', n, VAR, ...
+                              kervar(n,:));
+               disp( txt )
+            end
+
+         else
+            txt = sprintf( ['Failed to find  ' VAR ' in the kernel pool.'] );
+            disp( txt )
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in MATLAB due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Variable 1 matching *: BODY611_LONG_AXIS
+      Variable 2 matching *: BODY4_NUT_PREC_ANGLES
+      Variable 3 matching *: BODY604_POLE_RA
+      Variable 4 matching *: BODY605_POLE_DEC
+      Variable 5 matching *: BODY399_N_GEOMAG_CTR_DIPOLE_LAT
+      Variable 6 matching *: BODY399_POLE_RA
+      Variable 7 matching *: BODY703_NUT_PREC_PM
+      Variable 8 matching *: BODY708_LONG_AXIS
+      Variable 9 matching *: BODY501_NUT_PREC_RA
+      Variable 10 matching *: BODY710_NUT_PREC_PM
+
+
+      Note, the seemingly random order of the output list reflects the
+      order used by the SPICE kernel subsystem to store/lookup the
+      variable names.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine provides the user interface for retrieving the names
+   of kernel pool variables. This interface allows you to retrieve
+   the names matching a template via multiple accesses. Under some
+   circumstances this alleviates the problem of having to know in
+   advance the maximum amount of space needed to accommodate all
+   matching names.
+
+   However, this method of access does come with a price. It is
+   always more efficient to retrieve all of the data associated with
+   a kernel pool variable in one call than it is to retrieve it in
+   sections.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the value of `room' is less than one, the error
+       SPICE(BADARRAYSIZE) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If any of the input arguments, `name', `start' or `room', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `name', `start' or `room', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 26-NOV-2021 (EDW) (JDR)
+
+       Changed the output argument name &quot;kvars&quot; to &quot;cvals&quot; for consistency
+       with other routines. Corrected typo in usage message.
+
+       Edited the header to comply with NAIF standard. Added examples'
+       problem statement and a reference to the required PCK.
+
+       Added -Parameters, -Particulars, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.1.0, 12-MAR-2012 (EDW) (SCK)
+
+       &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+       -I/O descriptions edits to conform to Mice documentation format.
+
+   -Mice Version 1.0.0, 15-DEC-2006 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   return names of kernel pool variables matching a template
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:25 2021</pre>
+
+</body>
+</html>
+

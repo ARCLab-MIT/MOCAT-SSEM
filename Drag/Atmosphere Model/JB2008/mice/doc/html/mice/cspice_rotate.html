@@ -1,0 +1,275 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_rotate</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_rotate</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_ROTATE calculates the 3x3 rotation matrix generated
+   by a rotation of a specified angle about a specified axis.
+   This rotation operates as a rotation of the coordinate
+   system.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      angle    the angle(s), given in radians, through which the rotation is
+               performed.
+
+               [1,n] = size(angle); double = class(angle)
+
+      iaxis    the index of the axis of rotation.
+
+               [1,1] = size(iaxis); int32 = class(iaxis)
+
+               The X, Y, and Z axes have indices 1, 2 and 3 respectively.
+
+   the call:
+
+      [mout] = <b>cspice_rotate</b>( angle, iaxis )
+
+   returns:
+
+      mout     the rotation matri(x|ces) which describes the rotation of a
+               reference frame through `angle' radians about the axis whose
+               index is `iaxis'.
+
+               If [1,1] = size(angle) then [3,3]   = size(mout)
+               If [1,n] = size(angle) then [3,3,n] = size(mout)
+                                            double = class(mout)
+
+               `mout' returns with the same vectorization measure, N,
+               as `angle'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Compute the 3x3 matrix that rotates vectors from one
+      frame to another frame rotated by pi/10 radians about
+      +Y with respect to the first frame, and use it to transform
+      an arbitrary vector from the first frame to the second frame.
+
+      Example code begins here.
+
+
+      function rotate_ex1()
+
+         %
+         % Let's pick an arbitrary vector.
+         %
+         vec1 = [ 0.2; 0.04; 1.0 ];
+         fprintf( 'Vector in base frame:\n' )
+         fprintf( '  %16.12f  %16.12f  %16.12f\n', vec1 );
+
+         %
+         % Compute Pi/10 frame rotation about the Y axis.
+         %
+         rotmat = <b>cspice_rotate</b>( 0.1*<a href="cspice_pi.html">cspice_pi</a>, 2 );
+
+         %
+         % Apply the coordinate rotation to the vector.
+         %
+         vec2 = rotmat * vec1;
+         fprintf( 'Vector in rotated frame:\n' )
+         fprintf( '  %16.12f  %16.12f  %16.12f\n', vec2 );
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Vector in base frame:
+          0.200000000000    0.040000000000    1.000000000000
+      Vector in rotated frame:
+         -0.118805691116    0.040000000000    1.012859915170
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A rotation about the first, i.e. x-axis, is described by
+
+      |  1        0          0      |
+      |  0   cos(theta) sin(theta)  |
+      |  0  -sin(theta) cos(theta)  |
+
+   A rotation about the second, i.e. y-axis, is described by
+
+      |  cos(theta)  0  -sin(theta)  |
+      |      0       1        0      |
+      |  sin(theta)  0   cos(theta)  |
+
+   A rotation about the third, i.e. z-axis, is described by
+
+      |  cos(theta) sin(theta)   0   |
+      | -sin(theta) cos(theta)   0   |
+      |       0          0       1   |
+
+   <b>cspice_rotate</b> decides which form is appropriate according to the value
+   of `iaxis'.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the axis index is not in the range 1 to 3, it will be
+       treated the same as that integer 1, 2, or 3 that is congruent
+       to it mod 3.
+
+   2)  If any of the input arguments, `angle' or `iaxis', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   3)  If any of the input arguments, `angle' or `iaxis', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/rotation.html">ROTATION.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 24-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       example's problem statement and modified example code accordingly.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 10-MAR-2015 (EDW)
+
+      Edited -I/O section to conform to NAIF standard for Mice documentation.
+
+   -Mice Version 1.0.0, 10-JAN-2006 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   generate a rotation matrix
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

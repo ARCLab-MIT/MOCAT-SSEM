@@ -1,0 +1,622 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_unload</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_unload</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_UNLOAD unloads a SPICE kernel file (of any type)
+   from MATLAB.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      file     the name of the file(s) to unload.
+
+               [n,c1] = size(file); char = class(file)
+
+                  or
+
+               [1,n] = size(file); cell = class(file)
+
+               This file should be one loaded through the interface
+               <a href="cspice_furnsh.html">cspice_furnsh</a>. If the file is not on the list of loaded
+               kernels no action is taken.
+
+               Note that if `file' is a meta-text kernel, all of
+               the files loaded as a result of loading the meta-text
+               kernel will be unloaded.
+
+   the call:
+
+      <b>cspice_unload</b>( file )
+
+   returns:
+
+      None.
+
+      It removes the file and all associated data from the kernel
+      sub-system. If `file' is a meta-text kernel, the sub-system
+      unloads all files listed in the kernel.
+
+      Note: a <b>cspice_unload</b> call deletes ALL kernel variables except
+      those loaded into the kernel pool via a <a href="cspice_furnsh.html">cspice_furnsh</a> kernel
+      load  call, i.e. <b>cspice_unload</b> erases kernel variables placed
+      in the pool by the pool functions: <a href="cspice_pipool.html">cspice_pipool</a>, <a href="cspice_pdpool.html">cspice_pdpool</a>,
+      and <a href="cspice_pcpool.html">cspice_pcpool</a>.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Load a PCK in the kernel pool and look up the kernel variable
+      BODY399_RADII, then unload the kernel and look the variable up
+      again. In the later case, the POOL subsystem shall throw
+      an error indicating that the kernel POOL variable does
+      not exist.
+
+      Use the PCK kernel below to load the required triaxial
+      ellipsoidal shape model for the Earth, which uses the kernel
+      variable BODY399_RADII to store the Earth's radii data.
+
+         pck00010.tpc
+
+
+      Example code begins here.
+
+
+      function unload_ex1()
+
+         %
+         %  Load a PCK kernel.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'pck00010.tpc' )
+
+         %
+         % When the kernel variable
+         %
+         %    BODY399_RADII
+         %
+         % is present in the kernel pool---normally because a PCK
+         % defining this variable has been loaded (as is the case
+         % here)---the call
+         %
+         disp( 'Calling <a href="cspice_bodvrd.html">cspice_bodvrd</a> after loading the PCK:' )
+         try
+            values = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'EARTH', 'RADII', 3);
+            disp('   Expected result, found kernel data')
+         catch
+            disp('   ERROR: Unexpected result, no kernel data found')
+         end
+
+         %
+         %  Now unload the kernel and try again.
+         %
+         <b>cspice_unload</b>( 'pck00010.tpc' )
+
+         disp( 'Calling <a href="cspice_bodvrd.html">cspice_bodvrd</a> after unloading the PCK:' )
+         try
+            values = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'EARTH', 'RADII', 3);
+            disp('   ERROR: Unexpected result, found kernel data')
+         catch
+            disp('   Expected result, no kernel data found')
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Calling <a href="cspice_bodvrd.html">cspice_bodvrd</a> after loading the PCK:
+         Expected result, found kernel data
+      Calling <a href="cspice_bodvrd.html">cspice_bodvrd</a> after unloading the PCK:
+         Expected result, no kernel data found
+
+
+   2) Load a meta-kernel with a PCK, an LSK and an SPK, and
+      separately a text kernel and a binary PCK. Loop over the
+      loaded kernels, outputting file information for each of
+      them.
+
+      Then unload the text kernels, check that they have been
+      unloaded, and finally unload the meta-kernel.
+
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: unload_ex2.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00009.tpc                  Planet orientation and
+                                          radii
+            naif0012.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'naif0012.tls',
+                                'pck00009.tpc' )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Use the PCK kernel below as the binary PCK required for the
+      example.
+
+         earth_latest_high_prec.bpc
+
+
+      Use the FK kernel below as the text kernel required for the
+      example.
+
+         RSSD0002.TF
+
+
+      Example code begins here.
+
+
+      function unload_ex2()
+
+         %
+         % Load several kernel files.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'unload_ex2.tm' );
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'RSSD0002.TF' );
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'earth_latest_high_prec.bpc' );
+
+         %
+         % Count the number of loaded kernel files.
+         %
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'ALL' );
+
+         fprintf( [ 'The total number of kernels after final',            ...
+                    ' <a href="cspice_furnsh.html">cspice_furnsh</a>:  %1d\n' ], count          )
+         fprintf( ' \n' )
+
+         %
+         % Unload the text kernels.
+         %
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'TEXT' );
+
+         fprintf( ' \n' )
+         fprintf( 'Unloading %1d text kernels...\n', count )
+         fprintf( ' \n' )
+
+         while ( count != 0 )
+
+            [file,   filtyp, srcfil,                                      ...
+             handle, found]          = <a href="cspice_kdata.html">cspice_kdata</a>( 1, 'TEXT' );
+
+            %
+            % If the kernel is found in the pool, unload it.
+            %
+            if ( found )
+
+               <b>cspice_unload</b>( file );
+
+               %
+               % Check if the file has been unloaded.
+               %
+               [filtyp, srcfil, handle, found] = <a href="cspice_kinfo.html">cspice_kinfo</a>( file );
+
+               if ( found )
+
+                  fprintf( '  Error'    )
+
+               else
+
+                   fprintf( '  Success' )
+
+               end
+
+               fprintf( ' unloading %s\n', file )
+
+               %
+               % Something is not working. Inform NAIF.
+               %
+            else
+
+               fprintf( [ ' ERROR: No kernel found but <a href="cspice_ktotal.html">cspice_ktotal</a>',    ...
+                          ' returns  %d\n' ], count                    )
+
+            end
+
+            %
+            % Check if we have more text kernels to unload from
+            % the kernel pool. Note that unloading a text kernel
+            % or meta-kernel implies that the kernel pool is
+            % cleared, and any kernel(s) that were not to be
+            % unloaded are re-loaded. Therefore the `count' value
+            % changes, and the indexing of the files within the
+            % kernel pool too.
+            %
+            [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'TEXT' );
+
+         end
+
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'ALL' );
+
+         fprintf( ' \n' )
+         fprintf( [ 'The total number of kernels after <b>cspice_unload</b>',    ...
+                    ' calls:  %1d\n' ], count                          )
+
+         %
+         % Unload the meta-kernel and retrieve the number of loaded
+         % after the clear.
+         %
+         <b>cspice_unload</b>( 'unload_ex2.tm' );
+
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'ALL' );
+
+         fprintf( ' \n' )
+         fprintf( [ 'The total number of kernels after final',            ...
+                    ' <b>cspice_unload</b>:  %1d\n' ], count          )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      The total number of kernels after final <a href="cspice_furnsh.html">cspice_furnsh</a>:  6
+
+
+      Unloading 3 text kernels...
+
+        Success unloading naif0012.tls
+        Success unloading pck00009.tpc
+        Success unloading RSSD0002.TF
+
+      The total number of kernels after <b>cspice_unload</b> calls:  3
+
+      The total number of kernels after final <b>cspice_unload</b>:  1
+
+
+   3) Redo the previous example, using the <b>cspice_unload</b> capability
+      of unloading kernels by listing them in an array of strings.
+
+      Use the meta-kernel and kernels of Example 2.
+
+
+      Example code begins here.
+
+
+      function unload_ex3()
+
+         %
+         % Load several kernel files.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'unload_ex2.tm' );
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'RSSD0002.TF' );
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'earth_latest_high_prec.bpc' );
+
+         %
+         % Count the number of loaded kernel files.
+         %
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'ALL' );
+
+         fprintf( [ 'The total number of kernels after final',            ...
+                    ' <a href="cspice_furnsh.html">cspice_furnsh</a>:  %1d\n' ], count          )
+         fprintf( ' \n' )
+
+         %
+         % Unload the text kernels.
+         %
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'TEXT' );
+
+         fprintf( ' \n' )
+         fprintf( 'Unloading %1d text kernels...\n', count )
+         fprintf( ' \n' )
+
+         %
+         % Create an empty array of strings, to hold the
+         % names of the kernels to unload.
+         %
+         kernels = cell(count,1);
+         for i = 1: count
+
+            [file,   filtyp, srcfil,                                      ...
+             handle, found]          = <a href="cspice_kdata.html">cspice_kdata</a>( i, 'TEXT' );
+
+            %
+            % If the kernel is found in the pool, add it to the array.
+            %
+            if ( found )
+
+               kernels(i) = file;
+               fprintf( ' %s will be unloaded.\n', file );
+
+            %
+            % Something is not working. Inform NAIF.
+            %
+            else
+
+               fprintf( ' ERROR: No kernel found with index %d\n', i )
+
+            end
+
+         end
+
+         %
+         % Unload the kernels present in the `kernels' variable, and
+         % retrieve the number of remaining loaded kernels.
+         %
+         <b>cspice_unload</b>( kernels );
+
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'ALL' );
+
+         fprintf( ' \n' )
+         fprintf( [ 'The total number of kernels after <b>cspice_unload</b>',    ...
+                    ' call :  %1d\n' ], count                          )
+
+         %
+         % Unload the meta-kernel and retrieve the number of loaded
+         % after the clear.
+         %
+         <b>cspice_unload</b>( 'unload_ex2.tm' );
+
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'ALL' );
+
+         fprintf( ' \n' )
+         fprintf( [ 'The total number of kernels after final',            ...
+                    ' <b>cspice_unload</b>:  %1d\n' ], count          )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      The total number of kernels after final <a href="cspice_furnsh.html">cspice_furnsh</a>:  6
+
+
+      Unloading 3 text kernels...
+
+       naif0012.tls will be unloaded.
+       pck00009.tpc will be unloaded.
+       RSSD0002.TF will be unloaded.
+
+      The total number of kernels after <b>cspice_unload</b> call :  3
+
+      The total number of kernels after final <b>cspice_unload</b>:  1
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The call
+
+      <b>cspice_unload</b> ( file );
+
+   has the effect of &quot;erasing&quot; the last previous call:
+
+      <a href="cspice_furnsh.html">cspice_furnsh</a> ( file );
+
+   This interface allows you to unload binary and text kernels.
+   Moreover, if you used a meta-text kernel to set up your
+   working environment, you can unload all of the kernels loaded
+   through the meta-kernel by unloading the meta-kernel.
+
+
+   Unloading Text Kernels or Meta-Kernels
+   --------------------------------------
+
+   Part of the action of unloading text (or meta-text kernels) is
+   clearing the kernel pool and re-loading any kernels that were not in
+   the specified set of kernels to unload. Since loading of text
+   kernels is not a very fast process, unloading text kernels takes
+   considerably longer than unloading binary kernels. Moreover, since
+   the kernel pool is cleared, any kernel pool variables you have set
+   from your program by using one of the interfaces <a href="cspice_pcpool.html">cspice_pcpool</a>,
+   <a href="cspice_pdpool.html">cspice_pdpool</a>, <a href="cspice_pipool.html">cspice_pipool</a>, or <a href="cspice_lmpool.html">cspice_lmpool</a> will be removed from the
+   kernel pool. For this reason, if you plan to use this feature in your
+   program, together with one of the routines specified above, you will need
+   to take special precautions to make sure kernel pool variables required
+   by your program do not inadvertently disappear.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the specified kernel is not on the list of loaded kernels
+       no action is taken.
+
+   2)  If the input argument `file' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   3)  If the input argument `file' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  See the note regarding the unloading of Text and meta-text
+       Kernels.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/kernel.html">KERNEL.REQ</a>
+   <a href="../req/pck.html">PCK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 24-AUG-2021 (EDW) (JDR)
+
+       Fixed bug in vectorized unloading of kernels.
+
+       Edited the header to comply with NAIF standard. Added
+       example's problem statement and a reference to the required PCK.
+       Extended the example's output and added the solution to the
+       section.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.1.1, 13-FEB-2015 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.1.0, 17-DEC-2008 (EDW)
+
+       Added zzmice_str call on input `file' to convert string cells to
+       character arrays if `file' has type string cells. Properly
+       identified `file' as a vectorizable string/character array.
+
+   -Mice Version 1.0.0, 22-NOV-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Unload a SPICE kernel
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

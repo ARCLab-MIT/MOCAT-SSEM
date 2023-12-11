@@ -1,0 +1,304 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_frinfo</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_frinfo</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_FRINFO retrieves the minimal attributes associated with a
+   frame needed for converting transformations to and from it.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      frcode   a SPICE ID(s) for some reference frame(s).
+
+               [1,n] = size(frcode); int32 = class(frcode)
+
+   the call:
+
+      [cent, frclss, clssid, found] = <b>cspice_frinfo</b>( frcode )
+
+   returns:
+
+      cent     the SPICE body ID(s) for the center of the reference frame(s)
+               (if such an ID is appropriate).
+
+               [1,n] = size(cent); int32 = class(cent)
+
+      frclss   the class ID(s) or type(s) of the frame. This identifies which
+               subsystem will perform frame transformations.
+
+               [1,n] = size(frclss); int32 = class(frclss)
+
+      clssid   the ID(s) used for the frame within its class. This may be
+               different from the frame ID.
+
+               [1,n] = size(clssid); int32 = class(clssid)
+
+      found    flag(s) returning true if `cent', `frclss' and `frcode' are
+               available, false if not.
+
+               [1,n] = size(found); logical = class(found)
+
+               `cent', `frclss', `clssid' and `found' return with the same
+               vectorization measure (N) as `frcode'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given a set of frame IDs, retrieve the SPICE body ID associated
+      with the frame's center, the frame class (or type of the frame),
+      and the ID used for the frame within its class.
+
+
+      Example code begins here.
+
+
+      function frinfo_ex1()
+
+         %
+         % Retrieve frame information for a scalar 'code'.
+         %
+         code = 13000;
+
+         [cent, frclss, clssid, found] = <b>cspice_frinfo</b>( code );
+         disp(' code   center  class  class_ID' )
+         disp('-----  -------  -----  --------' )
+         disp('Scalar:' )
+         if ( found )
+            fprintf( '%5d  %7d  %5d  %6d\n', ...
+                     code, cent, frclss, clssid   );
+         end
+
+         %
+         % Retrieve frame information for a vector of 'codes'.
+         %
+         disp('Vector:' )
+         codes = [1, 2, 3, 4, 5, 245];
+
+         [cent, frclss, clssid, found] = <b>cspice_frinfo</b>( codes );
+
+         for i=1:numel( codes )
+
+            if ( found(i) )
+               fprintf( '%5d  %7d  %5d  %6d\n', ...
+                       codes(i), cent(i), frclss(i), clssid(i) )
+            else
+               fprintf( 'No data available for frame ID %d\n', codes(i) )
+            end
+
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+       code   center  class  class_ID
+      -----  -------  -----  --------
+      Scalar:
+      13000      399      2    3000
+      Vector:
+          1        0      1       1
+          2        0      1       2
+          3        0      1       3
+          4        0      1       4
+          5        0      1       5
+      No data available for frame ID 245
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This is a low level routine needed by state transformation
+   software to transform states and attitudes between different
+   reference frames.
+
+   The routine first examines local &quot;hard-coded&quot; information about
+   reference frames to see if the requested frame belongs to this
+   set. If it does that information is returned.
+
+   If the requested information is not stored locally, the routine
+   then examines the kernel pool to see if the requested information
+   is stored there. If it is and has the expected format, the data
+   is retrieved and returned.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If a frame definition is encountered that does not define a
+       central body for the frame, an error is signaled by a routine
+       in the call tree of this routine.
+
+   2)  If a frame definition is encountered that does not define
+       a class for the frame, an error is signaled by a routine
+       in the call tree of this routine.
+
+   3)  If a frame definition is encountered that does not define a
+       class ID for the frame, an error is signaled by a routine in
+       the call tree of this routine.
+
+   4)  If a kernel variable defining a frame name is found, but that
+       variable has dimension greater than 1, the error
+       SPICE(INVALIDDIMENSION) is signaled by a routine in the call
+       tree of this routine.
+
+   5)  If the input argument `frcode' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   6)  If the input argument `frcode' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 24-AUG-2021 (EDW) (JDR)
+
+       Changed the output argument name &quot;clss&quot; to &quot;frclss&quot; for
+       consistency with other routines.
+
+       Edited the -Examples section to comply with NAIF standard.
+       Reformatted example's output and added problem statement.
+       Added case for demonstrating usage of `found' flag.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 12-MAR-2012 (EDW) (SCK)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   fetch reference frame attributes
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

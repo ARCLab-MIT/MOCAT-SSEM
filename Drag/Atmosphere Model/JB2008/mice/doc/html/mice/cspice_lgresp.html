@@ -1,0 +1,327 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_lgresp</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_lgresp</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_LGRESP evaluates a Lagrange interpolating polynomial for a
+   specified set of coordinate pairs whose first components are equally
+   spaced, at a specified abscissa value.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      n        the number of points defining the polynomial.
+
+               [1,1] = size(n); int32 = class(n)
+
+               The array `yvals' contains `n' elements.
+
+      first,
+      step     respectively, a starting abscissa value and a step
+               size that define the set of abscissa values at which a
+               Lagrange interpolating polynomial is to be defined.
+
+               [1,1] = size(first); double = class(first)
+               [1,1] = size(step); double = class(step)
+
+               The set of abscissa values is
+
+                  first   +   i * step,     i = 0, ..., n-1
+
+               `step' must be non-zero.
+
+      yvals    an array of ordinate values that, together with the abscissa
+               values defined by `first' and `step', define `n' ordered
+               pairs belonging to the graph of a function.
+
+               [n,1] = size(yvals); double = class(yvals)
+
+               The set of points
+
+                  (  first  +  (i-1)*STEP,   yvals(i)  )
+
+               where `i' ranges from 1 to `n', define the Lagrange
+               polynomial used for interpolation.
+
+      x        the abscissa value at which the interpolating polynomial is
+               to be evaluated.
+
+               [1,1] = size(x); double = class(x)
+
+   the call:
+
+      [lgresp] = <b>cspice_lgresp</b>( n, first, step, yvals, x )
+
+   returns:
+
+      lgresp   the value at `x' of the unique polynomial of degree n-1 that
+               fits the points in the plane defined by `first', `step', and
+               `yvals'.
+
+               [1,1] = size(lgresp); double = class(lgresp)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Fit a cubic polynomial through the points
+
+          ( -1,  -2 )
+          (  1,  -8 )
+          (  3,  26 )
+          (  5, 148 )
+
+      and evaluate this polynomial at x = 2.
+
+      The returned value of <b>cspice_lgresp</b> should be 1.0, since the
+      unique cubic polynomial that fits these points is
+
+                   3      2
+         f(x)  =  x  + 2*x  - 4*x - 7
+
+
+      Example code begins here.
+
+
+      function lgresp_ex1()
+
+         n      =   4;
+         first  =  -1.0;
+         step   =   2.0;
+
+         yvals  = [ -2.0, -8.0, 26.0, 148.0 ]';
+
+         answer =   <b>cspice_lgresp</b>( n, first, step, yvals, 2.0 );
+
+         fprintf( 'ANSWER = %f\n', answer )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      ANSWER = 1.000000
+
+
+   2) Solve the same problem using a negative step. In order to
+      find the solution, set the elements of `yvals' in reverse order.
+
+      The returned value of <b>cspice_lgresp</b> would still be 1.0.
+
+
+      Example code begins here.
+
+
+      function lgresp_ex2()
+
+         n      =   4;
+         first  =   5.0;
+         step   =  -2.0;
+
+         yvals  = [ 148.0, 26.0, -8.0, -2.0 ]';
+
+         answer =   <b>cspice_lgresp</b>( n, first, step, yvals, 2.0 );
+
+         fprintf( 'ANSWER = %f\n', answer )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      ANSWER = 1.000000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Given a set of `n' distinct abscissa values and corresponding
+   ordinate values, there is a unique polynomial of degree n-1,
+   often called the &quot;Lagrange polynomial&quot;, that fits the graph
+   defined by these values. The Lagrange polynomial can be used to
+   interpolate the value of a function at a specified point, given a
+   discrete set of values of the function.
+
+   Users of this routine must choose the number of points to use
+   in their interpolation method. The authors of Reference [1] have
+   this to say on the topic:
+
+      Unless there is solid evidence that the interpolating function
+      is close in form to the true function `f', it is a good idea to
+      be cautious about high-order interpolation. We
+      enthusiastically endorse interpolations with 3 or 4 points, we
+      are perhaps tolerant of 5 or 6; but we rarely go higher than
+      that unless there is quite rigorous monitoring of estimated
+      errors.
+
+   The same authors offer this warning on the use of the
+   interpolating function for extrapolation:
+
+      ...the dangers of extrapolation cannot be overemphasized:
+      An interpolating function, which is perforce an extrapolating
+      function, will typically go berserk when the argument `x' is
+      outside the range of tabulated values by more than the typical
+      spacing of tabulated points.
+
+   For Lagrange interpolation on unequally spaced abscissa values,
+   see the Mice routine <a href="cspice_lgrint.html">cspice_lgrint</a>.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `step' is zero, the error SPICE(INVALIDSTEPSIZE) is signaled
+       by a routine in the call tree of this routine.
+
+   2)  If `n' is less than 1, the error SPICE(INVALIDSIZE) is signaled
+       by a routine in the call tree of this routine.
+
+   3)  This routine does not attempt to ward off or diagnose
+       arithmetic overflows.
+
+   4)  If any of the input arguments, `n', `first', `step', `yvals'
+       or `x', is undefined, an error is signaled by the Matlab error
+       handling system.
+
+   5)  If any of the input arguments, `n', `first', `step', `yvals'
+       or `x', is not of the expected type, or it does not have the
+       expected dimensions and size, an error is signaled by the Mice
+       interface.
+
+   6)  If the number of elements in `yvals' is less than `n', an error
+       is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling,
+        &quot;Numerical Recipes -- The Art of Scientific Computing,&quot;
+        chapters 3.0 and 3.1, Cambridge University Press, 1986.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 01-JUL-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   interpolate function using Lagrange polynomial
+   Lagrange interpolation
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:25 2021</pre>
+
+</body>
+</html>
+

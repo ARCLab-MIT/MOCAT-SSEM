@@ -1,0 +1,331 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dvhat</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dvhat</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DVHAT calculates the unit vector corresponding to a state or states
+   and the derivative of the unit vector.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      s1       the array(s) defining a state or states;
+
+                            dr1
+                  s1 = (r1, --- ).
+                             dt
+
+               [6,n] = size(s1); double = class(s1)
+
+   the call:
+
+      [sout] = <b>cspice_dvhat</b>( s1 )
+
+   returns:
+
+      sout     the array(s) containing the unit vector(s) pointing in the
+               direction of the position component(s) of `s1' and the
+               derivative of the unit vector with respect to time;
+
+                             du               r1
+                  sout = [u, -- ] where u = ------
+                             dt             ||r1||
+
+               [6,n] = size(sout); double = class(sout)
+
+               `sout' returns with the same vectorization measure (N)
+               as `s1'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Suppose that `state' gives the apparent state of a body with
+      respect to an observer. This routine can be used to compute the
+      instantaneous angular rate of the object across the sky as seen
+      from the observers vantage.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: dvhat_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            pck00008.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'pck00008.tpc',
+                                'naif0009.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function dvhat_ex1()
+
+         target   = 'MOON';
+         frame    = 'J2000';
+         abcorr   = 'LT+S';
+         observer = 'EARTH BARYCENTER';
+
+         %
+         % Load SPK, PCK, and LSK kernels, use a meta kernel for
+         % convenience.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'dvhat_ex1.tm' );
+
+         %
+         % Define an arbitrary epoch, convert the epoch to ephemeris time.
+         %
+         EPOCH = 'Jan 1 2009';
+         et    = <a href="cspice_str2et.html">cspice_str2et</a>( EPOCH );
+
+         %
+         % Calculate the state of the moon with respect to the earth-moon
+         % barycenter in J2000, corrected for light time and stellar
+         % aberration at `et'.
+         %
+         [ state, lt ] = <a href="cspice_spkezr.html">cspice_spkezr</a>( target, et, frame, ...
+                                           abcorr, observer       );
+
+         %
+         % Calculate the unit vector of `state' and the derivative of the
+         % unit vector.
+         %
+         ustate = <b>cspice_dvhat</b>( state );
+
+         %
+         % Calculate the instantaneous angular velocity from the magnitude
+         % of the derivative of the unit vector.
+         %
+         %   v = r x omega
+         %
+         %   ||omega|| = ||v||  for  r . v = 0
+         %               -----
+         %               ||r||
+         %
+         %   ||omega|| = ||v||  for  ||r|| = 1
+         %
+         omega = <a href="cspice_vnorm.html">cspice_vnorm</a>( ustate(4:6) );
+
+         fprintf( 'Instantaneous angular velocity (rad/sec): %18.12e\n', ...
+                                                                      omega )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Instantaneous angular velocity (rad/sec): 2.481066592694e-06
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Let `s1' be a state vector with position and velocity components P
+   and V respectively. From these components one can compute the
+   unit vector parallel to P, call it U and the derivative of U
+   with respect to time, DU. This pair (U,DU) is the state returned
+   by this routine in `sout'.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If `s1' represents the zero vector, then the position
+       component of `sout' will also be the zero vector. The
+       velocity component will be the velocity component
+       of `s1'.
+
+   2)  If the input argument `s1' is undefined, an error is signaled
+       by the Matlab error handling system.
+
+   3)  If the input argument `s1' is not of the expected type, or it
+       does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Changed output argument name &quot;dvhat&quot; to &quot;sout&quot;.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section. Corrected minor typos in header.
+
+       Edited the header to comply with NAIF standard. Added
+       meta-kernel to the example.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 03-NOV-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 04-MAY-2010 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   state of a unit vector parallel to a state vector
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

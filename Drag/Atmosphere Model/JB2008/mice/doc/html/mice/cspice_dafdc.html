@@ -1,0 +1,310 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafdc</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafdc</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFDC deletes the entire comment area of a specified DAF file.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the file handle referring to a DAF file opened with
+               write access.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+               This handle refers to the DAF file from which to delete
+               the comment section.
+
+   the call:
+
+      <b>cspice_dafdc</b>( handle )
+
+   removes the comment area of the DAF file referred to by 'handle'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Delete the entire comment area of a DAF file. Note that this
+      action should only be performed if fresh new comments are to
+      be placed within the DAF file.
+
+      Use the SPK kernel below as input DAF file for the program.
+
+         earthstns_itrf93_201023.bsp
+
+
+      Example code begins here.
+
+
+      function dafdc_ex1()
+
+         %
+         % Local parameters
+         %
+         KERNEL = 'earthstns_itrf93_201023.bsp';
+         BUFFSZ = 10;
+         LINLEN = 1000;
+
+         %
+         % Open a DAF for write. Return a `handle' referring to the
+         % file.
+         %
+         [handle] = <a href="cspice_dafopw.html">cspice_dafopw</a>( KERNEL );
+
+         %
+         % Print the first 10 lines of comments from the DAF file.
+         %
+         fprintf( 'Comment area of input DAF file (max. 10 lines): \n' )
+         fprintf( ['--------------------------------',                    ...
+                   '--------------------------------\n'] )
+
+         [buffer, done] = <a href="cspice_dafec.html">cspice_dafec</a>( handle, BUFFSZ, LINLEN );
+
+         for i=1:size(buffer,1)
+            fprintf( '%s\n', buffer(i,:) )
+         end
+
+         fprintf( ['--------------------------------',                    ...
+                   '--------------------------------\n'] )
+         fprintf( ' \n' )
+         fprintf( 'Deleting entire comment area...\n' )
+
+         %
+         % Delete all the comments from the DAF file.
+         %
+         <b>cspice_dafdc</b>( handle );
+
+         %
+         % Close the DAF file and re-open it for read
+         % access to work around the <a href="cspice_dafec.html">cspice_dafec</a> restriction
+         % on comments not to be modified while they are
+         % being extracted.
+         %
+         <a href="cspice_dafcls.html">cspice_dafcls</a>( handle );
+
+         [handle] = <a href="cspice_dafopr.html">cspice_dafopr</a>( KERNEL );
+
+         %
+         % Check if the comments have indeed been deleted.
+         %
+         [buffer, done] = <a href="cspice_dafec.html">cspice_dafec</a>( handle, BUFFSZ, LINLEN );
+
+         if ( done &amp;&amp; numel(buffer) == 0 )
+            fprintf( ' \n' )
+            fprintf( '   Successful operation.\n' )
+         else
+            fprintf( ' \n' )
+            fprintf( '   Operation failed.\n' )
+         end
+
+         %
+         % Safely close the DAF.
+         %
+         <a href="cspice_dafcls.html">cspice_dafcls</a>( handle );
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Comment area of input DAF file (max. 10 lines):
+      ----------------------------------------------------------------
+
+         SPK for DSN Station Locations
+         =====================================================================
+
+         Original file name:                   earthstns_itrf93_201023.bsp
+         Creation date:                        2020 October 28 12:30
+         Created by:                           Nat Bachman  (NAIF/JPL)
+
+
+         Introduction
+      ----------------------------------------------------------------
+
+      Deleting entire comment area...
+
+         Successful operation.
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   A binary DAF contains an area which is reserved for storing
+   annotations or descriptive textual information about the data
+   contained in a file. This area is referred to as the &quot;comment
+   area&quot; of the file. The comment area of a DAF is a line oriented
+   medium for storing textual information. The comment area preserves
+   any leading or embedded white space in the line(s) of text which are
+   stored, so that the appearance of the of information will be
+   unchanged when it is retrieved (extracted) at some other time.
+   Trailing blanks, however, are NOT preserved, due to the way that
+   character strings are represented in standard Fortran 77.
+
+   This routine will delete the entire comment area from the binary DAF
+   attached to `handle'. The size of the binary DAF will remain
+   unchanged. The space that was used by the comment records is
+   reclaimed: the data area of the DAF is shifted toward the beginning
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the binary DAF attached to `handle' is not open with write
+       access, an error is signaled by a routine in the call tree of
+       this routine.
+
+   2)  If the input argument `handle' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   3)  If the input argument `handle' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   See argument `handle' in -I/O.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 25-NOV-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard.
+       Added complete code example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 10-JUL-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   delete DAF comment area
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

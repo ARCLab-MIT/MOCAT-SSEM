@@ -1,0 +1,304 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pl2psv</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pl2psv</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PL2PSV returns a point and two orthogonal spanning vectors that
+   generate a specified plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      plane    a SPICE plane.
+
+               [1,1] = size(plane); struct = class(plane)
+
+               The structure has the fields:
+
+                  normal:   [3,1] = size(normal); double = class(normal)
+                  constant: [1,1] = size(constant); double = class(constant)
+
+   the call:
+
+      [point, span1, span2] = <b>cspice_pl2psv</b>( plane )
+
+   returns:
+
+      point,
+      span1,
+      span2    respectively, a point and two orthogonal
+               spanning vectors that generate the geometric plane
+               represented by `plane'.
+
+               [3,1] = size(point); double = class(point)
+               [3,1] = size(span1); double = class(span1)
+               [3,1] = size(span2); double = class(span2)
+
+               The geometric plane is the set of vectors
+
+                  point   +   s * span1   +   t * span2
+
+               where `s' and `t' are real numbers. `point' is the closest
+               point in the plane to the origin; this point is always a
+               multiple of the plane's normal vector. `span1' and `span2'
+               are an orthonormal pair of vectors. `point', `span1', and
+               `span2' are mutually orthogonal.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Construct a SPICE plane from a normal vector and a point on
+      that plane, and calculate a point and two orthogonal spanning
+      vectors that generate the specified plane.
+
+      Example code begins here.
+
+
+      function pl2psv_ex1()
+         %
+         % Define a normal vector from a plane and a
+         % point in a plane.
+         %
+         normal = [ -1.;  5.;   -3.5 ];
+         point  = [  9.; -0.65; -12. ];
+
+         %
+         % Create a plane from the vectors.
+         %
+         plane = <a href="cspice_nvp2pl.html">cspice_nvp2pl</a>( normal, point );
+         fprintf( 'Input plane:\n' )
+         fprintf( '  Normal vector  : %15.12f %15.12f %15.12f\n', ...
+                                                        plane.normal   )
+         fprintf( '  Constant       : %15.12f\n\n',      plane.constant )
+
+         %
+         % Calculate a point in the plane, and
+         % two spanning vectors in the plane such that
+         % the point and spanning are mutually orthogonal.
+         %
+         [point, span1, span2] = <b>cspice_pl2psv</b>( plane );
+
+         fprintf( 'Point            : %15.12f %15.12f %15.12f\n',   point )
+         fprintf( 'Spanning vector 1: %15.12f %15.12f %15.12f\n',   span1 )
+         fprintf( 'Spanning vector 2: %15.12f %15.12f %15.12f\n\n', span2 )
+
+         %
+         % Test `point', `span1', and `span2' orthogonality. The dot
+         % products of any two vectors should equal zero to
+         % within round-off.
+         %
+         fprintf( 'dot(point,span1) : %20.17f\n', dot( point, span1) )
+         fprintf( 'dot(point,span2) : %20.17f\n', dot( point, span2) )
+         fprintf( 'dot(span1,span2) : %20.17f\n', dot( span1, span2) )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Input plane:
+        Normal vector  : -0.161690416691  0.808452083454 -0.565916458418
+        Constant       :  4.810289896554
+
+      Point            : -0.777777777778  3.888888888889 -2.722222222222
+      Spanning vector 1:  0.000000000000  0.573462344363  0.819231920519
+      Spanning vector 2:  0.986841531934  0.132461950595 -0.092723365417
+
+      dot(point,span1) :  0.00000000000000000
+      dot(point,span2) :  0.00000000000000006
+      dot(span1,span2) :  0.00000000000000000
+
+
+      Note that, as expected, the dot products of any two vectors equal
+      zero to within round-off.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Mice geometry routines that deal with planes use the `plane'
+   data type to represent input and output planes. This data type
+   makes the routine interfaces simpler and more uniform.
+
+   The Mice routines that produce SPICE planes from data that
+   define a plane are:
+
+      <a href="cspice_nvc2pl.html">cspice_nvc2pl</a> ( Normal vector and constant to plane )
+      <a href="cspice_nvp2pl.html">cspice_nvp2pl</a> ( Normal vector and point to plane    )
+      <a href="cspice_psv2pl.html">cspice_psv2pl</a> ( Point and spanning vectors to plane )
+
+   The Mice routines that convert SPICE planes to data that
+   define a plane are:
+
+      <a href="cspice_pl2nvc.html">cspice_pl2nvc</a> ( Plane to normal vector and constant )
+      <a href="cspice_pl2nvp.html">cspice_pl2nvp</a> ( Plane to normal vector and point    )
+      <b>cspice_pl2psv</b> ( Plane to point and spanning vectors )
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  The input plane MUST have been created by one of the Mice
+       routines
+
+          <a href="cspice_nvc2pl.html">cspice_nvc2pl</a> ( Normal vector and constant to plane )
+          <a href="cspice_nvp2pl.html">cspice_nvp2pl</a> ( Normal vector and point to plane    )
+          <a href="cspice_psv2pl.html">cspice_psv2pl</a> ( Point and spanning vectors to plane )
+
+       Otherwise, the results of this routine are unpredictable.
+
+   2)  If the input argument `plane' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   3)  If the input argument `plane' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/planes.html">PLANES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  G. Thomas and R. Finney, &quot;Calculus and Analytic Geometry,&quot;
+        7th Edition, Addison Wesley, 1988.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 24-AUG-2021 (EDW) (JDR)
+
+       Edited -Examples section to comply with NAIF standard. Added
+       example's problem statement and modified code example to produce
+       formatted output.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 27-AUG-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   plane to point and spanning vectors
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

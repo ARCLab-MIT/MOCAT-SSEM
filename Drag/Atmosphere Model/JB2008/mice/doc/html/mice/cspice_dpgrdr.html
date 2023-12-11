@@ -1,0 +1,601 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dpgrdr</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dpgrdr</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DPGRDR computes the Jacobian matrix of the transformation
+   from rectangular to planetographic coordinates.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      body     the name of the body with which the planetographic coordinate
+               system is associated.
+
+               [1,c1] = size(body); char = class(body)
+
+                  or
+
+               [1,1] = size(body); cell = class(body)
+
+               `body' is used by this routine to look up from the kernel
+               pool the prime meridian rate coefficient giving the body's
+               spin sense.
+
+      x,
+      y,
+      z        the rectangular coordinates of the point(s) at which the
+               Jacobian of the map from rectangular to planetographic
+               coordinates is desired.
+
+               [1,n] = size(x); double = class(x)
+               [1,n] = size(y); double = class(y)
+               [1,n] = size(z); double = class(z)
+
+      re       the equatorial radius of the reference spheroid.
+
+               [1,1] = size(re); double = class(re)
+
+               This spheroid is a volume of revolution: its horizontal cross
+               sections are circular. The shape of the spheroid is defined by
+               an equatorial radius `re' and a polar radius `rp'.
+
+      f        the flattening coefficient
+
+                  f = (re-rp) / re
+
+               where `rp' is the polar radius of the spheroid.
+
+               [1,1] = size(f); double = class(f)
+
+               The units of `rp' match those of `re'. (More importantly
+               rp = re*(1-f) )
+
+   the call:
+
+      [jacobi] = <b>cspice_dpgrdr</b>( body, x, y, z, re, f )
+
+   returns:
+
+      jacobi   the matrix(es) of partial derivatives of the conversion from
+               rectangular to planetographic coordinates.
+
+               If [1,1] = size(x) then [3,3]   = size(jacobi).
+               If [1,n] = size(x) then [3,3,n] = size(jacobi).
+                                        double = class(jacobi)
+
+               It has the form
+
+                  .-                           -.
+                  |  dlon/dx  dlon/dy  dlon/dz  |
+                  |  dlat/dx  dlat/dy  dlat/dz  |
+                  |  dalt/dx  dalt/dy  dalt/dz  |
+                  `-                           -'
+
+               evaluated at the input values of `x', `y', and `z'.
+
+               `jacobi' returns with the same vectorization measure (N)
+               as `x', `y' and `z'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Find the planetographic state of the Earth as seen from
+      Mars in the J2000 reference frame at January 1, 2005 TDB.
+      Map this state back to rectangular coordinates as a check.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: dpgrdr_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de405.bsp                     Planetary ephemeris
+            pck00008.tpc                  Planet orientation and
+                                          radii
+            naif0007.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de405.bsp',
+                                'pck00008.tpc',
+                                'naif0007.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function dpgrdr_ex1()
+
+         %
+         % Load SPK, PCK, and LSK kernels, use a meta kernel for
+         % convenience.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'dpgrdr_ex1.tm' );
+
+         %
+         % Look up the radii for Mars.  Although we
+         % omit it here, we could first call badkpv_c
+         % to make sure the variable BODY499_RADII
+         % has three elements and numeric data type.
+         % If the variable is not present in the kernel
+         % pool, bodvrd_c will signal an error.
+         %
+         [radii] = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'MARS', 'RADII', 3 );
+
+         %
+         % Compute flattening coefficient.
+         %
+         re  =  radii(1);
+         rp  =  radii(3);
+         f   =  ( re - rp ) / re;
+
+         %
+         % Look up the geometric state of earth as seen from Mars at
+         % January 1, 2005 TDB, relative to the J2000 reference
+         % frame.
+         %
+         [et] = <a href="cspice_str2et.html">cspice_str2et</a>( 'January 1, 2005 TDB' );
+
+         [state, lt] = <a href="cspice_spkezr.html">cspice_spkezr</a>( 'Earth', et, 'J2000', ...
+                                        'LT+S', 'Mars'        );
+
+         %
+         % Convert position to planetographic coordinates.
+         %
+         [lon, lat, alt] = <a href="cspice_recpgr.html">cspice_recpgr</a>( 'mars', state(1:3), re, f );
+
+         %
+         % Convert velocity to planetographic coordinates.
+         %
+
+         [jacobi] = <b>cspice_dpgrdr</b>( 'MARS', state(1), state(2), ...
+                                           state(3), re,       f );
+
+         pgrvel = jacobi * state(4:6);
+
+         %
+         % As a check, convert the planetographic state back to
+         % rectangular coordinates.
+         %
+         [rectan] = <a href="cspice_pgrrec.html">cspice_pgrrec</a>( 'mars', lon, lat, alt, re, f );
+         [jacobi] = <a href="cspice_drdpgr.html">cspice_drdpgr</a>( 'mars', lon, lat, alt, re, f );
+
+         drectn = jacobi * pgrvel;
+
+         fprintf( '\n' )
+         fprintf( 'Rectangular coordinates:\n' )
+         fprintf( '\n' )
+         fprintf( '  X (km)                 =  %17.8e\n', state (1) )
+         fprintf( '  Y (km)                 =  %17.8e\n', state (2) )
+         fprintf( '  Z (km)                 =  %17.8e\n', state (3) )
+         fprintf( '\n' )
+         fprintf( 'Rectangular velocity:\n' )
+         fprintf( '\n' )
+         fprintf( '  dX/dt (km/s)           =  %17.8e\n', state (4) )
+         fprintf( '  dY/dt (km/s)           =  %17.8e\n', state (5) )
+         fprintf( '  dZ/dt (km/s)           =  %17.8e\n', state (6) )
+         fprintf( '\n' )
+         fprintf( 'Ellipsoid shape parameters:\n' )
+         fprintf( '\n' )
+         fprintf( '  Equatorial radius (km) =  %17.8e\n', re )
+         fprintf( '  Polar radius      (km) =  %17.8e\n', rp )
+         fprintf( '  Flattening coefficient =  %17.8e\n', f )
+         fprintf( '\n' )
+         fprintf( 'Planetographic coordinates:\n' )
+         fprintf( '\n' )
+         fprintf( '  Longitude (deg)        =  %17.8e\n', ...
+                                                   lon / <a href="cspice_rpd.html">cspice_rpd</a> )
+         fprintf( '  Latitude  (deg)        =  %17.8e\n', ...
+                                                   lat / <a href="cspice_rpd.html">cspice_rpd</a> )
+         fprintf( '  Altitude  (km)         =  %17.8e\n', alt )
+         fprintf( '\n' )
+         fprintf( 'Planetographic velocity:\n' )
+         fprintf( '\n' )
+         fprintf( '  d Longitude/dt (deg/s) =  %17.8e\n', ...
+                                               pgrvel(1)/<a href="cspice_rpd.html">cspice_rpd</a> )
+         fprintf( '  d Latitude/dt  (deg/s) =  %17.8e\n', ...
+                                               pgrvel(2)/<a href="cspice_rpd.html">cspice_rpd</a> )
+         fprintf( '  d Altitude/dt  (km/s)  =  %17.8e\n', pgrvel(3) )
+         fprintf( '\n' )
+         fprintf( 'Rectangular coordinates from inverse mapping:\n' )
+         fprintf( '\n' )
+         fprintf( '  X (km)                 =  %17.8e\n', rectan (1) )
+         fprintf( '  Y (km)                 =  %17.8e\n', rectan (2) )
+         fprintf( '  Z (km)                 =  %17.8e\n', rectan (3) )
+         fprintf( '\n' )
+         fprintf( 'Rectangular velocity from inverse mapping:\n' )
+         fprintf( '\n' )
+         fprintf( '  dX/dt (km/s)           =  %17.8e\n', drectn (1) )
+         fprintf( '  dY/dt (km/s)           =  %17.8e\n', drectn (2) )
+         fprintf( '  dZ/dt (km/s)           =  %17.8e\n', drectn (3) )
+         fprintf( '\n' )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Rectangular coordinates:
+
+        X (km)                 =     1.46039732e+08
+        Y (km)                 =     2.78546607e+08
+        Z (km)                 =     1.19750315e+08
+
+      Rectangular velocity:
+
+        dX/dt (km/s)           =    -4.70432720e+01
+        dY/dt (km/s)           =     9.07326134e+00
+        dZ/dt (km/s)           =     4.75791694e+00
+
+      Ellipsoid shape parameters:
+
+        Equatorial radius (km) =     3.39619000e+03
+        Polar radius      (km) =     3.37620000e+03
+        Flattening coefficient =     5.88600756e-03
+
+      Planetographic coordinates:
+
+        Longitude (deg)        =     2.97667659e+02
+        Latitude  (deg)        =     2.08445040e+01
+        Altitude  (km)         =     3.36531825e+08
+
+      Planetographic velocity:
+
+        d Longitude/dt (deg/s) =    -8.35770664e-06
+        d Latitude/dt  (deg/s) =     1.59355667e-06
+        d Altitude/dt  (km/s)  =    -1.12116008e+01
+
+      Rectangular coordinates from inverse mapping:
+
+        X (km)                 =     1.46039732e+08
+        Y (km)                 =     2.78546607e+08
+        Z (km)                 =     1.19750315e+08
+
+      Rectangular velocity from inverse mapping:
+
+        dX/dt (km/s)           =    -4.70432720e+01
+        dY/dt (km/s)           =     9.07326134e+00
+        dZ/dt (km/s)           =     4.75791694e+00
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   When performing vector calculations with velocities it is usually
+   most convenient to work in rectangular coordinates. However, once
+   the vector manipulations have been performed, it is often
+   desirable to convert the rectangular representations into
+   planetographic coordinates to gain insights about phenomena in
+   this coordinate frame.
+
+   To transform rectangular velocities to derivatives of coordinates
+   in a planetographic system, one uses the Jacobian of the
+   transformation between the two systems.
+
+   Given a state in rectangular coordinates
+
+      ( x, y, z, dx, dy, dz )
+
+   the velocity in planetographic coordinates is given by the matrix
+   equation:
+                        t          |                     t
+      (dlon, dlat, dalt)   = jacobi|       * (dx, dy, dz)
+                                   |(x,y,z)
+
+   This routine computes the matrix
+
+            |
+      jacobi|
+            |(x, y, z)
+
+
+   The planetographic definition of latitude is identical to the
+   planetodetic (also called &quot;geodetic&quot; in SPICE documentation)
+   definition. In the planetographic coordinate system, latitude is
+   defined using a reference spheroid. The spheroid is
+   characterized by an equatorial radius and a polar radius. For a
+   point P on the spheroid, latitude is defined as the angle between
+   the X-Y plane and the outward surface normal at P. For a point P
+   off the spheroid, latitude is defined as the latitude of the
+   nearest point to P on the spheroid. Note if P is an interior
+   point, for example, if P is at the center of the spheroid, there
+   may not be a unique nearest point to P.
+
+   In the planetographic coordinate system, longitude is defined
+   using the spin sense of the body. Longitude is positive to the
+   west if the spin is prograde and positive to the east if the spin
+   is retrograde. The spin sense is given by the sign of the first
+   degree term of the time-dependent polynomial for the body's prime
+   meridian Euler angle &quot;W&quot;: the spin is retrograde if this term is
+   negative and prograde otherwise. For the sun, planets, most
+   natural satellites, and selected asteroids, the polynomial
+   expression for W may be found in a SPICE PCK kernel.
+
+   The earth, moon, and sun are exceptions: planetographic longitude
+   is measured positive east for these bodies.
+
+   If you wish to override the default sense of positive longitude
+   for a particular body, you can do so by defining the kernel
+   variable
+
+      BODY&lt;body ID&gt;_PGR_POSITIVE_LON
+
+   where &lt;body ID&gt; represents the NAIF ID code of the body. This
+   variable may be assigned either of the values
+
+      'WEST'
+      'EAST'
+
+   For example, you can have this routine treat the longitude
+   of the earth as increasing to the west using the kernel
+   variable assignment
+
+      BODY399_PGR_POSITIVE_LON = 'WEST'
+
+   Normally such assignments are made by placing them in a text
+   kernel and loading that kernel via <a href="cspice_furnsh.html">cspice_furnsh</a>.
+
+   The definition of this kernel variable controls the behavior of
+   the CSPICE planetographic routines
+
+      <a href="cspice_pgrrec.html">cspice_pgrrec</a>
+      <a href="cspice_recpgr.html">cspice_recpgr</a>
+      <b>cspice_dpgrdr</b>
+      <a href="cspice_drdpgr.html">cspice_drdpgr</a>
+
+   It does not affect the other CSPICE coordinate conversion
+   routines.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the body name `body' cannot be mapped to a NAIF ID code, and
+       if `body' is not a string representation of an integer, the
+       error SPICE(IDCODENOTFOUND) is signaled by a routine in the
+       call tree of this routine.
+
+   2)  If the kernel variable
+
+          BODY&lt;ID code&gt;_PGR_POSITIVE_LON
+
+       is present in the kernel pool but has a value other
+       than one of
+
+           'EAST'
+           'WEST'
+
+       the error SPICE(INVALIDOPTION) is signaled by a routine in the
+       call tree of this routine. Case and blanks are ignored when
+       these values are interpreted.
+
+   3)  If polynomial coefficients for the prime meridian of `body' are
+       not available in the kernel pool, and if the kernel variable
+       BODY&lt;ID code&gt;_PGR_POSITIVE_LON is not present in the kernel
+       pool, the error SPICE(MISSINGDATA) is signaled by a routine in
+       the call tree of this routine.
+
+   4)  If the equatorial radius is non-positive, the error
+       SPICE(VALUEOUTOFRANGE) is signaled by a routine in the call
+       tree of this routine.
+
+   5)  If the flattening coefficient is greater than or equal to one,
+       the error SPICE(VALUEOUTOFRANGE) is signaled by a routine in
+       the call tree of this routine.
+
+   6)  If the input point is on the z-axis (x = 0 and y = 0), the
+       Jacobian matrix is undefined, an error is signaled by a
+       routine in the call tree of this routine.
+
+   7)  If any of the input arguments, `body', `x', `y', `z', `re' or
+       `f', is undefined, an error is signaled by the Matlab error
+       handling system.
+
+   8)  If any of the input arguments, `body', `x', `y', `z', `re' or
+       `f', is not of the expected type, or it does not have the
+       expected dimensions and size, an error is signaled by the Mice
+       interface.
+
+   9)  If the input vectorizable arguments `x', `y' and `z' do not
+       have the same measure of vectorization (N), an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   This routine expects a kernel variable giving BODY's prime
+   meridian angle as a function of time to be available in the
+   kernel pool. Normally this item is provided by loading a PCK
+   file. The required kernel variable is named
+
+      BODY&lt;body ID&gt;_PM
+
+   where &lt;body ID&gt; represents a string containing the NAIF integer
+   ID code for `body'. For example, if `body' is 'JUPITER', then
+   the name of the kernel variable containing the prime meridian
+   angle coefficients is
+
+      BODY599_PM
+
+   See the PCK Required Reading for details concerning the prime
+   meridian kernel variable.
+
+   The optional kernel variable
+
+      BODY&lt;body ID&gt;_PGR_POSITIVE_LON
+
+   also is normally defined via loading a text kernel. When this
+   variable is present in the kernel pool, the prime meridian
+   coefficients for `body' are not required by this routine. See the
+   -Particulars section for details.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 23-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       example to the -Examples section.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 11-NOV-2013 (EDW) (SCK)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Jacobian of planetographic  w.r.t. rectangular coordinates
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

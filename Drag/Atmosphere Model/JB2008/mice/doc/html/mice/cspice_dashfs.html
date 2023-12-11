@@ -1,0 +1,501 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dashfs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dashfs</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DASHFS returns a file summary for a specified DAS file.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the handle of a previously opened DAS file.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+               The file may be open for read or write access.
+
+   the call:
+
+      [nresvr, nresvc, ncomr,  ncomc,                                     ...
+       free,   lastla, lastrc, lastwd] = <b>cspice_dashfs</b>( handle )
+
+   returns:
+
+      nresvr   the number of reserved records in a specified DAS file.
+
+               [1,1] = size(nresvr); int32 = class(nresvr)
+
+      nresvc   the number of characters in use in the reserved record area
+               of a specified DAS file.
+
+               [1,1] = size(nresvc); int32 = class(nresvc)
+
+      ncomr    the number of comment records in a specified DAS file.
+
+               [1,1] = size(ncomr); int32 = class(ncomr)
+
+      ncomc    the number of characters in use in the comment area of a
+               specified DAS file.
+
+               [1,1] = size(ncomc); int32 = class(ncomc)
+
+      free     the 1-based record number of the first free record in a
+               specified DAS file.
+
+               [1,1] = size(free); int32 = class(free)
+
+      lastla   an array containing the highest current 1-based logical
+               addresses, in the specified DAS file, of data of character,
+               double precision, and integer types, in that order.
+
+               [3,1] = size(lastla); int32 = class(lastla)
+
+      lastrc   an array containing the 1-based record numbers, in the
+               specified DAS file, of the directory records containing the
+               current last descriptors of clusters of character, double
+               precision, and integer data records, in that order.
+
+               [3,1] = size(lastrc); int32 = class(lastrc)
+
+      lastwd   an array containing the 1-based word indices, within the
+               respective descriptor records identified by the elements of
+               `lastrc', of the current last descriptors of clusters of
+               character, double precision, and integer data records, in
+               that order.
+
+               [3,1] = size(lastwd); int32 = class(lastwd)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   See parameter definitions file MiceDAS.m for declarations and
+   descriptions of parameters used throughout the DAS system.
+
+   SPICE_DAS_CHARDT,
+   SPICE_DAS_DPDT,
+   SPICE_DAS_INTDT
+
+               are data type specifiers which indicate SpiceChar
+               (uint8), SpiceDouble (double), and SpiceInt (int32)
+               respectively. These parameters are used in all DAS
+               routines that require a data type specifier.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Create a DAS file containing 10 integers, 5 double precision
+      numbers, and 4 characters. Print the summary of the file and
+      dump its contents.
+
+
+      Example code begins here.
+
+
+      function dashfs_ex1()
+
+         %
+         % MiceUser is a file that makes certain variables global.
+         % You must call MiceUser to have access to the parameters used
+         % in this example.
+         %
+         MiceUser;
+
+         %
+         % Local parameters.
+         %
+         FNAME  =   'dashfs_ex1.das';
+         LINLEN =   2;
+
+         %
+         % Local variables.
+         %
+         line = zeros( 1, LINLEN, 'uint8' );
+
+         %
+         % Open a new DAS file. Reserve no records for comments.
+         %
+         type     = 'TEST';
+         ifname   = 'TEST.DAS/NAIF/NJB/11-NOV-1992-20:12:20';
+
+         [handle] = <a href="cspice_dasonw.html">cspice_dasonw</a>( FNAME, type, ifname, 0 );
+
+         %
+         % Obtain the file summary.
+         %
+         [nresvr, nresvc,                                                 ...
+          ncomr,  ncomc,                                                  ...
+          free,   lastla,                                                 ...
+          lastrc, lastwd] = <b>cspice_dashfs</b>( handle );
+
+         %
+         % Print the summary of the new file.
+         %
+         fprintf( 'Summary before adding data:\n' )
+         fprintf( '   Number of reserved records     : %d\n', nresvr )
+         fprintf( '   Characters in reserved records : %d\n', nresvc )
+         fprintf( '   Number of comment records      : %d\n', ncomr )
+         fprintf( '   Characters in comment area     : %d\n', ncomc )
+         fprintf( '   Number of first free record    : %d\n', free )
+         fprintf( '   Last logical character address : %d\n',             ...
+                                              lastla(SPICE_DAS_CHARDT) )
+         fprintf( '   Last logical d.p. address      : %d\n',             ...
+                                              lastla(SPICE_DAS_DPDT) )
+         fprintf( '   Last logical integer address   : %d\n',             ...
+                                              lastla(SPICE_DAS_INTDT) )
+         fprintf( '   Last character descriptor      : %d\n',             ...
+                                              lastrc(SPICE_DAS_CHARDT) )
+         fprintf( '   Last d.p descriptor            : %d\n',             ...
+                                              lastrc(SPICE_DAS_DPDT) )
+         fprintf( '   Last integer descriptor        : %d\n',             ...
+                                              lastrc(SPICE_DAS_INTDT) )
+         fprintf( '   Character word position in desc: %d\n',             ...
+                                              lastwd(SPICE_DAS_CHARDT) )
+         fprintf( '   d.p. word position in desc     : %d\n',             ...
+                                              lastwd(SPICE_DAS_DPDT) )
+         fprintf( '   Integer word position in desc  : %d\n',             ...
+                                              lastwd(SPICE_DAS_INTDT) )
+         fprintf( '\n' )
+
+         %
+         % Add the data.
+         %
+         for i=1:10
+
+            <a href="cspice_dasadi.html">cspice_dasadi</a>( handle, i );
+
+         end
+
+         for i=1:5
+
+            <a href="cspice_dasadd.html">cspice_dasadd</a>( handle, double(i) );
+
+         end
+
+         %
+         % Add character data to the file. DAS character data are
+         % treated as a character array, not as a string. The
+         % following call adds only the first 4 characters to the
+         % DAS file.
+         %
+         <a href="cspice_dasadc.html">cspice_dasadc</a>( handle, 4, 1, 4, uint8('SPUDWXY') );
+
+         %
+         % Close the file and open it for reading.
+         %
+         <a href="cspice_dascls.html">cspice_dascls</a>( handle );
+         [handle] = <a href="cspice_dasopr.html">cspice_dasopr</a>( FNAME );
+
+         %
+         % Obtain again the file summary.
+         %
+         [nresvr, nresvc, ncomr,  ncomc,                                  ...
+          free,   lastla, lastrc, lastwd] = <b>cspice_dashfs</b>( handle );
+
+         fprintf( 'Summary after adding data:\n' )
+         fprintf( '   Number of reserved records     : %d\n', nresvr )
+         fprintf( '   Characters in reserved records : %d\n', nresvc )
+         fprintf( '   Number of comment records      : %d\n', ncomr )
+         fprintf( '   Characters in comment area     : %d\n', ncomc )
+         fprintf( '   Number of first free record    : %d\n', free )
+         fprintf( '   Last logical character address : %d\n',             ...
+                                              lastla(SPICE_DAS_CHARDT) )
+         fprintf( '   Last logical d.p. address      : %d\n',             ...
+                                              lastla(SPICE_DAS_DPDT) )
+         fprintf( '   Last logical integer address   : %d\n',             ...
+                                              lastla(SPICE_DAS_INTDT) )
+         fprintf( '   Last character descriptor      : %d\n',             ...
+                                              lastrc(SPICE_DAS_CHARDT) )
+         fprintf( '   Last d.p descriptor            : %d\n',             ...
+                                              lastrc(SPICE_DAS_DPDT) )
+         fprintf( '   Last integer descriptor        : %d\n',             ...
+                                              lastrc(SPICE_DAS_INTDT) )
+         fprintf( '   Character word position in desc: %d\n',             ...
+                                              lastwd(SPICE_DAS_CHARDT) )
+         fprintf( '   d.p. word position in desc     : %d\n',             ...
+                                              lastwd(SPICE_DAS_DPDT) )
+         fprintf( '   Integer word position in desc  : %d\n',             ...
+                                              lastwd(SPICE_DAS_INTDT) )
+         fprintf( '\n' )
+
+         %
+         % Read the integers and dump them.
+         %
+         fprintf( 'Integer data in the DAS file:\n' )
+         for i=1:lastla(SPICE_DAS_INTDT)
+
+            [n] = <a href="cspice_dasrdi.html">cspice_dasrdi</a>( handle, i, i );
+            fprintf( '   %d\n', n )
+
+         end
+
+         %
+         % Now the d.p. numbers:
+         %
+         fprintf( '\n' )
+         fprintf( 'Double precision data in the DAS file:\n' )
+         for i=1:lastla(SPICE_DAS_DPDT)
+
+            [x] = <a href="cspice_dasrdd.html">cspice_dasrdd</a>( handle, i, i );
+            fprintf( '   %f\n', x )
+
+         end
+
+         %
+         % Now the characters. In this case, we read the
+         % data one line at a time.
+         %
+         first  =  0;
+         last   =  0;
+         remain =  lastla(SPICE_DAS_CHARDT);
+
+         fprintf( '\n' )
+         fprintf( 'Character data in the DAS file:\n' )
+         while remain &gt; 0
+
+            nread  = min ( [LINLEN, remain] );
+            first  = last + 1;
+            last   = last + nread;
+
+            [line] = <a href="cspice_dasrdc.html">cspice_dasrdc</a>( handle, first, last, 1, LINLEN, line );
+
+            fprintf( '   %s\n', char(line) )
+
+            remain = remain - nread;
+
+         end
+
+         %
+         % Close the file.
+         %
+         <a href="cspice_dascls.html">cspice_dascls</a>( handle );
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Summary before adding data:
+         Number of reserved records     : 0
+         Characters in reserved records : 0
+         Number of comment records      : 0
+         Characters in comment area     : 0
+         Number of first free record    : 3
+         Last logical character address : 0
+         Last logical d.p. address      : 0
+         Last logical integer address   : 0
+         Last character descriptor      : 0
+         Last d.p descriptor            : 0
+         Last integer descriptor        : 0
+         Character word position in desc: 0
+         d.p. word position in desc     : 0
+         Integer word position in desc  : 0
+
+      Summary after adding data:
+         Number of reserved records     : 0
+         Characters in reserved records : 0
+         Number of comment records      : 0
+         Characters in comment area     : 0
+         Number of first free record    : 6
+         Last logical character address : 4
+         Last logical d.p. address      : 5
+         Last logical integer address   : 10
+         Last character descriptor      : 2
+         Last d.p descriptor            : 2
+         Last integer descriptor        : 2
+         Character word position in desc: 10
+         d.p. word position in desc     : 11
+         Integer word position in desc  : 12
+
+      Integer data in the DAS file:
+         1
+         2
+         3
+         4
+         5
+         6
+         7
+         8
+         9
+         10
+
+      Double precision data in the DAS file:
+         1.000000
+         2.000000
+         3.000000
+         4.000000
+         5.000000
+
+      Character data in the DAS file:
+         SP
+         UD
+
+
+      Note that after run completion, a new DAS file exists in the
+      output directory.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   The quantities
+
+      nresvr
+      nresvc
+      ncomr
+      ncomc
+      free
+      lastla
+      lastrc
+      lastwd
+
+   define the &quot;state&quot; of a DAS file, and in particular the state of
+   the directory structure of the file. This information is needed by
+   other DAS routines, but application programs will usually have no
+   need for it. The one exception is the array of &quot;last&quot; logical
+   addresses `lastla': these addresses indicate how many words of data
+   of each type are contained in the specified DAS file. The elements
+   of `lastla' can be conveniently retrieved by calling <a href="cspice_daslla.html">cspice_daslla</a>.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the specified handle does not belong to any file that is
+       currently known to be open, the error SPICE(DASNOSUCHHANDLE)
+       is signaled by a routine in the call tree of this routine.
+
+   2)  If the input argument `handle' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   3)  If the input argument `handle' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/das.html">DAS.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 23-JUL-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   return the file summary of a DAS file
+   find the amount of data in a DAS file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

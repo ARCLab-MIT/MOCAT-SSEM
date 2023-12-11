@@ -1,0 +1,312 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ccifrm</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ccifrm</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CCIFRM returns the frame name, frame id, and center associated with
+   a given frame class and class id.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+     frclss   is the class or type of the frame. This identifies which
+              subsystem will be used to perform frame transformations.
+
+              [1,1] = size(frclss); int32 = class(frclss)
+
+     clssid   is the ID code used for the frame within its class. This
+              may be different from the frame ID code.
+
+              [1,1] = size(clssid); int32 = class(clssid)
+
+   the call:
+
+      [frcode, frname, cent, found] = <b>cspice_ccifrm</b>( frclss, clssid )
+
+   returns:
+
+      frcode  is the frame ID code for the reference frame
+              identified by `frclss' and `clssid'.
+
+              [1,1] = size(frcode); int32 = class(frcode)
+
+      frname  is the name of the frame identified by
+              `frclss' and `clssid'.
+
+              [1,c1] = size(frname); char = class(frname)
+
+              If `frname' does not have enough room to hold
+              the full name of the frame, the name will be truncated
+              on the right.
+
+      cent    is the body ID code for the center of the reference
+              frame identified  by `frclss' and `clssid'.
+
+              [1,1] = size(cent); int32 = class(cent)
+
+      found   is true if a valid frame specification
+              corresponding to the input frame class and frame class
+              ID is available, in which case the other outputs are
+              valid. Otherwise, `found' is returned with the value
+              false.
+
+              [1,1] = size(found); logical = class(found)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) The following code example demonstrates how to find the frame
+      information about a frame by its ID using <a href="cspice_frinfo.html">cspice_frinfo</a> and
+      by its class and class ID using <b>cspice_ccifrm</b>.
+
+      Example code begins here.
+
+
+      function ccifrm_ex1()
+
+         frcode1 = <a href="cspice_namfrm.html">cspice_namfrm</a>( 'ITRF93');
+         [center1, clss, clss_ID, found] = <a href="cspice_frinfo.html">cspice_frinfo</a>( frcode1 );
+
+         if ( ~found )
+               error('No info found for ITRF93' )
+         end
+
+         fprintf( 'Frame ITRF93 info:\n'          )
+         fprintf( '   Frame Code: %d\n', frcode1 )
+         fprintf( '   Center ID : %d\n', center1 )
+         fprintf( '   Class     : %d\n', clss    )
+         fprintf( '   Class ID  : %d\n', clss_ID )
+
+         [frcode2, frname, center2, found] = <b>cspice_ccifrm</b>( clss, clss_ID );
+
+         if ( ~found )
+               error('No info found for type 2 frame 3000.' )
+         end
+
+         fprintf( 'Type 2 frame 3000 info:\n'    )
+         fprintf( '   Frame name: %s\n', frname  )
+         fprintf( '   Frame Code: %d\n', frcode2 )
+         fprintf( '   Center ID : %d\n', center2 )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Frame ITRF93 info:
+         Frame Code: 13000
+         Center ID : 399
+         Class     : 2
+         Class ID  : 3000
+      Type 2 frame 3000 info:
+         Frame name: ITRF93
+         Frame Code: 13000
+         Center ID : 399
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine allows the user to determine the frame associated
+   with a given frame class and class ID code. The kernel pool is
+   searched first for a matching frame; if no match is found, then
+   the set of built-in frames is searched.
+
+   Since the neither the frame class nor the class ID are primary
+   keys, searching for matching frames is a linear (and therefore
+   typically slow) process.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  This routine assumes that the first frame found with matching
+       class and class ID is the correct one. SPICE's frame system
+       does not diagnose the situation where there are multiple,
+       distinct frames with matching classes and class ID codes, but
+       this situation could occur if such conflicting frame
+       specifications are loaded via one or more frame kernels. The
+       user is responsible for avoiding such frame specification
+       conflicts.
+
+   2)  If a frame class assignment is found that associates a string
+       (as opposed to numeric) value with a frame class keyword, the
+       error SPICE(INVALIDFRAMEDEF) is signaled by a routine in the
+       call tree of this routine.
+
+   3)  If a frame class assignment is found that matches the input
+       class, but a corresponding class ID assignment is not
+       found in the kernel pool, the error SPICE(INVALIDFRAMEDEF)
+       is signaled by a routine in the call tree of this routine.
+
+   4)  If a frame specification is found in the kernel pool with
+       matching frame class and class ID, but either the frame name
+       or frame ID code are not found, the error
+       SPICE(INVALIDFRAMEDEF) is signaled by a routine in the call
+       tree of this routine.
+
+   5)  If a frame specification is found in the kernel pool with
+       matching frame class and class ID, but the frame center
+       is not found, an error is signaled by a routine
+       in the call tree of this routine.
+
+   6)  If any of the input arguments, `frclss' or `clssid', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   7)  If any of the input arguments, `frclss' or `clssid', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  See item (1) in the -Exceptions section above.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   M. Liukis           (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 26-NOV-2021 (EDW) (JDR)
+
+       Changed the output argument name &quot;center&quot; to &quot;cent&quot; for
+       consistency with other routines.
+
+       Edited the -Examples section to comply with NAIF standard. Updated
+       code example and added problem's statement. Added -Parameters,
+       -Exceptions, -Files, -Restrictions, -Literature_References and
+       -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 01-MAR-2017 (ML) (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Find info associated with a frame class and class id
+   Map frame class and class id to frame info
+   Map frame class and class id to frame name, id, and center
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:22 2021</pre>
+
+</body>
+</html>
+

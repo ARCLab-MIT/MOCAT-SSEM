@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_tpictr</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_tpictr</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_TPICTR creates a time format picture suitable for use by the
+   routine <a href="cspice_timout.html">cspice_timout</a> from a given sample time string.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      sample   a representative time string to use as a model to
+               format time strings (the string need not describe
+               an actual date - only format matters).
+
+               [1,c1] = size(sample); char = class(sample)
+
+                  or
+
+               [1,1] = size(sample); cell = class(sample)
+
+   the call:
+
+      [pictur, ok, errmsg] = <b>cspice_tpictr</b>(sample)
+
+   returns:
+
+      pictur   a format picture string suitable for use with the
+               SPICE routine <a href="cspice_timout.html">cspice_timout</a>.
+
+               [1,c2] = size(pictur); char = class(pictur)
+
+      ok       a boolean indicating whether `sample' parsed
+               without error, true, or some parse error occurred, false.
+
+               [1,1] = size(ok); logical = class(ok)
+
+      errmsg   a string containing the explanation of
+               the parse error.
+
+               [1,c3] = size(errmsg); char = class(errmsg)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given a sample with the format of the UNIX date string,
+      create a SPICE time picture for use in <a href="cspice_timout.html">cspice_timout</a>.
+
+
+      Example code begins here.
+
+
+      function tpictr_ex1()
+
+         sample = 'Thu Oct 1 11:11:11 PDT 1111';
+
+         %
+         % Make the call. 'ok' returns false is an error occurred.
+         % The error description returns in the err variable.
+         %
+         [pictur, ok, errmsg] = <b>cspice_tpictr</b>( sample );
+
+         %
+         % If a false error flag, print the picture; if
+         % a true error flag, print the error message.
+         %
+         if ( ok )
+            disp( pictur )
+         else
+            disp( errmsg )
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Wkd Mon DD HR:MN:SC PDT YYYY ::UTC-7
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Although the routine <a href="cspice_timout.html">cspice_timout</a> provides SPICE users with a great
+   deal of flexibility in formatting time strings, users must
+   master the means by which a time picture is constructed
+   suitable for use by <a href="cspice_timout.html">cspice_timout</a>.
+
+   This routine allows SPICE users to supply a sample time string
+   from which a corresponding time format picture can be created,
+   freeing users from the task of mastering the intricacies of
+   the routine <a href="cspice_timout.html">cspice_timout</a>.
+
+   Note that <a href="cspice_timout.html">cspice_timout</a> can produce many time strings whose patterns
+   can not be discerned by this routine. When such outputs are
+   called for, the user must consult <a href="cspice_timout.html">cspice_timout</a> and construct the
+   appropriate format picture &quot;by hand.&quot; However, these exceptional
+   formats are not widely used and are not generally recognizable
+   to an uninitiated reader.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  All problems with the inputs are reported via `ok' and `errmsg'.
+
+   2)  If a format picture can not be created from the sample
+       time string, `pictur' is returned as a blank string.
+
+   3)  If the input argument `sample' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   4)  If the input argument `sample' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 25-AUG-2021 (EDW) (JDR)
+
+       Changed the output argument name &quot;error&quot; to &quot;errmsg&quot; for
+       consistency with other routines.
+
+       Edited the header to comply with NAIF standard.
+
+       Added -Parameters, -Particulars, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.1.1, 09-MAR-2015 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.1.0, 10-MAY-2011 (EDW)
+
+       &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+   -Mice Version 1.0.1, 31-MAR-2010 (EDW)
+
+       Renamed error message argument 'error' to 'errmsg'.
+
+   -Mice Version 1.0.0, 22-NOV-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Use a sample time string to produce a time format picture
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

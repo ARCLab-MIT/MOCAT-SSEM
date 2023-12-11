@@ -1,0 +1,435 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_getfat</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_getfat</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_GETFAT determines the file architecture and file type of most
+   SPICE kernel files.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      file     the name of a SPICE kernel file whose architecture and type
+               are desired.
+
+               [1,c1] = size(file); char = class(file)
+
+                  or
+
+               [1,1] = size(file); cell = class(file)
+
+               This file must be closed when this routine is called.
+
+   the call:
+
+      [arch, kertyp] = <b>cspice_getfat</b>( file )
+
+   returns:
+
+      arch     the file architecture of the SPICE kernel file specified by
+               `file'.
+
+               [1,c2] = size(arch); char = class(arch)
+
+                  or
+
+               [1,1] = size(arch); cell = class(arch)
+
+               If the architecture cannot be determined or is not
+               recognized the value '?' is returned.
+
+               Architectures currently recognized are:
+
+                  DAF -- The file is based on the DAF architecture.
+                  DAS -- The file is based on the DAS architecture.
+                  XFR -- The file is in a SPICE transfer file format.
+                  DEC -- The file is an old SPICE decimal text file.
+                  ASC -- An ASCII text file.
+                  KPL -- Kernel Pool File (i.e., a text kernel)
+                  TXT -- An ASCII text file.
+                  TE1 -- Text E-Kernel type 1.
+                   ?  -- The architecture could not be determined.
+
+               This variable must be at least 3 characters long.
+
+      kertyp   the type of the SPICE kernel file.
+
+               [1,c3] = size(kertyp); char = class(kertyp)
+
+                  or
+
+               [1,1] = size(kertyp); cell = class(kertyp)
+
+               If the type can not be determined the value '?' is
+               returned.
+
+               Kernel file types may be any sequence of at most four
+               printing characters. NAIF has reserved for its use
+               types which contain all upper case letters.
+
+               A file type of 'PRE' means that the file is a
+               pre-release file.
+
+               This variable may be at most 4 characters long.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Determine the file architecture and file type of all the
+      kernels loaded through a meta-kernel and of a kernel in
+      transfer format.
+
+      Use the SPK kernel below to provide an example of a kernel in
+      transfer format.
+
+         earthstns_itrf93_050714.xsp
+
+
+      Use the meta-kernel shown below to load the other types of
+      SPICE kernels.
+
+
+         KPL/MK
+
+         File: getfat_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                        Contents
+            ---------                        --------
+            de430.bsp                        Planetary ephemeris
+            mar097.bsp                       Mars satellite ephemeris
+            pck00010.tpc                     Planet orientation and
+                                             radii
+            naif0011.tls                     Leapseconds
+            mgs_moc_v20.ti                   MGS MOC instrument
+                                             parameters
+            mgs_sclkscet_00061.tsc           MGS SCLK coefficients
+            mgs_sc_ext12.bc                  MGS s/c bus attitude
+            mgs_ext12_ipng_mgs95j.bsp        MGS ephemeris
+            megr90n000cb_plate.bds           Plate model based on
+                                             MEGDR DEM, resolution
+                                             4 pixels/degree.
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de430.bsp',
+                                'mar097.bsp',
+                                'pck00010.tpc',
+                                'naif0011.tls',
+                                'mgs_moc_v20.ti',
+                                'mgs_sclkscet_00061.tsc',
+                                'mgs_sc_ext12.bc',
+                                'mgs_ext12_ipng_mgs95j.bsp',
+                                'megr90n000cb_plate.bds'      )
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function getfat_ex1()
+
+         %
+         % Check the file architecture and type of an SPK
+         % in transfer format.
+         %
+         fname1 = 'earthstns_itrf93_050714.xsp';
+         [arch, ktype] = <b>cspice_getfat</b>( fname1 );
+         fprintf( 'File name     :  %s\n', fname1 )
+         fprintf( '  Architecture:  %s\n', arch )
+         fprintf( '  Kernel type :  %s\n', ktype )
+         fprintf( '\n' )
+
+         %
+         % Load the kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'getfat_ex1.tm' );
+
+         %
+         % Get the file architecture and kernel type for each of
+         % the kernels in the kernel pool.
+         %
+         [count] = <a href="cspice_ktotal.html">cspice_ktotal</a>( 'ALL' );
+
+         for i=1:count
+            [fname,  ktype, source,                          ...
+             handle, found]         = <a href="cspice_kdata.html">cspice_kdata</a>( i, 'ALL' );
+
+            [arch, ktype] = <b>cspice_getfat</b>( fname );
+
+            fprintf( 'File name     :  %s\n', fname )
+            fprintf( '  Source      :  %s\n', source )
+            fprintf( '  Architecture:  %s\n', arch )
+            fprintf( '  Kernel type :  %s\n', ktype )
+            fprintf( '\n' )
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave5.x/64-bit
+      platform, the output was:
+
+
+      File name     :  earthstns_itrf93_050714.xsp
+        Architecture:  XFR
+        Kernel type :  DAF
+
+      File name     :  getfat_ex1.tm
+        Source      :
+        Architecture:  KPL
+        Kernel type :  MK
+
+      File name     :  de430.bsp
+        Source      :  getfat_ex1.tm
+        Architecture:  DAF
+        Kernel type :  SPK
+
+      File name     :  mar097.bsp
+        Source      :  getfat_ex1.tm
+        Architecture:  DAF
+        Kernel type :  SPK
+
+      File name     :  pck00010.tpc
+        Source      :  getfat_ex1.tm
+        Architecture:  KPL
+        Kernel type :  PCK
+
+      File name     :  naif0011.tls
+        Source      :  getfat_ex1.tm
+        Architecture:  KPL
+        Kernel type :  LSK
+
+      File name     :  mgs_moc_v20.ti
+        Source      :  getfat_ex1.tm
+        Architecture:  KPL
+        Kernel type :  IK
+
+      File name     :  mgs_sclkscet_00061.tsc
+        Source      :  getfat_ex1.tm
+        Architecture:  KPL
+        Kernel type :  SCLK
+
+      File name     :  mgs_sc_ext12.bc
+        Source      :  getfat_ex1.tm
+        Architecture:  DAF
+        Kernel type :  CK
+
+      File name     :  mgs_ext12_ipng_mgs95j.bsp
+        Source      :  getfat_ex1.tm
+        Architecture:  DAF
+        Kernel type :  SPK
+
+      File name     :  megr90n000cb_plate.bds
+        Source      :  getfat_ex1.tm
+        Architecture:  DAS
+        Kernel type :  DSK
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This function is a support utility routine that determines the
+   architecture and type of a SPICE kernel file.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the filename specified is blank, the error
+       SPICE(BLANKFILENAME) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If any inquire on the filename specified by `file', required to
+       obtain information about the physical file, fails for some
+       reason, the error SPICE(INQUIREERROR) is signaled by a routine
+       in the call tree of this routine.
+
+   3)  If the file specified by `file' does not exist, the error
+       SPICE(FILENOTFOUND) is signaled by a routine in the call tree
+       of this routine.
+
+   4)  If the file specified by `file' is already open but not through
+       SPICE interfaces, the error SPICE(EXTERNALOPEN) is signaled by
+       a routine in the call tree of this routine.
+
+   5)  If an attempt to open the file specified by `file' fails when
+       this routine requires that it succeed, the error
+       SPICE(FILEOPENFAILED) is signaled by a routine in the call
+       tree of this routine.
+
+   6)  If an attempt to read the file specified by `file' fails when
+       this routine requires that it succeed, the error
+       SPICE(FILEREADFAILED) is signaled by a routine in the call
+       tree of this routine.
+
+   7)  If an issue is detected during the opening the input file or
+       the process to determine its architecture and type, an error
+       is signaled by a routine in the call tree of this routine.
+
+   8)  If the ID word in a DAF based kernel is 'NAIF/DAF', then the
+       algorithm <b>cspice_getfat</b> uses to distinguish between CK and SPK
+       kernels may result in an indeterminate `kertyp' if the SPK or
+       CK files have invalid first segments.
+
+   9)  If the input argument `file' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   10) If the input argument `file' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   The SPICE kernel file specified by `file' is opened and then
+   closed by this routine to determine its file architecture and
+   type. Filenames of open files should not be passed to this
+   routine.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  In order to properly determine the type of DAF based binary
+       kernels, the routine requires that their first segments and
+       the meta data necessary to address them are valid.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 09-AUG-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   determine the architecture and type of a kernel file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

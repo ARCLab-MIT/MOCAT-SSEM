@@ -1,0 +1,470 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_inedpl</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_inedpl</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_INEDPL calculates the intercept of a triaxial ellipsoid
+   and a plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a,
+      b,
+      c        the lengths of the semi-axes of a triaxial ellipsoid.
+
+               [1,1] = size(a); double = class(a)
+               [1,1] = size(b); double = class(b)
+               [1,1] = size(c); double = class(c)
+
+               The ellipsoid is centered at the origin and oriented so that
+               its axes lie on the x, y and z axes. `a', `b', and `c' are
+               the lengths of the semi-axes that respectively point in the
+               x, y, and z directions.
+
+      plane    a structure describing a SPICE plane.
+
+               [1,1] = size(plane); struct = class(plane)
+
+               The intersection of `plane' and the ellipsoid is sought.
+
+               The structure has the fields:
+
+                  normal:   [3,1] = size(normal); double = class(normal)
+                  constant: [1,1] = size(constant); double = class(constant)
+
+   the call:
+
+      [ellips, found] = <b>cspice_inedpl</b>( a, b, c, plane )
+
+   returns:
+
+      ellips   a structure describing a SPICE ellipse that defines the
+               intersection of `plane' and the ellipsoid.
+
+               [1,1] = size(ellips); struct = class(ellips)
+
+               The structure has the fields:
+
+                  center:    [3,1] =  size(center); double = class(center)
+                  semiMajor: [3,1] =  size(semiMajor);
+                            double = class(semiMajor)
+
+      found    the boolean indicating whether `plane'
+               intersects the ellipsoid (true) or not (false).
+
+               [1,1] = size(found); logical = class(found)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Suppose we wish to find the limb of a body, as observed from
+      location `loc' in body-fixed coordinates. The Mice routine
+      <a href="cspice_edlimb.html">cspice_edlimb</a> solves this problem. Here's how <b>cspice_inedpl</b> is used in
+      that solution.
+
+      We assume `loc' is outside of the body. The body is modelled as
+      a triaxial ellipsoid with semi-axes of length `a', `b', and `c'.
+
+      The notation
+
+         &lt; x, y &gt;
+
+      indicates the inner product of the vectors `x' and `y'.
+
+      The limb lies on the plane defined by
+
+         &lt; x,  n &gt;  =  1,
+
+      where the vector `n' is defined as
+
+                     2              2              2
+         ( loc(1) / a ,   loc(2) / b ,   loc(3) / c  )
+
+      The assignments
+
+         n(1) = loc(1) / (a*a);
+         n(2) = loc(2) / (b*b);
+         n(3) = loc(3) / (c*c);
+
+      and the calls
+
+         [plane]                  = <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>( n,  1.0 );
+
+         [limb, found]            = <b>cspice_inedpl</b>( a,  b,  c,  plane );
+
+         [center, smajor, sminor] = <a href="cspice_el2cgv.html">cspice_el2cgv</a>( limb );
+
+      will return the center and semi-axes of the limb.
+
+
+      How do we know that  &lt; x, n &gt; = 1  for all `x' on the limb?
+      This is because all limb points `x' satisfy
+
+         &lt; loc - x, surfnm(x) &gt;  =  0,
+
+      where surfnm(x) is any surface normal at `x'. surfnm(x) is
+      parallel to the vector
+
+                        2            2            2
+         v = (  x(1) / a ,   x(2) / b ,   x(3) / c   )
+
+      so we have
+
+         &lt; loc - x, v &gt;  =  0,
+
+         &lt; loc, v &gt;      =  &lt; x, v &gt;  =  1  (from the original
+                                             ellipsoid
+                                             equation)
+      and finally
+
+         &lt; x, n &gt;  =  1
+
+      where `n' is as defined above.
+
+
+   2) We'd like to find the apparent limb of Jupiter, corrected for
+      light time and stellar aberration, as seen from JUNO
+      spacecraft's position at a given UTC time.
+
+      This example is equivalent to the one in <a href="cspice_edlimb.html">cspice_edlimb</a>, but it uses
+      <b>cspice_inedpl</b> to compute the limb.
+
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: inedpl_ex2.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                           Contents
+            ---------                           --------
+            juno_rec_160522_160729_160909.bsp   JUNO s/c ephemeris
+            pck00010.tpc                        Planet orientation
+                                                and radii
+            naif0012.tls                        Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'juno_rec_160522_160729_160909.bsp',
+                                'pck00010.tpc',
+                                'naif0012.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function inedpl_ex2()
+
+         %
+         % Local parameters.
+         %
+         UTCSTR = '2016 Jul 14 19:45:00';
+
+         %
+         % Load the required kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'inedpl_ex2.tm' );
+
+         %
+         % Find the viewing point in Jupiter-fixed coordinates. To
+         % do this, find the apparent position of Jupiter as seen
+         % from the spacecraft in Jupiter-fixed coordinates and
+         % negate this vector. In this case we'll use light time
+         % and stellar aberration corrections to arrive at the
+         % apparent limb. `jpos' is the Jupiter's position as seen
+         % from the spacecraft.  `scpos' is the spacecraft's position
+         % relative to Jupiter.
+         %
+         [et]       = <a href="cspice_str2et.html">cspice_str2et</a>( UTCSTR );
+         [jpos, lt] = <a href="cspice_spkpos.html">cspice_spkpos</a>( 'JUPITER', et,    'J2000',           ...
+                                     'LT+S',    'JUNO'          );
+
+         scpos = -jpos;
+
+         %
+         % Get Jupiter's semi-axis lengths...
+         %
+         [rad] = <a href="cspice_bodvrd.html">cspice_bodvrd</a>( 'JUPITER', 'RADII', 3 );
+
+         %
+         % ...and the transformation from J2000 to Jupiter
+         % equator and prime meridian coordinates. Note that we
+         % use the orientation of Jupiter at the time of
+         % emission of the light that arrived at the
+         % spacecraft at time `et'.
+         %
+         [tipm] = <a href="cspice_pxform.html">cspice_pxform</a>( 'J2000', 'IAU_JUPITER', et-lt );
+
+         %
+         % Transform the spacecraft's position into Jupiter-
+         % fixed coordinates.
+         %
+         scpos = tipm * scpos;
+
+         %
+         % Normalize the position to factors of the radii.
+         %
+         scpos = [ scpos(1)/rad(1)^2,                                     ...
+                   scpos(2)/rad(2)^2,                                     ...
+                   scpos(3)/rad(3)^2 ]';
+
+         %
+         % Find the apparent limb.  `limb' is a SPICE ellipse
+         % representing the limb.
+         %
+         [plane]       = <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>( scpos, 1.0 );
+         [limb, found] = <b>cspice_inedpl</b>( rad(1), rad(2), rad(3), plane );
+
+         %
+         % `center', `smajor', and `sminor' are the limb's center,
+         % semi-major axis of the limb, and a semi-minor axis
+         % of the limb.  We obtain these from `limb' using the
+         % Mice routine <a href="cspice_el2cgv.html">cspice_el2cgv</a> ( Ellipse to center and
+         % generating vectors ).
+         %
+         [center, smajor, sminor] = <a href="cspice_el2cgv.html">cspice_el2cgv</a>( limb );
+
+         %
+         % Output the structure components.
+         %
+         fprintf( 'Apparent limb of Jupiter as seen from JUNO:\n' )
+         fprintf( '   UTC time       : %s\n', UTCSTR )
+         fprintf( '   Semi-minor axis: %13.6f %13.6f %13.6f\n',           ...
+                               sminor(1), sminor(2), sminor(3) )
+         fprintf( '   Semi-major axis: %13.6f %13.6f %13.6f\n',           ...
+                               smajor(1), smajor(2), smajor(3) )
+         fprintf( '   Center         : %13.6f %13.6f %13.6f\n',           ...
+                               center(1), center(2), center(3) )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Apparent limb of Jupiter as seen from JUNO:
+         UTC time       : 2016 Jul 14 19:45:00
+         Semi-minor axis:  12425.547643  -5135.572410  65656.053303
+         Semi-major axis:  27305.667297  66066.222576     -0.000000
+         Center         :    791.732472   -327.228993   -153.408849
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   An ellipsoid and a plane can intersect in an ellipse, a single point, or
+   the empty set.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If any of the lengths of the semi-axes of the input ellipsoid
+       are non-positive, the error SPICE(DEGENERATECASE) is signaled
+       by a routine in the call tree of this routine. `ellips' is not
+       modified. `found' is set to false.
+
+   2)  If the input plane in invalid, in other words, if the input
+       plane as the zero vector as its normal vector, the error
+       SPICE(INVALIDPLANE) is signaled by a routine in the call tree
+       of this routine. `ellips' is not modified. `found' is set to
+       false.
+
+   3)  If the input plane and ellipsoid are very nearly tangent,
+       roundoff error may cause this routine to give unreliable
+       results.
+
+   4)  If the input plane and ellipsoid are precisely tangent, the
+       intersection is a single point. In this case, the output
+       ellipse is degenerate, but `found' will still have the value
+       true. You must decide whether this output makes sense for
+       your application.
+
+   5)  If any of the input arguments, `a', `b', `c' or `plane', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   6)  If any of the input arguments, `a', `b', `c' or `plane', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+   <a href="../req/planes.html">PLANES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 13-AUG-2021 (EDW) (JDR)
+
+       Changed output argument name &quot;ellipse&quot; to &quot;ellips&quot;.
+
+       Edited the header to comply with NAIF standard. Replaced
+       example with mathematical description of the algorithm in
+       <a href="cspice_edlimb.html">cspice_edlimb</a>, and added a second complete code example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 11-JUN-2013 (EDW)
+
+       -I/O descriptions edits to conform to Mice documentation format.
+
+   -Mice Version 1.0.0, 27-AUG-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   intersection of ellipsoid and plane
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:25 2021</pre>
+
+</body>
+</html>
+

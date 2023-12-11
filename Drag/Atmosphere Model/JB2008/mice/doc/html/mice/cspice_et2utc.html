@@ -1,0 +1,380 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_et2utc</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_et2utc</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_ET2UTC converts an input time from ephemeris seconds
+   past J2000 to Calendar, Day-of-Year, or Julian Date format, UTC.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      et       the input epoch(s), ephemeris seconds past J2000.
+
+               [1,n] = size(et); double = class(et)
+
+      format   the format of the output time string.
+
+               [1,c1] = size(format); char = class(format)
+
+                  or
+
+               [1,1] = size(format); cell = class(format)
+
+               It may be any of the following:
+
+                  'C'      Calendar format, UTC.
+
+                  'D'      Day-of-Year format, UTC.
+
+                  'J'      Julian Date format, UTC.
+
+                  'ISOC'   ISO Calendar format, UTC.
+
+                  'ISOD'   ISO Day-of-Year format, UTC.
+
+      prec     the number of digits of precision to which fractional seconds
+               (for Calendar and Day-of-Year formats) or days (for Julian
+               Date format) are to be computed.
+
+               [1,1] = size(prec); int32 = class(prec)
+
+               If `prec' is zero or smaller, no decimal point is appended
+               to the output string. If `prec' is greater than 14, it is
+               treated as 14.
+
+   the call:
+
+      [utcstr] = <b>cspice_et2utc</b>( et, format, prec )
+
+   returns:
+
+      utcstr   the output time string(s) equivalent to the input epoch, in the
+               specified format.
+
+               [1,c2] = size(utcstr); char = class(utcstr)
+
+               Some examples are shown below.
+
+                  'C'      '1986 APR 12 16:31:09.814'
+                  'D'      '1986-102 // 16:31:12.814'
+                  'J'      'JD 2446533.18834276'
+                  'ISOC'   '1987-04-12T16:31:12.814'
+                  'ISOD'   '1987-102T16:31:12.814'
+
+               Fractional seconds, or for Julian dates, fractional
+               days, are rounded to the precision level specified
+               by the input argument `prec'.
+
+               For epochs prior to 1000 A.D. Jan 1 calendar
+               and day of year formats are returned with the
+               era (A.D. or B.C.) attached to the year. For
+               example
+
+                  '877 A.D. MAR 17 13:29:11.829'
+                  '471 B.C. Jan 01 12:00:00.000'
+                  '471 B.C. 001 // 12:00:00.000'
+
+               ISO formats do not support the inclusion of an era.
+               For years prior to 1 A.D. an error will be signaled
+               if ISO format has been requested.
+
+               `utcstr' returns with the same vectorization measure, N,
+               as `et'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Convert a single ephemeris time to UTC in Julian Date format, and
+      an array of ephemeris times to UTC in Calendar format.
+
+      Use the LSK kernel below to load the leap seconds and time
+      constants required for the conversions.
+
+         naif0012.tls
+
+
+      Example code begins here.
+
+
+      function et2utc_ex1()
+         %
+         % Define an arbitrary ephemeris time.
+         %
+         et     = -527644192.5403653;
+         format = 'J';
+         prec   = 6;
+         SIZE   = 5;
+
+         %
+         % Load a leapseconds kernel.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'naif0012.tls' )
+
+         disp( 'Ephemeris time          Converted UTC time' )
+         disp( '---------------------   ---------------------------' )
+
+         %
+         % Convert the ephemeris time to Julian Date
+         % 'format'. Define precision to 6 decimal
+         % places.
+         %
+         utcstr = <b>cspice_et2utc</b>( et, format, prec );
+         disp( 'Scalar (Julian Date format):' )
+         fprintf( '%21.8f   %s\n', et, utcstr )
+
+         %
+         % Create an array of ephemeris times beginning
+         % at -527644192.5403653 with graduations of 10000.0
+         % ephemeris seconds.
+         %
+         et     = [0:(SIZE-1)]*10000. -527644192.5403653;
+         format = 'C';
+
+         %
+         % Convert the array of ephemeris times 'et' to an
+         % array of UTC strings, 'utcstr', in calendar
+         % 'format'.
+         %
+         utcstr= <b>cspice_et2utc</b>( et, format, prec );
+
+         disp( 'Vector (Calendar format):' )
+
+         for n=1:SIZE
+
+            fprintf( '%21.8f   %s\n', et(n), utcstr(n,:) )
+
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in MATLAB due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Ephemeris time          Converted UTC time
+      ---------------------   ---------------------------
+      Scalar (Julian Date format):
+        -527644192.54036528   JD 2445438.006415
+      Vector (Calendar format):
+        -527644192.54036528   1983 APR 13 12:09:14.274000
+        -527634192.54036528   1983 APR 13 14:55:54.274001
+        -527624192.54036528   1983 APR 13 17:42:34.274001
+        -527614192.54036528   1983 APR 13 20:29:14.274002
+        -527604192.54036528   1983 APR 13 23:15:54.274002
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine handles the task of converting a double precision
+   representation of an epoch to a character string suitable for
+   human consumption. The more general routine <a href="cspice_timout.html">cspice_timout</a> may also be
+   used to convert `et' to time strings.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the format for the output string is not recognized, the
+       error SPICE(INVALIDTIMEFORMAT) is signaled by a routine in the
+       call tree of this routine.
+
+   2)  If `prec' is less than or equal to zero, it is treated as
+       zero. If `prec' is greater than 14, it is treated as 14.
+
+   3)  If one of the ISO formats is specified (ISOC or ISOD) but the
+       year corresponding to `et' is prior to 1 A.D. on the Gregorian
+       Calendar, the error SPICE(YEAROUTOFRANGE) is signaled by a
+       routine in the call tree of this routine.
+
+   4)  Epochs prior to 15 Oct, 1582 on the Gregorian calendar (the
+       calendar commonly used in western societies) are returned in
+       the &quot;extended&quot; Gregorian Calendar. To convert epochs to the
+       Julian calendar see the SPICELIB routine GR2JUL.
+
+   5)  This routine does not attempt to account for variations
+       in the length of the second that were in effect prior
+       to Jan 1, 1972. For days prior to that date, we assume
+       there are exactly 86400 ephemeris seconds. Consequently
+       the UTC Gregorian calendar strings produced for epochs
+       prior to Jan 1, 1972 differ from the corresponding
+       TDB calendar strings by approximately 41.18 seconds.
+       (TDB Gregorian calendar strings are produced by the
+       routine <a href="cspice_etcal.html">cspice_etcal</a>).
+
+   6)  If a leapseconds kernel has not been loaded prior to calling
+       this routine, an error is signaled by a routine in the
+       call tree of this routine.
+
+   7)  If any of the input arguments, `et', `format' or `prec', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   8)  If any of the input arguments, `et', `format' or `prec', is
+       not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   A leapseconds kernel must be loaded via <a href="cspice_furnsh.html">cspice_furnsh</a> prior to calling
+   this routine. The kernel need be loaded only once during a program
+   run.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/time.html">TIME.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  J. Jespersen and J. Fitz-Randolph, &quot;From Sundials to Atomic
+        Clocks, Understanding Time and Frequency,&quot; Dover
+        Publications, Inc. New York, 1982.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 24-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       example's problem statement and meta-kernel. Modified example's
+       output.
+
+       Added -Parameters, -Particulars, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 05-NOV-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 22-NOV-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   ephemeris time to utc
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:24 2021</pre>
+
+</body>
+</html>
+

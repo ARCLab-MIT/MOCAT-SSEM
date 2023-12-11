@@ -1,0 +1,430 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_cylsph</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_cylsph</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CYLSPH converts cylindrical coordinates to spherical
+   coordinates.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      r        the value(s) describing the distance of the point of
+               interest from z axis.
+
+               [1,n] = size(r); double = class(r)
+
+      clon     the value(s) describing the cylindrical angle of the point of
+               interest from the XZ plane measured in radians.
+
+               [1,n] = size(clon); double = class(clon)
+
+      z        the value(s) describing the height of the point above
+               the XY plane.
+
+               [1,n] = size(z); double = class(z)
+
+   the call:
+
+      [radius, colat, slon] = <b>cspice_cylsph</b>( r, clon, z)
+
+   returns:
+
+      radius   the value(s) describing the distance of the position
+               from the origin.
+
+               [1,n] = size(radius); double = class(radius)
+
+      colat    the value(s) describing the angle between the point and the
+               positive z-axis, measured in radians (also referred to
+               as the polar angle).
+
+               [1,n] = size(colat); double = class(colat)
+
+      slon     the value(s) describing the angle of the projection of the
+               point to the XY plane from the positive X-axis, measured
+               in radians, with range:
+
+                   -pi &lt; slon &lt;= pi
+
+               The positive Y-axis is at longitude PI/2 radians.
+
+               [1,n] = size(slon); double = class(slon)
+
+               The argument `radius' returns in the same units associated
+               with `r' and `z'.
+
+               `radius', `colat', and `slon' return with the vectorization
+               measure (N) as `r', `clon', and `z'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Compute the cylindrical coordinates of the position of the Moon
+      as seen from the Earth, and convert them to spherical and
+      rectangular coordinates.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: cylsph_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            naif0012.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'naif0012.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function cylsph_ex1()
+
+         %
+         % Load an SPK and leapseconds kernels.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'cylsph_ex1.tm' )
+
+         %
+         % Convert the time to ET.
+         %
+         et = <a href="cspice_str2et.html">cspice_str2et</a>( '2017 Mar 20' );
+
+         %
+         % Retrieve the position of the moon seen from earth at `et'
+         % in the J2000 frame without aberration correction.
+         %
+         [pos, et] = <a href="cspice_spkpos.html">cspice_spkpos</a>( 'MOON', et, 'J2000', 'NONE', 'EARTH' );
+
+         fprintf( 'Original rectangular coordinates:\n' )
+         fprintf( '   X            (km): %20.8f\n', pos(1) )
+         fprintf( '   Y            (km): %20.8f\n', pos(2) )
+         fprintf( '   Z            (km): %20.8f\n', pos(3) )
+
+         %
+         % Convert the position vector 'pos' to cylindrical
+         % coordinates.
+         %
+         [r, clon, z]           = <a href="cspice_reccyl.html">cspice_reccyl</a>(pos);
+         fprintf( '\n' )
+         fprintf( 'Cylindrical coordinates:\n' )
+         fprintf( '   Radius       (km): %20.8f\n', r )
+         fprintf( '   Longitude   (deg): %20.8f\n', clon * <a href="cspice_dpr.html">cspice_dpr</a> )
+         fprintf( '   Z            (km): %20.8f\n', z )
+
+         %
+         % Convert the cylindrical coords to spherical.
+         %
+         [radius, colat, slon] = <b>cspice_cylsph</b>(r, clon, z);
+         fprintf( '\n' )
+         fprintf( 'Spherical coordinates:\n' )
+         fprintf( '   Radius       (km): %20.8f\n', radius )
+         fprintf( '   Polar Angle (deg): %20.8f\n', colat * <a href="cspice_dpr.html">cspice_dpr</a> )
+         fprintf( '   Longitude   (deg): %20.8f\n', slon  * <a href="cspice_dpr.html">cspice_dpr</a> )
+
+         %
+         % Convert the spherical to rectangular.
+         %
+         [rectan]              = <a href="cspice_sphrec.html">cspice_sphrec</a>(radius, colat, slon);
+         fprintf( '\n' )
+         fprintf( 'Rectangular coordinates from <a href="cspice_sphrec.html">cspice_sphrec</a>:\n' )
+         fprintf( '   X            (km): %20.8f\n', rectan(1) )
+         fprintf( '   Y            (km): %20.8f\n', rectan(2) )
+         fprintf( '   Z            (km): %20.8f\n', rectan(3) )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in MATLAB due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Original rectangular coordinates:
+         X            (km):      -55658.44323296
+         Y            (km):     -379226.32931475
+         Z            (km):     -126505.93063865
+
+      Cylindrical coordinates:
+         Radius       (km):      383289.01777726
+         Longitude   (deg):         261.65040211
+         Z            (km):     -126505.93063865
+
+      Spherical coordinates:
+         Radius       (km):      403626.33912495
+         Polar Angle (deg):         108.26566077
+         Longitude   (deg):         261.65040211
+
+      Rectangular coordinates from <a href="cspice_sphrec.html">cspice_sphrec</a>:
+         X            (km):      -55658.44323296
+         Y            (km):     -379226.32931475
+         Z            (km):     -126505.93063865
+
+
+   2) Create a table showing a variety of cylindrical coordinates
+      and the corresponding spherical coordinates.
+
+      Corresponding cylindrical and spherical coordinates are
+      listed to three decimal places. All input and output angles
+      are in degrees.
+
+
+      Example code begins here.
+
+
+      function cylsph_ex2()
+
+         %
+         % Define six sets of cylindrical coordinates, `clon' expressed
+         % in degrees - converted to radians by use of <a href="cspice_rpd.html">cspice_rpd</a>.
+         %
+         r     = [ 1.,  1.,   1.,   1.,   0.,  0. ];
+         clon  = [ 0., 90., 180., 180., 180., 33. ] * <a href="cspice_rpd.html">cspice_rpd</a>;
+         z     = [ 0.,  0.,   1.,  -1.,   1.,  0. ];
+
+         %
+         % ...convert the cylindrical coordinates to spherical coordinates
+         %
+         [radius, colat, slon] = <b>cspice_cylsph</b>(r, clon, z);
+
+         %
+         % ...convert angular measure to degrees.
+         %
+         colat = colat * <a href="cspice_dpr.html">cspice_dpr</a>;
+         slon  = slon    * <a href="cspice_dpr.html">cspice_dpr</a>;
+         clon = clon   * <a href="cspice_dpr.html">cspice_dpr</a>;
+
+         %
+         % Output banner.
+         %
+         disp('     r       clon        z       radius    slon      colat ')
+         disp('  -------  --------  --------   -------  --------  --------')
+
+         %
+         % Create an array of values for output.
+         %
+         output = [ r; clon; z; radius; slon; colat ];
+
+         txt = sprintf( '%9.3f %9.3f %9.3f %9.3f %9.3f %9.3f\n', output );
+         disp( txt )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+           r       clon        z       radius    slon      colat
+        -------  --------  --------   -------  --------  --------
+          1.000     0.000     0.000     1.000     0.000    90.000
+          1.000    90.000     0.000     1.000    90.000    90.000
+          1.000   180.000     1.000     1.414   180.000    45.000
+          1.000   180.000    -1.000     1.414   180.000   135.000
+          0.000   180.000     1.000     1.000   180.000     0.000
+          0.000    33.000     0.000     0.000    33.000     0.000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This returns the spherical coordinates of a point whose position
+   is input through cylindrical coordinates.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If any of the input arguments, `r', `clon' or `z', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   2)  If any of the input arguments, `r', `clon' or `z', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+   3)  If the input vectorizable arguments `r', `clon' and `z' do not
+       have the same measure of vectorization (N), an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Changed the argument names &quot;lonc&quot; and &quot;lon&quot; to &quot;clon&quot; and &quot;slon&quot;
+       for consistency with other routines.
+
+       Edited the -Examples section to comply with NAIF standard. Added
+       meta-kernel to example #1. Updated code example #1 to produce
+       formatted output and added a call to <a href="cspice_kclear.html">cspice_kclear</a>. Added the
+       problem statement to both examples.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 30-OCT-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 01-DEC-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   cylindrical to spherical
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

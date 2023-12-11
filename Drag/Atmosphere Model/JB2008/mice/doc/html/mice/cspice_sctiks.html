@@ -1,0 +1,490 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_sctiks</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_sctiks</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SCTIKS converts a spacecraft clock format string to
+   number of 'ticks'.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      sc       the NAIF ID of the spacecraft clock whose time is
+               to encode.
+
+               [1,1] = size(sc); int32 = class(sc)
+
+      clkstr   the scalar string or N-vector representation of the
+               `sc' spacecraft's clock time, WITHOUT PARTITION NUMBER.
+
+               [n,c1] = size(clkstr); char = class(clkstr)
+
+                  or
+
+               [1,n] = size(clkstr); cell = class(clkstr)
+
+               Using Galileo as an example, the full format is
+
+                  wwwwwwww:xx:y:z
+
+               where z is a mod-8 counter (values 0-7) which
+               increments approximately once every 8 1/3 ms., y is a
+               mod-10 counter (values 0-9) which increments once
+               every time z turns over, i.e., approximately once every
+               66 2/3 ms., xx is a mod-91 (values 0-90) counter
+               which increments once every time y turns over, i.e.,
+               once every 2/3 seconds. wwwwwwww is the Real-Time Image
+               Count (RIM), which increments once every time xx turns
+               over, i.e., once every 60 2/3 seconds. The roll-over
+               expression for the RIM is 16777215, which corresponds
+               to approximately 32 years.
+
+               wwwwwwww, xx, y, and z are referred to interchangeably
+               as the fields or components of the spacecraft clock.
+               SCLK components may be separated by any of the
+               following characters: ' '  '.'  ':'  ','  '-'
+               Any number of spaces may separate the components and
+               the delimiters. The presence of the RIM component
+               is required. Successive components may be omitted, and
+               in such cases are assumed to represent zero values.
+
+               Values for the individual components may exceed the
+               maximum expected values. For instance, '0:0:0:9' is
+               an acceptable Galileo clock string, and will convert
+               to the same number of ticks as '0:0:1:1'.
+
+               Consecutive delimiters containing no intervening digits
+               are treated as if they delimit zero components.
+
+               Trailing zeros should always be included to match the
+               length of the counter. For example, a Galileo clock
+               count of '25684.90' should not be represented as
+               '25684.9'.
+
+               Some spacecraft clock components have offset, or
+               starting, values different from zero. For example,
+               with an offset value of 1, a mod 20 counter would
+               cycle from 1 to 20 instead of from 0 to 19.
+
+               See the SCLK required reading for a detailed
+               description of the Voyager and Mars Observer clock
+               formats.
+
+   the call:
+
+      ticks = <b>cspice_sctiks</b>( sc, clkstr )
+
+   returns:
+
+      ticks    the tick values(s) represented by the spacecraft clock
+               string `clkstr'.
+
+               [1,n] = size(ticks); double = class(ticks)
+
+               A tick is defined to be the smallest time increment
+               expressible by the spacecraft clock.
+
+               An analogy may be drawn between a spacecraft clock
+               and a standard wall clock, measuring hours, minutes
+               and seconds. The number of ticks represented by the
+               wall clock string
+
+                  hh:mm:ss
+
+               would be the number of seconds represented by that
+               time.
+
+               For example:
+
+                  00:00:10  would convert to 10
+                  00:01:00  would convert to 60
+                  00:10:00  would convert to 600
+                  01:00:00  would convert to 3600
+                  01:01:00  would convert to 3660
+
+               See the -Examples section below for examples for
+               actual spacecraft clocks.
+
+               `ticks' returns with the same vectorization measure, N,
+               as `clkstr'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) <b>cspice_sctiks</b> is used as part of the process of encoding spacecraft
+      clock by <a href="cspice_scencd.html">cspice_scencd</a>, though <b>cspice_sctiks</b> does not process any
+      partition information.
+
+      Another use of <b>cspice_sctiks</b>, however, is to convert a clock
+      measurement to ticks for use as a tolerance for the CK reader
+      <a href="cspice_ckgp.html">cspice_ckgp</a>.
+
+      In the following example, pointing for a sequence of images from
+      the CASSINI Imaging Science Subsystem (ISS) is requested from
+      the C-kernel using an array of character spacecraft clock counts
+      as input. The clock counts attached to the output are then
+      decoded to character and compared with the input strings.
+
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: sctiks_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name              Contents
+            --------------------   -----------------------------------
+            04153_04182ca_ISS.bc   CASSINI image navigated spacecraft
+                                   orientation.
+            cas00071.tsc           CASSINI SCLK.
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( '04153_04182ca_ISS.bc',
+                                'cas00071.tsc'        )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function sctiks_ex1()
+
+         %
+         % The instrument we want pointing for is the CASSINI
+         % spacecraft.  The reference frame we want is
+         % J2000. The spacecraft is CASSINI.
+         %
+         SC   = -82;
+         INST = -82000;
+         REF = 'J2000';
+         META = 'sctiks_ex1.tm';
+
+         %
+         % Load the appropriate files. We need
+         %
+         %    1. CK file containing pointing data.
+         %    2. Spacecraft clock kernel file.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( META );
+
+         %
+         % The SCLK string includes a partition number. Pictures are
+         % never shuttered at intervals smaller than 1.0 seconds
+         % from each other.
+         %
+         clkstr = '1/1465644281.0';
+         tolstr = '1.0';
+
+         %
+         % Encode the clock string and the tolerance.
+         %
+         [timein] = <a href="cspice_scencd.html">cspice_scencd</a>( SC, clkstr );
+         [tol] = <b>cspice_sctiks</b>( SC, tolstr );
+
+         %
+         % Get the pointing from the C-kernel.
+         %
+         [cmat, timeout, found] = <a href="cspice_ckgp.html">cspice_ckgp</a>( INST, timein, tol, REF );
+
+         if ( found )
+            [sclkout] = <a href="cspice_scdecd.html">cspice_scdecd</a>( SC, timeout );
+
+            fprintf( '\n' )
+            fprintf( 'Input  s/c clock count:  %s\n', clkstr  )
+            fprintf( 'Output s/c clock count:  %s\n', sclkout )
+            fprintf( 'Tolerance             :  %13.2f\n', tol )
+            fprintf( 'Output C-Matrix:          \n' )
+            fprintf( '    %18.15f   %18.15f   %18.15f\n', ...
+                              cmat(1,1), cmat(2,1), cmat(3,1) )
+            fprintf( '    %18.15f   %18.15f   %18.15f\n', ...
+                              cmat(1,2), cmat(2,2), cmat(3,2) )
+            fprintf( '    %18.15f   %18.15f   %18.15f\n', ...
+                              cmat(1,3), cmat(2,3), cmat(3,3) )
+         else
+            fprintf( '\n' )
+            fprintf( 'Input  s/c clock count:  %s\n', clkstr  )
+            fprintf( 'Tolerance             :  %13.2f\n', tol )
+            fprintf( 'No pointing found.\n' )
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Input  s/c clock count:  1/1465644281.0
+      Output s/c clock count:  1/1465644281.171
+      Tolerance             :         256.00
+      Output C-Matrix:
+          -0.335351455948710   -0.937887426812980    0.088918927227039
+           0.864374440205611   -0.343851965210223   -0.366909598048763
+           0.374694846658341   -0.046184419961653    0.925997176691424
+
+
+   2) Below are some examples illustrating various clock string inputs
+      and the resulting outputs for the Galileo spacecraft. See the
+      SCLK required reading for a detailed description of the Galileo
+      clock format.
+
+         CLKSTR                TICKS
+         ----------------      --------------------
+         '0:0:0:1'             1
+         '0:0:1'               8
+         '0:1'                 80
+         '1'                   7280
+         '1 0 0 0'             7280
+         '1,0,0,0'             7280
+         '1:90'                14480
+         '1:9'                 8000
+         '1:09'                8000
+         '0-0-10'              80   |--  Third component is supposed
+         '0-1-0'               80   |    to be a mod-10 count.
+         '0/1/0'               Error: '/' is not an accepted delimiter.
+         '1: 00 : 0 : 1'       7281
+         '1:::1'               7281
+         '1.1.1.1.1'           Error: Too many components
+         '1.1.1.1.'            Error: The last delimiter signals that
+                                      a fifth component will follow.
+
+
+      The following examples are for the Voyager 2 spacecraft. Note
+      that the last component of the Voyager clock has an offset
+      value of 1.
+
+         CLKSTR                TICKS
+         ----------------      --------------------
+          '0.0.001'              0
+          '0:0:002'              1
+          '0:01'                 800
+          '1'                    48000
+          '1.0'                  48000
+          '1.0.0'                Error: The 3rd component is never 0.
+          '0.0:100'              99
+          '0-60-1'               48000
+          '1-1-1'                48800
+          '1-1-2'                48801
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Each spacecraft is assigned a clock type code in the kernel file.
+   <b>cspice_sctiks</b> calls the function SCTYPE to determine this value. If the
+   clock type is supported by SPICE, then the SPICELIB routine TIKSnn
+   is called to handle the actual conversion from clock format to
+   number of ticks. The nn in TIKSnn refers to the spacecraft clock
+   type code. Different spacecraft have distinct clock formats but
+   can still be of the same clock type.
+
+   The TIKSnn routines are routines to the routines SCLKnn, which
+   also contain the ticks-to-clock format conversion routines FMTnn.
+   FMTnn is called by the routine <a href="cspice_scfmt.html">cspice_scfmt</a>, which performs the
+   inverse operation to <b>cspice_sctiks</b>.
+
+   Note the important difference between <a href="cspice_scencd.html">cspice_scencd</a> and <b>cspice_sctiks</b>.
+   <a href="cspice_scencd.html">cspice_scencd</a> converts a clock string to the number of ticks it
+   represents since the beginning of the mission, and so uses partition
+   information. <b>cspice_sctiks</b> just converts to absolute ticks.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the spacecraft clock type is not supported, the error
+       SPICE(NOTSUPPORTED) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If any of the extracted clock components cannot be parsed as
+       integers, or the string has too many components, or the value
+       of one of the components is less than the offset value, then,
+       an error is signaled by a routine in the call tree of this
+       routine.
+
+   3)  Invalid spacecraft ID's are not diagnosed.
+
+   4)  If any of the input arguments, `sc' or `clkstr', is undefined,
+       an error is signaled by the Matlab error handling system.
+
+   5)  If any of the input arguments, `sc' or `clkstr', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/sclk.html">SCLK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 01-NOV-2021 (EDW) (JDR)
+
+       Added complete examples to -Examples section, using CASSINI PDS
+       archived data.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Extended argument detailed descriptions in the -I/O section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 06-JAN-2015 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 07-JUN-2006 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   convert spacecraft_clock string to ticks
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

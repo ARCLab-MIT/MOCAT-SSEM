@@ -1,0 +1,396 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckupf</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckupf</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKUPF unloads a CK pointing file so that it will no longer be
+   searched by the readers.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the integer handle assigned to the CK file upon loading.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+   the call:
+
+      <b>cspice_ckupf</b>( handle )
+
+   returns:
+
+      None.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for these examples may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Unload a CK kernel specified by an integer handle, making
+      room to load another CK.
+
+         <b>cspice_ckupf</b>( handle );
+
+   2) Load a CASSINI CK file and obtain the position transformation
+      matrix from J2000 to the spacecraft reference frame provided
+      by the CK and its angular velocity vector at a given spacecraft
+      clock time.
+
+
+      Use the CK kernel below to load the CASSINI image navigated
+      spacecraft pointing and orientation data.
+
+         04153_04182ca_ISS.bc
+
+
+      In order to convert from spacecraft clock time to 'ticks,'
+      (units of encoded SCLK) as required by <a href="cspice_ckgpav.html">cspice_ckgpav</a>, we will need
+      to load as well a CASSINI SCLK.
+
+      Use the SCLK kernel below to load the CASSINI spacecraft clock
+      time correlation data required for the conversion between
+      spacecraft clock string representation and double precision
+      encoding of spacecraft clock counts.
+
+         cas00071.tsc
+
+
+      Example code begins here.
+
+
+      function ckupf_ex2()
+
+         %
+         % Constants for this program:
+         %
+         % -- The code for the CASSINI spacecraft clock is -82.
+         %
+         % -- The code for CASSINI spacecraft reference frame is -82000.
+         %
+         % -- Tolerance: 1 second. It must be converted to 'ticks'
+         %    (units of encoded SCLK) for input to <a href="cspice_ckgpav.html">cspice_ckgpav</a>.
+         %
+         % -- The reference frame we want is J2000.
+         %
+         SC   =   -82;
+         INST =   -82000;
+         REF  =   'J2000';
+         TOL  =   '1.0';
+
+         CK   =   '04153_04182ca_ISS.bc';
+         SCLK =   'cas00071.tsc';
+         sclkch = '1465644281.0';
+
+         %
+         % Load the CK for read access. This call may be replaced (as
+         % recommended by NAIF) by <a href="cspice_furnsh.html">cspice_furnsh</a>.
+         %
+         [handle] = <a href="cspice_cklpf.html">cspice_cklpf</a>( CK );
+
+         %
+         % We need to load a CASSINI SCLK kernel to convert from
+         % clock string to ticks.  Although not required for
+         % the CASSINI spacecraft clock, most modern spacecraft
+         % clocks require a leapseconds kernel to be loaded in
+         % addition to an SCLK kernel.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( SCLK );
+
+         %
+         % Convert tolerance from CASSINI formatted character string
+         % SCLK to ticks, which are units of encoded SCLK.
+         %
+         [toltik] = <a href="cspice_sctiks.html">cspice_sctiks</a>( SC, TOL );
+
+         %
+         % <a href="cspice_ckgpav.html">cspice_ckgpav</a> requires encoded spacecraft clock time.
+         %
+         [sclkdp] = <a href="cspice_scencd.html">cspice_scencd</a>( SC, sclkch );
+
+         [cmat, av, clkout, found] = <a href="cspice_ckgpav.html">cspice_ckgpav</a>( INST,   sclkdp,       ...
+                                                    toltik, REF     );
+
+         %
+         % Display the results.
+         %
+         if ( found )
+
+            [clkch] = <a href="cspice_scdecd.html">cspice_scdecd</a>( SC, clkout );
+
+            fprintf( 'Requested SCLK time         : %s\n', sclkch )
+            fprintf( '   CASSINI SCLK time        : %s\n', clkch )
+            fprintf( '   J2000 to S/C frame matrix:\n' )
+            fprintf( '\n' )
+            for i=1:3
+
+               fprintf( '%20.10f %19.10f %19.10f\n', cmat(i,:) )
+
+            end
+            fprintf( '\n' )
+            fprintf( [ '   Angular velocity vector  : %10.7f %10.7f',     ...
+                       ' %10.7f\n' ], av             )
+
+         else
+
+               fprintf( 'Pointing not found for time %s\n', sclkch )
+
+         end
+
+         %
+         % Close the CK file. This call may be replaced (as
+         % recommended by NAIF) by <a href="cspice_unload.html">cspice_unload</a>, if <a href="cspice_furnsh.html">cspice_furnsh</a> has
+         % been used to load the file.
+         %
+         <b>cspice_ckupf</b>( handle );
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Requested SCLK time         : 1465644281.0
+         CASSINI SCLK time        : 1/1465644281.171
+         J2000 to S/C frame matrix:
+
+             -0.3353514559        0.8643744402        0.3746948467
+             -0.9378874268       -0.3438519652       -0.0461844200
+              0.0889189272       -0.3669095980        0.9259971767
+
+         Angular velocity vector  :  0.0000000  0.0000000  0.0000000
+
+
+   3) The following example extracts the first 20 lines of the
+      comment area of a CK, displaying the comments on the terminal
+      screen.
+
+
+      Example code begins here.
+
+
+      function ckupf_ex3()
+
+         %
+         % Local parameters.
+         %
+         LINLEN =   1001;
+         BUFFSZ =   20;
+
+         %
+         % Local variables.
+         %
+
+         ckname = input( 'Enter name of CK &gt; ', 's' );
+
+         %
+         % Open the CK for read access. This operation could have
+         % been done with <a href="cspice_dafopr.html">cspice_dafopr</a>.
+         %
+         [handle] = <a href="cspice_cklpf.html">cspice_cklpf</a>( ckname );
+
+         %
+         % Extract up to 20 lines from the comment area of the
+         % loaded CK file and display them on the terminal screen.
+         %
+         [buffer, done] = <a href="cspice_dafec.html">cspice_dafec</a>( handle, BUFFSZ, LINLEN );
+
+         buffer = cellstr(buffer);
+         for i=1:numel(buffer)
+
+               fprintf( '%s\n', char(buffer(i)) )
+
+         end
+
+         %
+         % Close the CK file. This operation could have been done
+         % with <a href="cspice_dafcls.html">cspice_dafcls</a>.
+         %
+         <b>cspice_ckupf</b>( handle );
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, using the Cassini CK file named 04161_04164ra.bc as
+      input CK file, the output was:
+
+
+      Enter name of CK &gt; 04161_04164ra.bc
+      \beginlabel
+      PDS_VERSION_ID               = PDS3
+      RECORD_TYPE                  = FIXED_LENGTH
+      RECORD_BYTES                 = 1024
+      ^SPICE_KERNEL                = &quot;04161_04164ra.bc&quot;
+      MISSION_NAME                 = &quot;CASSINI-HUYGENS&quot;
+      SPACECRAFT_NAME              = &quot;CASSINI ORBITER&quot;
+      DATA_SET_ID                  = &quot;CO-S/J/E/V-SPICE-6-V1.0&quot;
+      KERNEL_TYPE_ID               = CK
+      PRODUCT_ID                   = &quot;04161_04164ra.bc&quot;
+      PRODUCT_CREATION_TIME        = 2005-06-29T21:28:09
+      PRODUCER_ID                  = &quot;CASSINI_AACS/JPL&quot;
+      MISSION_PHASE_NAME           = &quot;SCIENCE CRUISE&quot;
+      PRODUCT_VERSION_TYPE         = ACTUAL
+      PLATFORM_OR_MOUNTING_NAME    = &quot;N/A&quot;
+      START_TIME                   = 2004-06-09T12:00:03.631
+      STOP_TIME                    = 2004-06-12T11:58:57.943
+      SPACECRAFT_CLOCK_START_COUNT = &quot;1/1465475046.160&quot;
+      SPACECRAFT_CLOCK_STOP_COUNT  = &quot;1/1465734182.160&quot;
+      TARGET_NAME                  = &quot;N/A&quot;
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Unloading a file with <b>cspice_ckupf</b> removes that file from consideration
+   by the CK readers. In doing so, it frees up space for another
+   file to be loaded.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  Unloading a file that has not been loaded is a no-op.
+       No error is signaled.
+
+   2)  If the input argument `handle' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   3)  If the input argument `handle' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   The file referred to by `handle' is unloaded.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 30-JUN-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   unload CK pointing file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

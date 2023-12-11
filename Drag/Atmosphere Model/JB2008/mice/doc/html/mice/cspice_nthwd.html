@@ -1,0 +1,263 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_nthwd</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_nthwd</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_NTHWD returns the nth word in a character string, and its location
+   in the string.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      string   the input string to be parsed.
+
+               [1,c1] = size(string); char = class(string)
+
+                  or
+
+               [1,1] = size(string); cell = class(string)
+
+               Each word of this string is a maximal sequence of
+               consecutive non-blank characters.
+
+      nth      the index of the word to be returned.
+
+               [1,1] = size(nth); int32 = class(nth)
+
+               (One for the first word, two for the second, and so on.)
+
+   the call:
+
+      [word, loc] = <b>cspice_nthwd</b>( string, nth )
+
+   returns:
+
+      word     the `nth' word in `string'.
+
+               [1,c2] = size(word); char = class(word)
+
+               If `string' is blank or empty, or `nth' is non-positive or too
+               large, `word' is empty.
+
+               `word' may overwrite `string'.
+
+      loc      the location of `word' in `string'.
+
+               [1,1] = size(loc); int32 = class(loc)
+
+               (That is, `word' begins at string(loc)). If `string' is blank
+               or empty, or `nth' is non-positive or too large, `loc' is
+               zero.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given a character string, get the N'th word within, and the
+      word's location.
+
+
+      Example code begins here.
+
+
+      function nthwd_ex1()
+
+         %
+         % Local parameters.
+         %
+         STRING =   ' Now is the time,   for all good men     to come.';
+
+         %
+         % Local variables.
+         %
+
+         for nth=-1:11
+
+            [word, loc] = <b>cspice_nthwd</b>( STRING, nth );
+            fprintf( 'Word # %2d  is &lt;%s&gt;, starting at position %2d\n',   ...
+                                           nth, word, loc )
+
+         end
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Word # -1  is &lt;&gt;, starting at position  0
+      Word #  0  is &lt;&gt;, starting at position  0
+      Word #  1  is &lt;Now&gt;, starting at position  2
+      Word #  2  is &lt;is&gt;, starting at position  6
+      Word #  3  is &lt;the&gt;, starting at position  9
+      Word #  4  is &lt;time,&gt;, starting at position 13
+      Word #  5  is &lt;for&gt;, starting at position 21
+      Word #  6  is &lt;all&gt;, starting at position 25
+      Word #  7  is &lt;good&gt;, starting at position 29
+      Word #  8  is &lt;men&gt;, starting at position 34
+      Word #  9  is &lt;to&gt;, starting at position 42
+      Word # 10  is &lt;come.&gt;, starting at position 45
+      Word # 11  is &lt;&gt;, starting at position  0
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   <b>cspice_nthwd</b>, like <a href="cspice_nextwd.html">cspice_nextwd</a>, is useful primarily for parsing input
+   commands consisting of one or more words, where a word is defined to be a
+   maximal sequence of consecutive non-blank characters. Each word is
+   bounded on both sides by a blank character, or by the start or end of the
+   input string. Successive calls to <a href="cspice_nextwd.html">cspice_nextwd</a> allow the calling routine
+   to neatly parse and process one word at a time.
+
+   The chief difference between the two routines is that
+   <b>cspice_nthwd</b> allows the calling routine to access the words making
+   up the input string in random order. (<a href="cspice_nextwd.html">cspice_nextwd</a> allows only
+   sequential access.)
+
+   <b>cspice_nthwd</b> may be more efficient than <a href="cspice_nextwd.html">cspice_nextwd</a>, since cspice_nthwd
+   doesn't update an output string consisting of the remaining, unparsed
+   string.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If any of the input arguments, `string' or `nth', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   2)  If any of the input arguments, `string' or `nth', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 01-NOV-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   n'th word in a character_string
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

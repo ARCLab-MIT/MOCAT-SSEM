@@ -1,0 +1,341 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spksfs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spksfs</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKSFS searches through loaded SPK files to find the
+   highest-priority segment applicable to the body and time specified.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      body   the SPK ID code of an ephemeris object, typically a solar
+             system body.
+
+             [1,1] = size(dc); int32 = class(body)
+
+      et     the time, in seconds past the epoch J2000 TDB.
+
+             [1,1] = size(et); double = class(et)
+
+   the call:
+
+      [handle, descr, ident, found] = <b>cspice_spksfs</b>( body, et)
+
+   returns:
+
+      handle   the handle of the SPK file containing a located segment.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+      descr    the descriptor of a located SPK segment.
+
+               [5,1] = size(descr); double = class(descr)
+
+      ident    the string SPK segment identifier of a located SPK segment.
+
+               [1,c1] = size(ident); char = class(ident)
+
+      found    indicates whether a requested segment was found or not.
+               The other output arguments are valid only if `found'
+               is set to true.
+
+               [1,1] = size(found); logical = class(found)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Find a segment for the Pluto barycenter, with coverage for
+      a specified epoch, in a JPL planetary SPK file, and display
+      the segment's information.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: spksfs_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            naif0010.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'naif0010.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function spksfs_ex1()
+
+         %
+         % Local constants
+         %
+         META   =  'spksfs_ex1.tm';
+         ND     =  2;
+         NI     =  6;
+
+         %
+         % Load meta-kernel.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( META )
+
+         %
+         % Convert starting time to seconds past J2000 TDB.
+         %
+         timstr = '2012 APR 27 00:00:00.000 TDB';
+
+         et0 = <a href="cspice_str2et.html">cspice_str2et</a>(timstr);
+
+         %
+         % Get the NAIF ID code for the Pluto system barycenter.
+         % This is a built-in ID code, so something's seriously
+         % wrong if we can't find the code.
+         %
+         [idcode, found] = <a href="cspice_bodn2c.html">cspice_bodn2c</a>( 'PLUTO BARYCENTER' );
+
+         if ~found
+            <a href="cspice_kclear.html">cspice_kclear</a>
+            errot( 'SPICE(BUG)' )
+         end
+
+         [handle, descr, segid, found] = <b>cspice_spksfs</b>( idcode, et0);
+
+
+         if ~found
+            <a href="cspice_kclear.html">cspice_kclear</a>
+            txt = sprintf( 'No SPK segment found for body %d at time %s', ...
+                            body, timstr );
+            error( txt )
+         end
+
+         %
+         % Unpack the descriptor of the current segment.
+         %
+         [dc, ic] = <a href="cspice_dafus.html">cspice_dafus</a>( descr, ND, NI );
+
+         frname = <a href="cspice_frmnam.html">cspice_frmnam</a>( ic(3) );
+
+         fprintf( 'Body        = %d\n', ic(1) )
+         fprintf( 'Center      = %d\n', ic(2) )
+         fprintf( 'Frame       = %s\n', frname)
+         fprintf( 'Data type   = %d\n', ic(4) )
+         fprintf( 'Start ET    = %f\n', dc(1) )
+         fprintf( 'Stop ET     = %f\n', dc(2) )
+         fprintf( 'Segment ID  = %s\n\n', segid )
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Body        = 9
+      Center      = 0
+      Frame       = J2000
+      Data type   = 2
+      Start ET    = -3169195200.000000
+      Stop ET     = 1696852800.000000
+      Segment ID  = DE-0421LE-0421
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This routine finds the highest-priority segment, in any loaded
+   SPK file, such that the segment provides data for the specified
+   body and epoch.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If an attempt is made to call <b>cspice_spksfs</b> when there aren't any
+       files loaded, the error SPICE(NOLOADEDFILES) is signaled by a
+       routine in the call tree of this routine.
+
+   2)  If any of the input arguments, `body' or `et', is undefined,
+       an error is signaled by the Matlab error handling system.
+
+   3)  If any of the input arguments, `body' or `et', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   All files loaded by <a href="cspice_spklef.html">cspice_spklef</a> are potential search targets for
+   <b>cspice_spksfs</b>.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  If Fortran i/o errors occur while searching a loaded SPK
+       file, the internal state of this suite of routines may
+       be corrupted. It may be possible to correct the state
+       by unloading the pertinent SPK files and then re-loading
+       them.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 10-AUG-2021 (EDW) (JDR)
+
+       Edited -Examples section to comply with NAIF standard. Changed
+       example code to focus on <b>cspice_spksfs</b> example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 30-OCT-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   select SPK file and segment
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:27 2021</pre>
+
+</body>
+</html>
+

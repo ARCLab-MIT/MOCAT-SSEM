@@ -1,0 +1,447 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_wnreld</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_wnreld</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_WNRELD compares two double precision windows returning
+   a scalar boolean.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      a        SPICE window containing zero or more intervals.
+
+               [2l,1] = size(a); double = class(a)
+
+      b        SPICE window containing zero or more intervals.
+
+               [2m,1] = size(b); double = class(b)
+
+      op       comparison operator, indicating the way to compare the input
+               windows.
+
+               [1,c1] = size(op); char = class(op)
+
+                  or
+
+               [1,1] = size(op); cell = class(op)
+
+               `op' may have any of the following values:
+
+                  Operator             Meaning
+                  --------  -----------------------------------------
+                    '='     a = b  is true if `a' and `b' are equal
+                                   (contain the same intervals).
+
+                    '&lt;&gt;'    a &lt;&gt; b is true if `a' and `b' are not
+                                   equal.
+
+                    '&lt;='    a &lt;= b is true if `a' is a subset of `b'.
+
+                    '&lt;'     a &lt; b  is true if `a' is a proper subset
+                                   of `b'.
+
+                    '&gt;='    a &gt;= b is true if `b' is a subset of `a'.
+
+                    '&gt;'     a &gt; b  is true if `b' is a proper subset
+                                   of `a'.
+
+   the call:
+
+      [wnreld] = <b>cspice_wnreld</b>( a, op, b )
+
+   returns:
+
+      wnreld   A scalar boolean with value of the comparison.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given several double precision windows, compare them and output
+      the result of those comparisons.
+
+      Example code begins here.
+
+
+      function wnreld_ex1()
+
+         %
+         % Define the comparison operators.
+         %
+         ops = { '=', '&lt;&gt;', '&lt;=', '&lt;', '&gt;=', '&gt;' };
+
+         %
+         %  Let a contain the intervals
+         %
+         a = [ [ 1; 3 ];  [ 7; 11 ];  [ 23; 27 ] ];
+
+         %
+         %  Let b and c contain the intervals
+         %
+
+         b = [ [ 1; 2 ];  [  9; 9 ];  [ 24; 27 ] ];
+         c = b;
+
+         %
+         %  Let d contain the intervals
+         %
+         d = [ [ 5; 10 ];  [ 15; 25 ] ];
+
+         %
+         %  Finally, let e and f be empty windows (containing no intervals).
+         %
+         e = zeros(0,1);
+         f = e;
+
+         %
+         % Compare b and c, which contain the same intervals.
+         %
+         disp( 'b and c contain the same intervals:')
+         for i=1:numel(ops)
+            if ( <b>cspice_wnreld</b>( b, ops(i),  c ) )
+               fprintf( '  b %2s c  is True.\n', char(ops(i)))
+            else
+               fprintf( '  b %2s c  is False.\n', char(ops(i)))
+            end
+         end
+         disp( '' )
+
+         %
+         % Every point contained in b and c is also contained in a. Thus,
+         %
+         disp( 'Every point in b is also in contained in a:')
+         for i=1:numel(ops)
+            if ( <b>cspice_wnreld</b>( b, ops(i),  a ) )
+               fprintf( '  b %2s a  is True.\n', char(ops(i)))
+            else
+               fprintf( '  b %2s a  is False.\n', char(ops(i)))
+            end
+         end
+         disp( '' )
+
+         %
+         % Although a and d have points in common, neither contains the
+         % other. Thus
+         %
+         disp( 'a and d have points in common, neither contains the other:')
+         for i=1:numel(ops)
+            if ( <b>cspice_wnreld</b>( a, ops(i),  d ) )
+               fprintf( '  a %2s d  is True.\n', char(ops(i)))
+            else
+               fprintf( '  a %2s d  is False.\n', char(ops(i)))
+            end
+         end
+         disp( '' )
+
+         %
+         % In addition, any window is equal to itself, a subset of itself,
+         % and a superset of itself. Thus,
+         %
+         disp( 'A window compared to itself:')
+         for i=1:numel(ops)
+            if ( <b>cspice_wnreld</b>( a, ops(i),  a ) )
+               fprintf( '  a %2s a  is True.\n', char(ops(i)))
+            else
+               fprintf( '  a %2s a  is False.\n', char(ops(i)))
+            end
+         end
+         disp( '' )
+
+         %
+         % Finally, an empty window is a proper subset of any window
+         % except another empty window. Thus,
+         %
+         disp( 'A window compared to an empty window:')
+         for i=1:numel(ops)
+            if ( <b>cspice_wnreld</b>( a, ops(i),  e ) )
+               fprintf( '  a %2s e  is True.\n', char(ops(i)))
+            else
+               fprintf( '  a %2s e  is False.\n', char(ops(i)))
+            end
+         end
+         disp( '' )
+
+         disp( 'An empty window compared to another empty window:')
+         for i=1:numel(ops)
+            if ( <b>cspice_wnreld</b>( f, ops(i),  e ) )
+               fprintf( '  f %2s e  is True.\n', char(ops(i)))
+            else
+               fprintf( '  f %2s e  is False.\n', char(ops(i)))
+            end
+         end
+         disp( '' )
+
+         %
+         % is false.
+         %
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      b and c contain the same intervals:
+        b  = c  is True.
+        b &lt;&gt; c  is False.
+        b &lt;= c  is True.
+        b  &lt; c  is False.
+        b &gt;= c  is True.
+        b  &gt; c  is False.
+
+      Every point in b is also in contained in a:
+        b  = a  is False.
+        b &lt;&gt; a  is True.
+        b &lt;= a  is True.
+        b  &lt; a  is True.
+        b &gt;= a  is False.
+        b  &gt; a  is False.
+
+      a and d have points in common, neither contains the other:
+        a  = d  is False.
+        a &lt;&gt; d  is True.
+        a &lt;= d  is False.
+        a  &lt; d  is False.
+        a &gt;= d  is False.
+        a  &gt; d  is False.
+
+      A window compared to itself:
+        a  = a  is True.
+        a &lt;&gt; a  is False.
+        a &lt;= a  is True.
+        a  &lt; a  is False.
+        a &gt;= a  is True.
+        a  &gt; a  is False.
+
+      A window compared to an empty window:
+        a  = e  is False.
+        a &lt;&gt; e  is True.
+        a &lt;= e  is False.
+        a  &lt; e  is False.
+        a &gt;= e  is True.
+        a  &gt; e  is True.
+
+      An empty window compared to another empty window:
+        f  = e  is True.
+        f &lt;&gt; e  is False.
+        f &lt;= e  is True.
+        f  &lt; e  is False.
+        f &gt;= e  is True.
+        f  &gt; e  is False.
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This function returns True whenever the specified relationship
+   between the input windows `a' and `b' is satisfied. For example,
+   the expression
+
+      <b>cspice_wnreld</b> ( needed, '&lt;=', avail )
+
+   is True whenever the window `needed' is a subset of the window
+   `avail'. One window is a subset of another window if each of
+   the intervals in the first window is included in one of the
+   intervals in the second window. In addition, the first window
+   is a proper subset of the second if the second window contains
+   at least one point not contained in the first window. (Thus,
+   '&lt;' implies '&lt;=', and '&gt;' implies '&gt;='.)
+
+   The following pairs of expressions are equivalent.
+
+      <b>cspice_wnreld</b> ( a, '&gt;',  b )
+      <b>cspice_wnreld</b> ( b, '&lt;',  a )
+
+      <b>cspice_wnreld</b> ( a, '&gt;=', b )
+      <b>cspice_wnreld</b> ( b, '&lt;=', a )
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the relational operator is not recognized, the error
+       SPICE(INVALIDOPERATION) is signaled by a routine in the call
+       tree of this routine.
+
+   2)  The cardinality of the input windows must be even. Left
+       endpoints of stored intervals must be strictly greater than
+       preceding right endpoints. Right endpoints must be greater
+       than or equal to corresponding left endpoints. Invalid window
+       data are not diagnosed by this routine and may lead to
+       unpredictable results.
+
+   3)  If any of the input arguments, `a', `op' or `b', is undefined,
+       an error is signaled by the Matlab error handling system.
+
+   4)  If any of the input arguments, `a', `op' or `b', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/windows.html">WINDOWS.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   S.C. Krening        (JPL)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 26-NOV-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       example's problem statement and modified example code to generate
+       formatted output.
+
+       Added square brackets to the output argument in function
+       declaration, and renamed it to &quot;wnreld&quot;.
+
+       Corrected error message format.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.2, 12-MAR-2012 (EDW) (SCK)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+       &quot;logical&quot; call replaced with &quot;zzmice_logical.&quot;
+
+       Corrected version ID in 23-JUL-2009 entry, &quot;1.0.0&quot; to &quot;1.0.1.&quot;
+
+   -Mice Version 1.0.1, 23-JUL-2009 (EDW)
+
+       Replaced &quot;boolean&quot; calls with &quot;logical&quot; as &quot;boolean&quot; functionally
+       aliases &quot;logical.&quot;
+
+   -Mice Version 1.0.0, 22-JUL-2007 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   compare two d.p. windows
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+

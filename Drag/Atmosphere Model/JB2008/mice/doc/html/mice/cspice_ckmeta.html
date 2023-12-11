@@ -1,0 +1,340 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckmeta</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckmeta</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKMETA returns (depending upon the user's request) the ID code of
+   either the spacecraft or spacecraft clock associated with a C-Kernel ID
+   code.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      ckid     the ID code for some object whose attitude and possibly
+               angular velocity are stored in some C-kernel.
+
+               [1,1] = size(ckid); int32 = class(ckid)
+
+      meta     a character string that indicates which piece of meta data to
+               fetch.
+
+               [1,c1] = size(meta); char = class(meta)
+
+                  or
+
+               [1,1] = size(meta); cell = class(meta)
+
+               Acceptable values are 'SCLK' and 'SPK'. The routine is case
+               insensitive. Leading and trailing blanks are insignificant.
+               However, blanks between characters are regarded as being
+               significant.
+
+   the call:
+
+      [idcode] = <b>cspice_ckmeta</b>( ckid, meta )
+
+   returns:
+
+      idcode   if `meta' is 'SCLK' then the value returned in `idcode' is
+               the ID code of the spacecraft clock used for converting ET to
+               TICKS and TICKS to ET for the C-kernel used to represent the
+               attitude of the object with ID code `ckid'.
+
+               [1,1] = size(idcode); int32 = class(idcode)
+
+               If `meta' is 'SPK' then the value returned in `idcode' is the
+               ID code of the spacecraft on which the platform indicated
+               by `ckid' is mounted.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Suppose you would like to look up the attitude of an object
+      in a C-kernel but have ET and seconds as your input time and
+      tolerance.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: ckmeta_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name              Contents
+            --------------------   -----------------------
+            cas00071.tsc           CASSINI SCLK
+            naif0012.tls           Leapseconds
+            04153_04182ca_ISS.bc   CASSINI image navigated
+                                   spacecraft CK
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'naif0012.tls',
+                                'cas00071.tsc'
+                                '04153_04182ca_ISS.bc' )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      function ckmeta_ex1()
+
+         %
+         % Local parameters.
+         %
+         % -- The code for CASSINI spacecraft reference frame is
+         %    -82000.
+         %
+         % -- The reference frame we want is J2000.
+         %
+         REF  =   'J2000';
+         CKID =   -82000;
+
+         %
+         % Initial values.
+         %
+         et     = [141162208.034340]';
+         sectol = [0.5]';
+
+         %
+         % First load the CK, LSK and SCLK files.
+         %
+         <a href="cspice_furnsh.html">cspice_furnsh</a>( 'ckmeta_ex1.tm' );
+
+         %
+         % Get the SCLK identifier of the spacecraft clock required
+         % to convert from `et' to `ticks'.
+         %
+         [idcode] = <b>cspice_ckmeta</b>( CKID, 'SCLK' );
+
+         %
+         % Convert `et' and et+sectol to spacecraft clock ticks.
+         %
+         [ticks] = <a href="cspice_sce2c.html">cspice_sce2c</a>( idcode, et );
+         [tick2] = <a href="cspice_sce2c.html">cspice_sce2c</a>( idcode, et+sectol );
+
+         %
+         % Compute the tolerance in spacecraft clock ticks.
+         %
+         tol = tick2 - ticks;
+
+         %
+         % Look the attitude up.
+         %
+         [cmat, av, clkout, found] = <a href="cspice_ckgpav.html">cspice_ckgpav</a>( CKID, ticks, tol, REF );
+
+         fprintf( 'Input ET:             %19.6f\n', et )
+
+         if ( found )
+
+            [etout] = <a href="cspice_sct2e.html">cspice_sct2e</a>( idcode, clkout );
+            fprintf( 'Attitude found at ET: %19.6f\n', etout )
+
+         else
+
+            fprintf( 'No attitude found at ET.\n' )
+
+         end
+
+         %
+         % It's always good form to unload kernels after use,
+         % particularly in Matlab due to data persistence.
+         %
+         <a href="cspice_kclear.html">cspice_kclear</a>
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Input ET:                141162208.034340
+      Attitude found at ET:    141162208.034586
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   This is a utility routine for mapping C-kernels to associated
+   spacecraft clocks.
+
+   An association of an SCLK ID and spacecraft ID with a CK frame
+   class ID may be made by placing in a text kernel the kernel
+   variable assignments
+
+      CK_&lt;ck_frame_class_ID_code&gt;_SCLK = &lt;ID code of SCLK&gt;
+      CK_&lt;ck_frame_class_ID_code&gt;_SPK  = &lt;SPK ID code&gt;
+
+   See the Frames Required Reading section on CK frames.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the variable `meta' is not recognized to be one of the
+       inputs 'SPK' or 'SCLK', the error SPICE(UNKNOWNCKMETA)
+       is signaled by a routine in the call tree of this routine.
+
+   2)  If `ckid' is greater than -1000, the associated SCLK and SPK
+       IDs must be in the kernel pool. If they are not present
+       a value of zero is returned for the requested item. Zero
+       is never the valid ID of a spacecraft clock.
+
+   3)  If any of the input arguments, `ckid' or `meta', is undefined,
+       an error is signaled by the Matlab error handling system.
+
+   4)  If any of the input arguments, `ckid' or `meta', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/ck.html">CK.REQ</a>
+   <a href="../req/frames.html">FRAMES.REQ</a>
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.0.0, 21-JUN-2021 (JDR)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   Map C-kernel ID to SCLK and SPK ID
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

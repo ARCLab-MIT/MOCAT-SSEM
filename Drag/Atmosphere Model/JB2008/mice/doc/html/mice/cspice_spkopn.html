@@ -1,0 +1,310 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_spkopn</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_spkopn</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_SPKOPN creates a new SPK file, returning the handle of the opened
+   file.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      fname    the name of the new SPK file to be created.
+
+               [1,c1] = size(fname); char = class(fname)
+
+                  or
+
+               [1,1] = size(fname); cell = class(fname)
+
+      ifname   the internal filename for the SPK file that is being created.
+
+               [1,c2] = size(ifname); char = class(ifname)
+
+                  or
+
+               [1,1] = size(ifname); cell = class(ifname)
+
+               The internal filename may be up to 60 characters long. If
+               you do not have any conventions for tagging your files, an
+               internal filename of 'SPK_file' is perfectly acceptable. You
+               may also leave it blank if you like.
+
+      ncomch   the space, measured in characters, to be initially set aside
+               for the comment area when a new SPK file is opened.
+
+               [1,1] = size(ncomch); int32 = class(ncomch)
+
+               The amount of space actually set aside may be greater than
+               the amount requested, due to the manner in which comment
+               records are allocated in an SPK file. However, the amount of
+               space set aside for comments will always be at least the
+               amount that was requested.
+
+               The value of ncomch should be greater than or equal to
+               zero, i.e., 0 &lt;= ncomch. A negative value, should one
+               occur, will be assumed to be zero.
+
+   the call:
+
+      [handle] = <b>cspice_spkopn</b>( fname, ifname, ncomch )
+
+   returns:
+
+      handle   the handle of the opened SPK file.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+               If an error occurs when opening the file, the value of this
+               variable should not be used, as it will not represent a valid
+               handle.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) This example demonstrates how to create an SPK type 8 kernel
+      containing only one segment, given a time-ordered set of
+      discrete states and epochs.
+
+
+      Example code begins here.
+
+
+      function spkopn_ex1()
+
+         %
+         % Define the segment identifier parameters.
+         %
+         BODY       = 3;
+         CENTER     = 10;
+         REF        = 'J2000';
+         POLY_DEG   = 3;
+         SPK8       = 'spkopn_ex1.bsp';
+         N_DISCRETE = 9;
+
+         %
+         % A set of epochs.
+         %
+         DISCRETEEPOCHS = (1:9)*100;
+
+         %
+         % An array of discrete states to write to the SPK segment.
+         %
+         base = [ (1:6)*100 ]';
+
+         %
+         % Create the 6xN array of states.
+         %
+         DISCRETESTATES = [(base+1), (base+2), (base+3), ...
+                           (base+4), (base+5), (base+6), ...
+                           (base+7), (base+8), (base+9) ];
+
+         %
+         % Create a segment identifier.
+         %
+         segid = 'SPK type 8 test segment';
+
+         %
+         % Open a new SPK file.
+         %
+         handle = <b>cspice_spkopn</b>( SPK8, segid, 4 );
+
+         step   = DISCRETEEPOCHS(2) - DISCRETEEPOCHS(1);
+
+         %
+         % Create a type 8 segment.
+         %
+         <a href="cspice_spkw08.html">cspice_spkw08</a>( handle,                       ...
+                        BODY,                         ...
+                        CENTER,                       ...
+                        REF,                          ...
+                        DISCRETEEPOCHS(1),            ...
+                        DISCRETEEPOCHS(N_DISCRETE),   ...
+                        segid,                        ...
+                        POLY_DEG,                     ...
+                        DISCRETESTATES,               ...
+                        DISCRETEEPOCHS(1),            ...
+                        step )
+
+         %
+         % Close the SPK file.
+         %
+         <a href="cspice_spkcls.html">cspice_spkcls</a>( handle )
+
+
+      When this program is executed, no output is presented on
+      screen. After run completion, a new SPK type 8 exists in
+      the output directory.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Open a new SPK file, reserving room for comments if requested.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the value of `ncomch' is negative, a value of zero (0) will
+       be used for the number of comment characters to be set aside
+       for comments.
+
+   2)  If an error occurs while attempting to open the SPK file, the
+       value of `handle' will not represent a valid file handle.
+
+   3)  If any of the input arguments, `fname', `ifname' or `ncomch',
+       is undefined, an error is signaled by the Matlab error
+       handling system.
+
+   4)  If any of the input arguments, `fname', `ifname' or `ncomch',
+       is not of the expected type, or it does not have the expected
+       dimensions and size, an error is signaled by the Mice
+       interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   See `fname' and `handle'.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/spk.html">SPK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 05-AUG-2021 (EDW) (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       complete code example, based on the <a href="cspice_spkw08.html">cspice_spkw08</a> example.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 23-MAY-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   open a new SPK file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:27 2021</pre>
+
+</body>
+</html>
+

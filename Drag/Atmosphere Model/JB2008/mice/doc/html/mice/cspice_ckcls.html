@@ -1,0 +1,292 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_ckcls</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_ckcls</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_CKCLS closes a CK file opened for read or write.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the file handle for an open CK file.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+   the call:
+
+      <b>cspice_ckcls</b>( handle )
+
+   closes the file attached to 'handle'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Create a CK type 3 segment; fill with data for a simple time
+      dependent rotation and angular velocity, and reserve room in
+      the CK comments area for 5000 characters.
+
+      Example code begins here.
+
+
+      function ckcls_ex1()
+
+         INST3      = -77703;
+         NCOMCH     = 5000;
+         REF        = 'J2000';
+         CK3        = 'ckcls_ex1.bc';
+         IFNAME     = 'Test CK type 3 created by <a href="cspice_ckw03.html">cspice_ckw03</a>';
+         SEGID3     = 'Test type 3 segment test CK';
+         SECPERTICK = 0.001;
+         SPACING    = 10.0;
+         MAXREC     = 50;
+
+         %
+         % Note, sclkdp is a vector input, not a vectorized scalar.
+         %
+         sclkdp    = [1:MAXREC]';
+         sclkdp    = (sclkdp - 1)*SPACING;
+
+         spinrate  = [1:MAXREC]*1.e-6;
+
+         theta     = [0:MAXREC-1]*SPACING;
+         theta     = theta .* spinrate;
+
+         %
+         % Create a zero-filled array for the angular velocity
+         % vectors. This allocates the needed memory and
+         % defines a variable of the correct shape.
+         %
+         expavvs = zeros( [3 MAXREC] );
+
+         a1 = zeros( [1 MAXREC] );
+         a2 = a1;
+
+         size(theta)
+         size(a2)
+         size(a1)
+         r  = <a href="cspice_eul2m.html">cspice_eul2m</a>( theta, a2, a1, 3, 1 ,3 );
+         q  = <a href="cspice_m2q.html">cspice_m2q</a>( r );
+
+         %
+         % Fill the z component of the expavvs vectors with the
+         % corresponding spinrate element scaled to SECPERTICK.
+         %
+         expavvs(3,:) = spinrate/SECPERTICK;
+
+         begtim = sclkdp(1);
+         endtim = sclkdp(MAXREC);
+         avflag = 1;
+
+         starts = [1:(MAXREC/2)]';
+         starts = (starts-1)*2*SPACING;
+
+         %
+         % Open a new CK, write the data, catch any errors.
+         %
+         try
+            handle = <a href="cspice_ckopn.html">cspice_ckopn</a>( CK3, IFNAME, NCOMCH )
+            <a href="cspice_ckw03.html">cspice_ckw03</a>( handle,  ...
+                          begtim,  ...
+                          endtim,  ...
+                          INST3,   ...
+                          REF,     ...
+                          avflag,  ...
+                          SEGID3,  ...
+                          sclkdp,  ...
+                          q,       ...
+                          expavvs, ...
+                          starts )
+         catch
+
+            error( [ 'Failure: ' lasterr] )
+         end
+
+         <b>cspice_ckcls</b>(handle)
+
+
+      When this program is executed, no output is presented on
+      screen. After run completion, a new CK file exists in the
+      output directory.
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Close the CK file attached to `handle'.
+
+   The close operation tests the file to ensure the presence of data
+   segments.
+
+   A <b>cspice_ckcls</b> call should balance every <a href="cspice_ckopn.html">cspice_ckopn</a> call.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If there are no segments in the file, the error
+       SPICE(NOSEGMENTSFOUND) is signaled by a routine in the call
+       tree of this routine.
+
+   2)  If the input argument `handle' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   3)  If the input argument `handle' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ck.html">CK.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.2.0, 10-AUG-2021 (EDW) (JDR)
+
+       Updated the header to comply with NAIF standard. Added
+       complete code example based on existing fragment.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.1.1, 29-OCT-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.1.0, 22-JUL-2009 (EDW)
+
+       Corrected the function definition name. This wrapper had a
+       the function name &quot;<a href="cspice_ckopn.html">cspice_ckopn</a>&quot; instead of &quot;<b>cspice_ckcls</b>.&quot;
+
+   -Mice Version 1.0.0, 22-NOV-2005 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   close a CK file
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

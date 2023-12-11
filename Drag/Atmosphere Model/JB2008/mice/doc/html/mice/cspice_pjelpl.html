@@ -1,0 +1,279 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_pjelpl</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_pjelpl</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_PJELPL projects orthogonally an ellipse onto a plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      elin    a structure describing a SPICE ellipse.
+
+              [1,1] = size(elin); struct = class(elin)
+
+              The structure has the fields:
+
+                 center:    [3x1 double]
+                 semiMajor: [3x1 double]
+                 semiMinor: [3x1 double]
+
+      plane   a structure describing a SPICE plane.
+
+              [1,1] = size(plane); struct = class(plane)
+
+              The structure has the fields:
+
+                  normal:     [3x1 double]
+                  constant:   [1x1 double]
+
+              are, respectively, a SPICE ellipse and a SPICE plane. The
+              geometric ellipse represented by 'elin' is to be orthogonally
+              projected onto the geometric plane represented by 'plane'.
+
+   the call:
+
+      elout = <b>cspice_pjelpl</b>( elin, plane )
+
+   returns:
+
+      elout   the SPICE ellipse that represents the geometric
+              ellipse resulting from orthogonally projecting the ellipse
+              represented by 'elin' onto the plane represented by 'plane'.
+
+              [1,1] = size(elout); struct = class(elout)
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given an ellipse and a plane, compute the projection of the
+      ellipse on the plane.
+
+      Example code begins here.
+
+
+      function pjelpl_ex1()
+
+         %
+         % Assign the values for plane/ellipse definition
+         % vectors.
+         %
+         center  = [ 1,  1,  1 ]';
+         vect1   = [ 2,  0,  0 ]';
+         vect2   = [ 0,  1,  1 ]';
+         normal  = [ 0,  0,  1 ]';
+
+         %
+         % Create a plane using a constant value of 0...
+         %
+         plane = <a href="cspice_nvc2pl.html">cspice_nvc2pl</a>( normal, 0 );
+
+         %
+         % ...and an ellipse.
+         %
+         elin = <a href="cspice_cgv2el.html">cspice_cgv2el</a>( center, vect1, vect2 );
+
+         %
+         % Project the ellipse onto the plane.
+         %
+         elout = <b>cspice_pjelpl</b>( elin, plane );
+
+         %
+         % Output the ellipse in the plane.
+         %
+         fprintf( 'Center    :  %f  %f  %f\n', elout.center    )
+         fprintf( 'Semi-minor:  %f  %f  %f\n', elout.semiMinor )
+         fprintf( 'Semi-major:  %f  %f  %f\n', elout.semiMajor )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Center    :  1.000000  1.000000  0.000000
+      Semi-minor:  0.000000  1.000000  0.000000
+      Semi-major:  2.000000  0.000000  0.000000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Projecting an ellipse orthogonally onto a plane can be thought of
+   finding the points on the plane that are `under' or `over' the
+   ellipse, with the `up' direction considered to be perpendicular
+   to the plane. More mathematically, the orthogonal projection is
+   the set of points Y in the plane such that for some point X in
+   the ellipse, the vector Y - X is perpendicular to the plane.
+   The orthogonal projection of an ellipse onto a plane yields
+   another ellipse.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input plane is invalid, an error is signaled by a
+       routine in the call tree of this routine.
+
+   2)  The input ellipse may be degenerate--its semi-axes may be
+       linearly dependent. Such ellipses are allowed as inputs.
+
+   3)  The ellipse resulting from orthogonally projecting the input
+       ellipse onto a plane may be degenerate, even if the input
+       ellipse is not.
+
+   4)  If any of the input arguments, `elin' or `plane', is
+       undefined, an error is signaled by the Matlab error handling
+       system.
+
+   5)  If any of the input arguments, `elin' or `plane', is not of
+       the expected type, or it does not have the expected dimensions
+       and size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/ellipses.html">ELLIPSES.REQ</a>
+   <a href="../req/planes.html">PLANES.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 27-AUG-2021 (EDW) (JDR)
+
+       Edited -Examples section to comply with NAIF standard. Added
+       example's problem statement.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 11-JUN-2013 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   project ellipse onto plane
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:26 2021</pre>
+
+</body>
+</html>
+

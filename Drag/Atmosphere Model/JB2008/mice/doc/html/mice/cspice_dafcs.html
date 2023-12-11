@@ -1,0 +1,449 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_dafcs</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_dafcs</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_DAFCS sets the active DAF to search. A search must be
+   in progress for the DAF.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      handle   the file handle referring to a DAF to
+               set as the &quot;active&quot; file for a search.
+
+               [1,1] = size(handle); int32 = class(handle)
+
+   the call:
+
+      <b>cspice_dafcs</b>( handle )
+
+   causes all DAF search activity apply to the file
+   referred to by 'handle'.
+
+   returns:
+
+      None.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Given two SPK files, begin a forward search on one and, right
+      after, a backward search on the other. Restitute the search on
+      the first SPK, and print all the segment IDs found in the file.
+      Go back to the second file, and print all its segment IDs.
+
+      Use the SPK kernel below as first input DAF file for the program.
+
+         OUTERPLANETS_V0002.BSP
+
+      Use the SPK kernel below as second input DAF file for the program.
+
+         sat382-rocks-merge.bsp
+
+
+      Example code begins here.
+
+
+      function dafcs_ex1()
+
+         %
+         % Define two SPK test files.
+         %
+         SPK1 = 'OUTERPLANETS_V0002.BSP';
+         SPK2 = 'sat382-rocks-merge.bsp';
+
+         %
+         % Open the DAFs for read
+         %
+         han1 = <a href="cspice_dafopr.html">cspice_dafopr</a>( SPK1 );
+         han2 = <a href="cspice_dafopr.html">cspice_dafopr</a>( SPK2 );
+
+         %
+         % Begin a forward search on SPK1
+         %
+         <a href="cspice_dafbfs.html">cspice_dafbfs</a>( han1 )
+         found = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+         %
+         % Begin a backwards search on SPK2
+         %
+         <a href="cspice_dafbbs.html">cspice_dafbbs</a>( han2 )
+         found2 = <a href="cspice_daffpa.html">cspice_daffpa</a>;
+
+         %
+         % Reinstitute the search on han1, loop
+         % so long as segment data are found.
+         %
+         <b>cspice_dafcs</b>( han1 );
+         fprintf( 'Segment IDs found on forward search of: %s\n', SPK1 );
+
+         while ( found )
+
+            segid    = <a href="cspice_dafgn.html">cspice_dafgn</a>;
+            found    = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+            %
+            % Output each segment ID.
+            %
+            fprintf( '%s\n', segid )
+
+         end
+
+         %
+         % Reinstitute the search on han2, loop
+         % so long as segment data are found.
+         %
+         <b>cspice_dafcs</b>( han2 )
+         fprintf( '\nSegment IDs found on backward search of: %s\n', SPK2 );
+
+         while ( found2 )
+
+            segid    = <a href="cspice_dafgn.html">cspice_dafgn</a>;
+            found2   = <a href="cspice_daffpa.html">cspice_daffpa</a>;
+
+            %
+            % Output each segment ID.
+            %
+            fprintf( '%s\n', segid )
+
+         end
+
+         %
+         % Close the files.
+         %
+         <a href="cspice_dafcls.html">cspice_dafcls</a>( han1 )
+         <a href="cspice_dafcls.html">cspice_dafcls</a>( han2 )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Segment IDs found on forward search of: OUTERPLANETS_V0002.BSP
+      JUP230
+      SAT261xl
+      URA083
+      NEP016.6
+
+      Segment IDs found on backward search of: sat382-rocks-merge.bsp
+      SAT375
+      DE-0431LE-0431
+      DE-0431LE-0431
+      DE-0431LE-0431
+      DE-0431LE-0431
+      PAN
+      DAPHNIS
+      PAN
+      DAPHNIS
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   <b>cspice_dafcs</b> supports simultaneous searching of multiple DAFs. In
+   applications that use this capability, <b>cspice_dafcs</b> should be called
+   prior to each call to <a href="cspice_daffna.html">cspice_daffna</a>, <a href="cspice_daffpa.html">cspice_daffpa</a>, <a href="cspice_dafgn.html">cspice_dafgn</a>, or
+   <a href="cspice_dafgs.html">cspice_dafgs</a> to specify which DAF is to be acted upon.
+
+   The DAF search routines are:
+
+      <a href="cspice_dafbfs.html">cspice_dafbfs</a>       Begin forward search.
+      <a href="cspice_daffna.html">cspice_daffna</a>       Find next array.
+
+      <a href="cspice_dafbbs.html">cspice_dafbbs</a>       Begin backward search.
+      <a href="cspice_daffpa.html">cspice_daffpa</a>       Find previous array.
+
+      <a href="cspice_dafgs.html">cspice_dafgs</a>        Get summary.
+      <a href="cspice_dafgn.html">cspice_dafgn</a>        Get name.
+
+      <b>cspice_dafcs</b>        Continue search.
+
+   The main function of these routines is to allow the
+   contents of any DAF to be examined on an array-by-array
+   basis.
+
+   Conceptually, the arrays in a DAF form a doubly linked list,
+   which can be searched in either of two directions: forward or
+   backward. It is possible to search multiple DAFs simultaneously.
+
+   <a href="cspice_dafbfs.html">cspice_dafbfs</a> (begin forward search) and <a href="cspice_daffna.html">cspice_daffna</a> are used to
+   search the arrays in a DAF in forward order. In applications that
+   search a single DAF at a time, the normal usage is
+
+      <a href="cspice_dafbfs.html">cspice_dafbfs</a>( handle );
+      found = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+      while found
+
+         [dc, ic] = <a href="cspice_dafgs.html">cspice_dafgs</a>( ND, NI );
+         [sum]    = <a href="cspice_dafps.html">cspice_dafps</a>( dc, ic );
+         name     = <a href="cspice_dafgn.html">cspice_dafgn</a>;
+
+          .
+          .
+
+         found = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+      end
+
+
+   <a href="cspice_dafbbs.html">cspice_dafbbs</a> (begin backward search) and <a href="cspice_daffpa.html">cspice_daffpa</a> are used to
+   search the arrays in a DAF in backward order. In applications that
+   search a single DAF at a time, the normal usage is
+
+      <a href="cspice_dafbbs.html">cspice_dafbbs</a>( handle );
+      found = <a href="cspice_daffpa.html">cspice_daffpa</a>;
+
+      while found
+
+         [dc, ic] = <a href="cspice_dafgs.html">cspice_dafgs</a>( ND, NI );
+         [sum]    = <a href="cspice_dafps.html">cspice_dafps</a>( dc, ic );
+         name     = <a href="cspice_dafgn.html">cspice_dafgn</a>;
+
+          .
+          .
+
+         found = <a href="cspice_daffpa.html">cspice_daffpa</a>;
+
+      end
+
+
+   In applications that conduct multiple searches simultaneously, the above
+   usage must be modified to specify the handle of the file to operate on,
+   in any case where the file may not be the last one specified by
+   <a href="cspice_dafbfs.html">cspice_dafbfs</a> or <a href="cspice_dafbbs.html">cspice_dafbbs</a>. The routine <b>cspice_dafcs</b> (DAF, continue
+   search) is used for this purpose. Below, we give an example of an
+   interleaved search of two files specified by the handles `handl1' and
+   `handl2'. The directions of searches in different DAFs are independent;
+   here we conduct a forward search on one file and a backward search on the
+   other. Throughout, we use <b>cspice_dafcs</b> to specify which file to operate
+   on, before calling <a href="cspice_daffna.html">cspice_daffna</a>, <a href="cspice_daffpa.html">cspice_daffpa</a>, <a href="cspice_dafgs.html">cspice_dafgs</a>, or
+   <a href="cspice_dafgn.html">cspice_dafgn</a>.
+
+
+      <a href="cspice_dafbfs.html">cspice_dafbfs</a>( handl1 );
+      <a href="cspice_dafbbs.html">cspice_dafbbs</a>( handl2 );
+
+      <b>cspice_dafcs</b>( handl1 );
+      found1 = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+      <b>cspice_dafcs</b>( handl2 );
+      found2 = <a href="cspice_daffpa.html">cspice_daffpa</a>;
+
+      while ( found1 | found2 )
+
+         if found1
+
+            <b>cspice_dafcs</b>( handl1 );
+            [dc, ic] = <a href="cspice_dafgs.html">cspice_dafgs</a>( ND, NI );
+            [sum]    = <a href="cspice_dafps.html">cspice_dafps</a>( dc, ic );
+            name     = <a href="cspice_dafgn.html">cspice_dafgn</a>;
+
+             .
+             .
+
+            <b>cspice_dafcs</b>( handl1 );
+            found1 = <a href="cspice_daffna.html">cspice_daffna</a>;
+
+         end
+
+         if found2
+
+            <b>cspice_dafcs</b>( handl2 );
+            [dc, ic] = <a href="cspice_dafgs.html">cspice_dafgs</a>( ND, NI );
+            [sum]    = <a href="cspice_dafps.html">cspice_dafps</a>( dc, ic );
+            name     = <a href="cspice_dafgn.html">cspice_dafgn</a>;
+
+             .
+             .
+
+            <b>cspice_dafcs</b>( handl2 );
+            found2 = <a href="cspice_daffpa.html">cspice_daffpa</a>;
+
+         end
+
+      end
+
+
+   At any time, the latest array found (whether by <a href="cspice_daffna.html">cspice_daffna</a> or
+   <a href="cspice_daffpa.html">cspice_daffpa</a>) is regarded as the 'current' array for the file in which
+   the array was found. The last DAF in which a search was started,
+   executed, or continued by any of <a href="cspice_dafbfs.html">cspice_dafbfs</a>, <a href="cspice_dafbbs.html">cspice_dafbbs</a>,
+   <a href="cspice_daffna.html">cspice_daffna</a>, <a href="cspice_daffpa.html">cspice_daffpa</a> or <b>cspice_dafcs</b> is regarded as the 'current'
+   DAF. The summary and name for the current array in the current DAF can
+   be obtained separately, as shown above, by calls to <a href="cspice_dafgs.html">cspice_dafgs</a>
+   (get summary) and <a href="cspice_dafgn.html">cspice_dafgn</a> (get name).
+
+   Once a search has been begun, it may be continued in either
+   direction. That is, <a href="cspice_daffpa.html">cspice_daffpa</a> may be used to back up during a
+   forward search, and <a href="cspice_daffna.html">cspice_daffna</a> may be used to advance during a
+   backward search.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the input handle is invalid, an error is signaled by a
+       routine in the call tree of this routine.
+
+   2)  If this routine is called when no search is in progress in the
+       the current DAF, the error SPICE(DAFNOSEARCH) is signaled by a
+       routine in the call tree of this routine.
+
+   3)  If the input argument `handle' is undefined, an error is
+       signaled by the Matlab error handling system.
+
+   4)  If the input argument `handle' is not of the expected type, or
+       it does not have the expected dimensions and size, an error is
+       signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+   <a href="../req/daf.html">DAF.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 25-AUG-2021 (EDW) (JDR)
+
+       Edited the -Examples section to comply with NAIF standard.
+       Update code example to output segment IDs for both input SPK
+       files. Added example's problem statement.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections, and
+       completed -Particulars section.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.0, 10-JUL-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   select a DAF to continue searching
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:23 2021</pre>
+
+</body>
+</html>
+

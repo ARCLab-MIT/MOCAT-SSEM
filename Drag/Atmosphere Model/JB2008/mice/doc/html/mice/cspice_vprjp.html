@@ -1,0 +1,277 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+
+<HEAD>
+   <TITLE>cspice_vprjp</TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+<A name="TOP"></A>
+
+<table style="text-align: left; margin-left: auto; margin-right: auto; width: 800px;"
+ border="0" cellpadding="5" cellspacing="2">
+  <tbody>
+    <tr><td>
+<div align="center">
+Index of Functions: 
+<A HREF="index.html#A">A</A>&nbsp;
+<A HREF="index.html#B">B</A>&nbsp;
+<A HREF="index.html#C">C</A>&nbsp;
+<A HREF="index.html#D">D</A>&nbsp;
+<A HREF="index.html#E">E</A>&nbsp;
+<A HREF="index.html#F">F</A>&nbsp;
+<A HREF="index.html#G">G</A>&nbsp;
+<A HREF="index.html#H">H</A>&nbsp;
+<A HREF="index.html#I">I</A>&nbsp;
+<A HREF="index.html#J">J</A>&nbsp;
+<A HREF="index.html#K">K</A>&nbsp;
+<A HREF="index.html#L">L</A>&nbsp;
+<A HREF="index.html#M">M</A>&nbsp;
+<A HREF="index.html#N">N</A>&nbsp;
+<A HREF="index.html#O">O</A>&nbsp;
+<A HREF="index.html#P">P</A>&nbsp;
+<A HREF="index.html#Q">Q</A>&nbsp;
+<A HREF="index.html#R">R</A>&nbsp;
+<A HREF="index.html#S">S</A>&nbsp;
+<A HREF="index.html#T">T</A>&nbsp;
+<A HREF="index.html#U">U</A>&nbsp;
+<A HREF="index.html#V">V</A>&nbsp;
+<A HREF="index.html#W">W</A>&nbsp;
+<A HREF="index.html#X">X</A>&nbsp;
+</div>
+</td></tr>
+
+    <tr>
+      <td style="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+      <div align="right"> 
+      <small><small><a href="index.html">Index Page</a></small></small>
+      </div>
+      <b>cspice_vprjp</b></td>
+    </tr>
+    
+
+    <tr>
+      <td style="vertical-align: top;">
+
+       <br>
+       <div align="left"><b>Table of contents</b></div>
+       <table style="text-align: left; width: 60%; margin-left: auto; margin-right: auto;"
+       border="0" cellspacing="2" cellpadding="2">
+        <tbody>
+          <tr>
+            <td style="width: 33%; text-align: center;">
+              <a href="#Abstract">Abstract<br></a>
+              <a href="#I/O">I/O<br></a>
+              <a href="#Parameters">Parameters<br></a>
+              <big><b><a href="#Examples">Examples<br></a></b></big>
+              <a href="#Particulars">Particulars<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Exceptions">Exceptions<br></a>
+              <a href="#Files">Files<br></a>
+              <a href="#Restrictions">Restrictions<br></a>
+              <a href="#Required_Reading">Required_Reading<br></a>
+              <a href="#Literature_References">Literature_References<br></a>
+
+              </td>
+              <td style="vertical-align: top; width: 33%; text-align: center;">              <a href="#Author_and_Institution">Author_and_Institution<br></a>
+              <a href="#Version">Version<br></a>
+              <a href="#Index_Entries">Index_Entries<br></a>
+            </td>
+          </tr>
+        </tbody>
+</table>
+<hr>
+
+
+<PRE>
+</pre><h4><a name="Abstract">Abstract</a></h4><pre>
+
+   CSPICE_VPRJP projects orthogonally a vector onto a specified plane.
+
+</pre><h4><a name="I/O">I/O</a></h4><pre>
+
+   Given:
+
+      vin      the vector to orthogonally project onto a specified plane.
+
+               [3,1] = size(vin); double = class(vin)
+
+      plane    a structure describing a SPICE plane onto which to
+               project `vin'.
+
+               [1,1] = size(plane); struct = class(plane)
+
+               The structure has the fields:
+
+                  normal:   [3,1] = size(normal);   double = class(normal)
+                  constant: [1,1] = size(constant); double = class(constant)
+
+               The normal vector component of a SPICE plane has unit length.
+
+   the call:
+
+      [vout] = <b>cspice_vprjp</b>( vin, plane )
+
+   returns:
+
+      vout     the vector resulting from the orthogonal projection of `vin'
+               onto `plane'.
+
+               [3,1] = size(vout); double = class(vout)
+
+               `vout' is the closest point in the specified plane to `vin'.
+
+</pre><h4><a name="Parameters">Parameters</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Examples">Examples</a></h4><pre>
+
+   Any numerical results shown for this example may differ between
+   platforms as the results depend on the SPICE kernels used as input
+   and the machine specific arithmetic implementation.
+
+   1) Find the closest point in the ring plane of a planet to a
+      spacecraft located at a point (in body-fixed coordinates).
+
+
+      Example code begins here.
+
+
+      function vprjp_ex1()
+
+         %
+         % Set the spacecraft location and define the normal
+         % vector as the normal to the equatorial plane, and
+         % the origin at the body/ring center.
+         %
+         scpos = [-29703.16955, 879765.72163, -137280.21757]';
+
+         norm  = [0.0, 0.0, 1.0]';
+
+         orig  = [0.0, 0.0, 0.0]';
+
+         %
+         % Create the plane structure.
+         %
+         [ringpl] = <a href="cspice_nvp2pl.html">cspice_nvp2pl</a>( norm, orig );
+
+         %
+         % Project the position vector onto the ring plane.
+         %
+         [proj] = <b>cspice_vprjp</b>( scpos, ringpl );
+
+         fprintf( 'Projection of S/C position onto ring plane:\n'     )
+         fprintf( '%17.5f %16.5f %16.5f\n', proj(1), proj(2), proj(3) )
+
+
+      When this program was executed on a Mac/Intel/Octave6.x/64-bit
+      platform, the output was:
+
+
+      Projection of S/C position onto ring plane:
+           -29703.16955     879765.72163          0.00000
+
+
+</pre><h4><a name="Particulars">Particulars</a></h4><pre>
+
+   Projecting a vector `vin' orthogonally onto a plane can be thought of
+   as finding the closest vector in the plane to `vin'. This &quot;closest
+   vector&quot; always exists; it may be coincident with the original
+   vector.
+
+   Two related routines are cspice_vprjpi, which inverts an orthogonal
+   projection of a vector onto a plane, and <a href="cspice_vproj.html">cspice_vproj</a>, which projects
+   a vector orthogonally onto another vector.
+
+</pre><h4><a name="Exceptions">Exceptions</a></h4><pre>
+
+   1)  If the normal vector of the input plane does not have unit
+       length (allowing for round-off error), the error
+       SPICE(NONUNITNORMAL) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If any of the input arguments, `vin' or `plane', is undefined,
+       an error is signaled by the Matlab error handling system.
+
+   3)  If any of the input arguments, `vin' or `plane', is not of the
+       expected type, or it does not have the expected dimensions and
+       size, an error is signaled by the Mice interface.
+
+</pre><h4><a name="Files">Files</a></h4><pre>
+
+   None.
+
+</pre><h4><a name="Restrictions">Restrictions</a></h4><pre>
+
+   1)  It is recommended that the input plane be created by one of
+       the Mice routines
+
+          <a href="cspice_nvc2pl.html">cspice_nvc2pl</a> ( Normal vector and constant to plane )
+          <a href="cspice_nvp2pl.html">cspice_nvp2pl</a> ( Normal vector and point to plane    )
+          <a href="cspice_psv2pl.html">cspice_psv2pl</a> ( Point and spanning vectors to plane )
+
+       In any case the input plane must have a unit length normal
+       vector and a plane constant consistent with the normal
+       vector.
+
+</pre><h4><a name="Required_Reading">Required_Reading</a></h4><pre>
+
+   <a href="../req/mice.html">MICE.REQ</a>
+
+</pre><h4><a name="Literature_References">Literature_References</a></h4><pre>
+
+   [1]  G. Thomas and R. Finney, &quot;Calculus and Analytic Geometry,&quot;
+        7th Edition, Addison Wesley, 1988.
+
+</pre><h4><a name="Author_and_Institution">Author_and_Institution</a></h4><pre>
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
+</pre><h4><a name="Version">Version</a></h4><pre>
+
+   -Mice Version 1.1.0, 27-AUG-2021 (EDW) (JDR) (NJB)
+
+       Added error check for non-unit plane normal vector.
+
+       Edited the header to comply with NAIF standard.
+       Modified code example to produce formatted output and use actual
+       data.
+
+       Added -Parameters, -Exceptions, -Files, -Restrictions,
+       -Literature_References and -Author_and_Institution sections.
+
+       Eliminated use of &quot;lasterror&quot; in rethrow.
+
+       Removed reference to the function's corresponding CSPICE header from
+       -Required_Reading section.
+
+   -Mice Version 1.0.1, 18-DEC-2014 (EDW)
+
+       Edited -I/O section to conform to NAIF standard for Mice
+       documentation.
+
+   -Mice Version 1.0.0, 27-AUG-2012 (EDW)
+
+</pre><h4><a name="Index_Entries">Index_Entries</a></h4><pre>
+
+   vector projection onto plane
+
+
+</PRE>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+   <pre>Fri Dec 31 18:44:28 2021</pre>
+
+</body>
+</html>
+
