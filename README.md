@@ -21,7 +21,7 @@ Each Matlab live script reports:
 - A walkthrough on how to setup and run the script.
 - Several plots to highlight the outputs of the model.
 
-## Work in progress
+### Work in progress
 
 - **`MOCAT_4S_Workbook.mlx`**: This Matlab live script serves as the main script for running MOCAT-4S. The MOCAT-4S model contains the following species: slotted satellites (S), unslotted satellites (Su), derelict (D), and debris (N).
 
