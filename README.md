@@ -16,14 +16,14 @@ The folder Demo Workbooks contains the following main scripts:
 
 - **`MOCAT_3_Workbook.mlx`**: This Matlab live script serves as the main script for running MOCAT-3. The MOCAT-3 model contains the following species: unslotted satellites (Su), derelict (D), and debris (N). 
 
+- **`MOCAT_4S_Workbook.mlx`**: This Matlab live script serves as the main script for running MOCAT-4S. The MOCAT-4S model contains the following species: slotted satellites (S), unslotted satellites (Su), derelict (D), and debris (N).
+
 Each Matlab live script reports: 
 - An introduction of the model, with equations and parameters definition. 
 - A walkthrough on how to setup and run the script.
 - Several plots to highlight the outputs of the model.
 
 ### Work in progress
-
-- **`MOCAT_4S_Workbook.mlx`**: This Matlab live script serves as the main script for running MOCAT-4S. The MOCAT-4S model contains the following species: slotted satellites (S), unslotted satellites (Su), derelict (D), and debris (N).
 
 - **`MOCAT_Multi_Mass_Species_Workbook.mlx`**: This Matlab live script serves as the main script for a general implementation of the MOCAT-SSEM framework, in which multi-mass species can be created.
 
@@ -39,7 +39,7 @@ Each sub-directory contains the sub-modules used by the workbooks. The sub-modul
 
 ## Tutorial
 
-The folder Tutorials contains two previews of output solutions retrieved by MOCAT-3 using constant launch rate and static exponential or JB2008-based atmospheric density models. These can be accessed online without need of any software.
+The folder Tutorials contains two previews of output solutions retrieved by MOCAT-3, MOCAT-4S using constant launch rate and static exponential or JB2008-based atmospheric density models. These can be accessed online without the need to install/download any software.
 
 <!--
 The following website contains an example of the MOCAT-SSEM Matlab livescript functionalities: [https://gdmend.github.io/MOCAT/](https://gdmend.github.io/MOCAT/) . (TO BE CHANGED)
