@@ -2,7 +2,7 @@
 
 # Beta - Version 0.1
 
-MOCAT-SSEM investigates the evolution of the space objects population in LEO by exploiting a new probabilistic source-sink model, with the objective of estimating the LEO orbital capacity. This is carried out through the long-term propagation of the proposed source-sink model, which globally takes into account different object species, such as active satellites, derelict satellites, debris, and additional subgroups. Since the SOs are propagated as species, the information about single objects is missing, but it allows to be computationally fast and provide essential information about projected future distribution of SOs in the space environment for long prediction horizon.
+MOCAT-SSEM investigates the evolution of the space objects population in LEO by exploiting a new probabilistic source-sink model, with the objective of estimating the LEO orbital capacity. This is carried out through the long-term propagation of the proposed source-sink model, which globally takes into account different object species, such as active satellites, derelict satellites, debris, and additional subgroups. Since the SOs are propagated as species, the information about single objects is missing, but it allows to be computationally fast and provide essential information about projected future distribution of SOs in the space environment for long prediction horizon. MOCAT-SSEM is developed in MATLAB.
 
 <!--
 This repository provides a comprehensive package for the replication of different versions of MOCAT-SSEM using MATLAB, described in the following papers: (TO BE ADDED).
@@ -43,9 +43,8 @@ The folder Tutorials contains previews of output solutions retrieved by MOCAT-3,
 
 <!--
 The following website contains an example of the MOCAT-SSEM Matlab livescript functionalities: [https://gdmend.github.io/MOCAT/](https://gdmend.github.io/MOCAT/) . (TO BE CHANGED)
+-->
 
 ## Acknowledgments
 
-This work was supported by (TO BE ADDED) grant funding.
-
--->
+MOCAT’s initial development has been supported by the Defense Advanced Research Projects Agency (DARPA) under Grant N66001-20-1-4028, NASA’s Office of Technology and Strategy, under Grant Number NNH22ZDA001N-ESPOD.
