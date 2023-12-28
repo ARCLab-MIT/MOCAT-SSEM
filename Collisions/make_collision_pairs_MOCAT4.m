@@ -48,9 +48,9 @@ for i = 1:height(species_pairs)
         if s1.species_properties.maneuverable && s2.species_properties.maneuverable
             gammas(:,index) = -s1.species_properties.alpha_active;
             if n1 == "S"
-                gammas(:,index) = gammas(:,index) .* min(s2.species_properties.sym ./ (s1.species_properties.sym + s2.species_properties.sym),0);
+                gammas(:,index) = gammas(:,index) .* max(s2.species_properties.sym ./ (s1.species_properties.sym + s2.species_properties.sym),0);
             elseif n2 == "S"
-                gammas(:,index) = gammas(:,index) .* min(s1.species_properties.sym ./ (s1.species_properties.sym + s2.species_properties.sym),0);
+                gammas(:,index) = gammas(:,index) .* max(s1.species_properties.sym ./ (s1.species_properties.sym + s2.species_properties.sym),0);
             end
         elseif n1 == "D" || n1 == "N" 
             gammas(:,index) = -(scen_properties.delta + s2.species_properties.alpha);
@@ -69,9 +69,9 @@ for i = 1:height(species_pairs)
         if s1.species_properties.slotted && s2.species_properties.slotted
             gammas(:,index) = -s1.species_properties.alpha_active * (1-s1.species_properties.slotting_effectiveness);
         elseif n1 == "Su"
-            gammas(:,index) = -s1.species_properties.alpha_active * min(s2.species_properties.sym ./ (s1.species_properties.sym + s2.species_properties.sym),0);
+            gammas(:,index) = -s1.species_properties.alpha_active * max(s2.species_properties.sym ./ (s1.species_properties.sym + s2.species_properties.sym),0);
         elseif n2 == "Su"
-            gammas(:,index) = -s2.species_properties.alpha_active * min(s1.species_properties.sym ./ (s1.species_properties.sym + s2.species_properties.sym),0);
+            gammas(:,index) = -s2.species_properties.alpha_active * max(s1.species_properties.sym ./ (s1.species_properties.sym + s2.species_properties.sym),0);
         elseif n1 == "D" || n1 == "N" 
             gammas(:,index) = -(scen_properties.delta + s2.species_properties.alpha);
         elseif n2 == "D" || n2 == "N" 

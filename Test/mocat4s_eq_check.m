@@ -1,19 +1,21 @@
-close all
-clear 
-clc
+function [f4, OUT] = mocat4s_eq_check()
+
+% close all
+% clear 
+% clc
 
 addpath(genpath(pwd)) % add subfolders to path
 % rmpath(genpath(pwd)) % remove subfolders to path
-
-VAR = MOCAT4S_VAR_Cons();
-
-% Integrate over 200 years with constant yearly launch rate
-tf = 100; %Years
 
 Si = [17 373 1232 233 1];
 Sui = [10 54 2439 27 1];
 Di = [19 204 295 382 1];
 Ni = [62 443 699 1758 1];
+
+VAR = MOCAT4S_VAR_Cons();
+
+% Integrate over 200 years with constant yearly launch rate
+tf = 100; %Years
 
 x0 = [Si';Di';Ni';Sui'];
 
@@ -58,133 +60,133 @@ D = X(:,VAR.N_shell+1:2*VAR.N_shell);
 N = X(:,2*VAR.N_shell+1:3*VAR.N_shell);
 Su = X(:,3*VAR.N_shell+1:4*VAR.N_shell);
 N_tot = S+D+N+Su; % total population at each time instant for each shell
-
-figure
-subplot(1,3,1)
-hold on
-grid on
-set(gca,'FontSize',14)
-plot(VAR.R02(2:end),S(1,:),'k*-','LineWidth',2)
-plot(VAR.R02(2:end),S(end,:),'*-','LineWidth',2)
-xlabel('Altitude [km]')
-ylabel('Slotted satellites')
-legend('S_0','S_f')
-
-subplot(1,3,2)
-hold on
-grid on
-set(gca,'FontSize',14)
-plot(VAR.R02(2:end),D(1,:),'k*-','LineWidth',2)
-plot(VAR.R02(2:end),D(end,:),'*-','LineWidth',2)
-xlabel('Altitude [km]')
-ylabel('Derelicts')
-legend('D_0','D_f')
-
-subplot(1,3,3)
-hold on
-grid on
-set(gca,'FontSize',14)
-plot(VAR.R02(2:end),N(1,:),'k*-','LineWidth',2)
-plot(VAR.R02(2:end),N(end,:),'*-','LineWidth',2)
-xlabel('Altitude [km]')
-ylabel('Debris')
-legend('N_0','N_f')
-
-figure
-semilogy(VAR.R02(2:end),S(end,:),'LineWidth',2)
-hold on
-semilogy(VAR.R02(2:end),Su(end,:),'LineWidth',2)
-grid on
-set(gca,'FontSize',14)
-xlabel('Altitude [km]')
-ylabel('Number of objects')
-legend('S','Su') %
-title('Final time')
-
-figure
-hold on
-grid on
-set(gca,'FontSize',14)
-xlabel('Altitude [km]')
-ylabel('Launch Rate S (Number of objects/year)')
-for t = 1:length(tf)-1
-    plot(VAR.R02(2:end), LAM1(t,:))
-end
-
-figure
-hold on
-grid on
-set(gca,'FontSize',14)
-xlabel('Altitude [km]')
-ylabel('Launch Rate Su (Number of objects/year)')
-for t = 1:length(tf)-1
-    plot(VAR.R02(2:end), LAM2(t,:))
-end
-
-figure 
-hold on
-grid on
-set(gca,'FontSize',14)
-plot(tf,sum(N_tot,2),'-','LineWidth',2)
-plot(tf,sum(S,2),'-','LineWidth',2)
-plot(tf,sum(D,2),'-','LineWidth',2)
-plot(tf,sum(N,2),'-','LineWidth',2)
-plot(tf,sum(Su,2),'-','LineWidth',2)
-xlabel('Time [years]')
-ylabel('Number of objects')
-legend('total','S','D','N','Su')
-title('Population vs time')
-
-
-x = tf';
-y = VAR.R02(2:end);
-[Xi,Yi] = meshgrid(x,y);
-
-figure
-subplot(4,1,1)
-hold on
+% 
+% figure
+% subplot(1,3,1)
+% hold on
 % grid on
-set(gca,'FontSize',14)
-% surf(Xi,Yi,S','edgecolor','none')
-surf(tf', VAR.R02(2:end), transpose(S),'edgecolor','none'); 
-c = colorbar;
-c.Label.String = 'S';
-xlabel('Time [years]')
-ylabel('Altitude [km]')
-ylim([VAR.R02(2) VAR.R02(end)])
-
-subplot(4,1,2)
-hold on
+% set(gca,'FontSize',14)
+% plot(VAR.R02(2:end),S(1,:),'k*-','LineWidth',2)
+% plot(VAR.R02(2:end),S(end,:),'*-','LineWidth',2)
+% xlabel('Altitude [km]')
+% ylabel('Slotted satellites')
+% legend('S_0','S_f')
+% 
+% subplot(1,3,2)
+% hold on
 % grid on
-set(gca,'FontSize',14)
-surf(Xi,Yi,Su','edgecolor','none')
-c = colorbar;
-c.Label.String = 'S_u';
-xlabel('Time [years]')
-ylabel('Altitude [km]')
-ylim([VAR.R02(2) VAR.R02(end)])
-
-subplot(4,1,3)
-hold on
+% set(gca,'FontSize',14)
+% plot(VAR.R02(2:end),D(1,:),'k*-','LineWidth',2)
+% plot(VAR.R02(2:end),D(end,:),'*-','LineWidth',2)
+% xlabel('Altitude [km]')
+% ylabel('Derelicts')
+% legend('D_0','D_f')
+% 
+% subplot(1,3,3)
+% hold on
 % grid on
-set(gca,'FontSize',14)
-surf(Xi,Yi,D','edgecolor','none')
-c = colorbar;
-c.Label.String = 'D';
-xlabel('Time [years]')
-ylabel('Altitude [km]')
-ylim([VAR.R02(2) VAR.R02(end)])
-
-subplot(4,1,4)
-hold on
+% set(gca,'FontSize',14)
+% plot(VAR.R02(2:end),N(1,:),'k*-','LineWidth',2)
+% plot(VAR.R02(2:end),N(end,:),'*-','LineWidth',2)
+% xlabel('Altitude [km]')
+% ylabel('Debris')
+% legend('N_0','N_f')
+% 
+% figure
+% semilogy(VAR.R02(2:end),S(end,:),'LineWidth',2)
+% hold on
+% semilogy(VAR.R02(2:end),Su(end,:),'LineWidth',2)
 % grid on
-set(gca,'FontSize',14)
-surf(Xi,Yi,N','edgecolor','none')
-c = colorbar;
-c.Label.String = 'N';
-xlabel('Time [years]')
-ylabel('Altitude [km]')
-ylim([VAR.R02(2) VAR.R02(end)])
+% set(gca,'FontSize',14)
+% xlabel('Altitude [km]')
+% ylabel('Number of objects')
+% legend('S','Su') %
+% title('Final time')
+% 
+% figure
+% hold on
+% grid on
+% set(gca,'FontSize',14)
+% xlabel('Altitude [km]')
+% ylabel('Launch Rate S (Number of objects/year)')
+% for t = 1:length(tf)-1
+%     plot(VAR.R02(2:end), LAM1(t,:))
+% end
+% 
+% figure
+% hold on
+% grid on
+% set(gca,'FontSize',14)
+% xlabel('Altitude [km]')
+% ylabel('Launch Rate Su (Number of objects/year)')
+% for t = 1:length(tf)-1
+%     plot(VAR.R02(2:end), LAM2(t,:))
+% end
+% 
+% figure 
+% hold on
+% grid on
+% set(gca,'FontSize',14)
+% plot(tf,sum(N_tot,2),'-','LineWidth',2)
+% plot(tf,sum(S,2),'-','LineWidth',2)
+% plot(tf,sum(D,2),'-','LineWidth',2)
+% plot(tf,sum(N,2),'-','LineWidth',2)
+% plot(tf,sum(Su,2),'-','LineWidth',2)
+% xlabel('Time [years]')
+% ylabel('Number of objects')
+% legend('total','S','D','N','Su')
+% title('Population vs time')
+% 
+% 
+% x = tf';
+% y = VAR.R02(2:end);
+% [Xi,Yi] = meshgrid(x,y);
+% 
+% figure
+% subplot(4,1,1)
+% hold on
+% % grid on
+% set(gca,'FontSize',14)
+% % surf(Xi,Yi,S','edgecolor','none')
+% surf(tf', VAR.R02(2:end), transpose(S),'edgecolor','none'); 
+% c = colorbar;
+% c.Label.String = 'S';
+% xlabel('Time [years]')
+% ylabel('Altitude [km]')
+% ylim([VAR.R02(2) VAR.R02(end)])
+% 
+% subplot(4,1,2)
+% hold on
+% % grid on
+% set(gca,'FontSize',14)
+% surf(Xi,Yi,Su','edgecolor','none')
+% c = colorbar;
+% c.Label.String = 'S_u';
+% xlabel('Time [years]')
+% ylabel('Altitude [km]')
+% ylim([VAR.R02(2) VAR.R02(end)])
+% 
+% subplot(4,1,3)
+% hold on
+% % grid on
+% set(gca,'FontSize',14)
+% surf(Xi,Yi,D','edgecolor','none')
+% c = colorbar;
+% c.Label.String = 'D';
+% xlabel('Time [years]')
+% ylabel('Altitude [km]')
+% ylim([VAR.R02(2) VAR.R02(end)])
+% 
+% subplot(4,1,4)
+% hold on
+% % grid on
+% set(gca,'FontSize',14)
+% surf(Xi,Yi,N','edgecolor','none')
+% c = colorbar;
+% c.Label.String = 'N';
+% xlabel('Time [years]')
+% ylabel('Altitude [km]')
+% ylim([VAR.R02(2) VAR.R02(end)])
 
 
 %% FUNCTIONS
@@ -228,7 +230,7 @@ VAR.sep_dist_method = "distance";% either 'distance' or 'angle'. Sets minimum se
 VAR.sep_angle = 0.1; % minimum angular separation distance [deg]. Only used if sep_dist_method VAR.sep_dist_method = 'angle'
 VAR.sep_dist = 5; % minimum separation distance [km]. Only used if sep_dist_method VAR.sep_dist_method = 'distance'
 
-VAR.input_pop = 'TLE';  % 'TLE' or 'distribution'.  TLE pulls binned present day objects. 'distribution' uses an arbitary hardcoded population distribution.
+% VAR.input_pop = 'TLE';  % 'TLE' or 'distribution'.  TLE pulls binned present day objects. 'distribution' uses an arbitary hardcoded population distribution.
 % Generate TLE binned appropriately using the getTLEBins python method
 % TODO: 
 % savedir = py.tletobins.getTLEBins(VAR.deltaH, VAR.h_min, VAR.h_max, savedir = None, graph = False)
@@ -242,11 +244,11 @@ VAR.input_pop = 'TLE';  % 'TLE' or 'distribution'.  TLE pulls binned present day
 % VAR.filename_S = '..\MOCAT-4S\x0_TLE\Counts_PAYLOADslot_bins_35.csv';
 % VAR.filename_Su = '..\MOCAT-4S\x0_TLE\Counts_PAYLOADunslot_bins_35.csv';
 % VAR.filename_D = '..\MOCAT-4S\x0_TLE\Counts_DERELICT_bins_35.csv';
-
-VAR.filename_N = '../MOCAT-4S/x0_TLE/Counts_DEBRIS_bins_35.csv';
-VAR.filename_S = '../MOCAT-4S/x0_TLE/Counts_PAYLOADslot_bins_35.csv';
-VAR.filename_Su = '../MOCAT-4S/x0_TLE/Counts_PAYLOADunslot_bins_35.csv';
-VAR.filename_D = '../MOCAT-4S/x0_TLE/Counts_DERELICT_bins_35.csv';
+% 
+% VAR.filename_N = '../MOCAT-4S/x0_TLE/Counts_DEBRIS_bins_35.csv';
+% VAR.filename_S = '../MOCAT-4S/x0_TLE/Counts_PAYLOADslot_bins_35.csv';
+% VAR.filename_Su = '../MOCAT-4S/x0_TLE/Counts_PAYLOADunslot_bins_35.csv';
+% VAR.filename_D = '../MOCAT-4S/x0_TLE/Counts_DERELICT_bins_35.csv';
 
 
 R1=R0;
@@ -295,48 +297,48 @@ phi=f_corrective*pi*sigma*VAR.v; % new (from Somma)
 %input_pop = 'TLE';
 % input_pop = 'distribution';
 
-if strcmp(VAR.input_pop,'TLE')
-    %%% MODIFY FOR MORE SHELLS
-    % load initial conditions from TLEs
-    
-    filename_N = VAR.filename_N;
-    filename_S = VAR.filename_S;
-    filename_Su = VAR.filename_Su;
-    filename_D = VAR.filename_D;
-
-    Ni = readmatrix(filename_N);
-    Ni = Ni(:,2)';
-    
-    Si = readmatrix(filename_S);
-%   Si = Si(:,3)';
-    Si = Si(:,2)';
-       
-    Sui = readmatrix(filename_Su);
-    Sui = Sui(:,2)';
-       
-    Di = readmatrix(filename_D);
-    Di = Di(:,2)';
-%   Di = floor(0.5*(Si+Sui));
-
-elseif strcmp(VAR.input_pop,'distribution')
-
-    % previous initial conditions
-
-    mu_S=500;sig_S=300^2;S0=1000;
-    mu_Su=650;sig_Su=300^2;Su0=850;
-    mu_D=450;sig_D=300^2;D0=500;
-    mu_N=300;sig_N=150^2;N0=400;
-    mu_lam_S=350;sig_lam_S=300^2;lam0_S=1000; %lam0=3000
-    mu_lam_Su=350;sig_lam_Su=300^2;lam0_Su=1000; %lam0=3000
-    lam_model_S=lam0_S*exp(-(R02(2:end)-mu_lam_S).^2/sig_lam_S); 
-    lam_model_Su=lam0_Su*exp(-(R02(2:end)-mu_lam_Su).^2/sig_lam_Su); 
-
-    Si=S0*exp(-(R02(2:end)-mu_S).^2/sig_S);
-    Sui=Su0*exp(-(R02(2:end)-mu_Su).^2/sig_Su);
-    Di=D0*exp(-(R02(2:end)-mu_D).^2/sig_D);
-    Ni=N0*exp(-(R02(2:end)-mu_N).^2/sig_N);
-
-end
+% if strcmp(VAR.input_pop,'TLE')
+%     %%% MODIFY FOR MORE SHELLS
+%     % load initial conditions from TLEs
+% 
+%     filename_N = VAR.filename_N;
+%     filename_S = VAR.filename_S;
+%     filename_Su = VAR.filename_Su;
+%     filename_D = VAR.filename_D;
+% 
+%     Ni = readmatrix(filename_N);
+%     Ni = Ni(:,2)';
+% 
+%     Si = readmatrix(filename_S);
+% %   Si = Si(:,3)';
+%     Si = Si(:,2)';
+% 
+%     Sui = readmatrix(filename_Su);
+%     Sui = Sui(:,2)';
+% 
+%     Di = readmatrix(filename_D);
+%     Di = Di(:,2)';
+% %   Di = floor(0.5*(Si+Sui));
+% 
+% elseif strcmp(VAR.input_pop,'distribution')
+% 
+%     % previous initial conditions
+% 
+%     mu_S=500;sig_S=300^2;S0=1000;
+%     mu_Su=650;sig_Su=300^2;Su0=850;
+%     mu_D=450;sig_D=300^2;D0=500;
+%     mu_N=300;sig_N=150^2;N0=400;
+%     mu_lam_S=350;sig_lam_S=300^2;lam0_S=1000; %lam0=3000
+%     mu_lam_Su=350;sig_lam_Su=300^2;lam0_Su=1000; %lam0=3000
+%     lam_model_S=lam0_S*exp(-(R02(2:end)-mu_lam_S).^2/sig_lam_S); 
+%     lam_model_Su=lam0_Su*exp(-(R02(2:end)-mu_lam_Su).^2/sig_lam_Su); 
+% 
+%     Si=S0*exp(-(R02(2:end)-mu_S).^2/sig_S);
+%     Sui=Su0*exp(-(R02(2:end)-mu_Su).^2/sig_Su);
+%     Di=D0*exp(-(R02(2:end)-mu_D).^2/sig_D);
+%     Ni=N0*exp(-(R02(2:end)-mu_N).^2/sig_N);
+% 
+% end
 
 % start computation
 
@@ -369,10 +371,10 @@ warning('off')
 
 %% propagation
 
-S = sym('S',[VAR.N_shell,1]);
-D = sym('D',[VAR.N_shell,1]);
-N = sym('N',[VAR.N_shell,1]);
-Su = sym('Su',[VAR.N_shell,1]);
+S = sym('S_',[VAR.N_shell,1]);
+D = sym('D_',[VAR.N_shell,1]);
+N = sym('N_',[VAR.N_shell,1]);
+Su = sym('Su_',[VAR.N_shell,1]);
 lam_S = sym('lam_S',[VAR.N_shell,1]);
 lam_Su = sym('lam_Su',[VAR.N_shell,1]);
 
@@ -481,8 +483,9 @@ end
 
 var=[S;D;N;Su];
 f4=[Eq1.';Eq2.';Eq3.';Eq4.'];
-fun4= matlabFunction(f4,'Vars',{var,lam_S,lam_Su});
-func_temp = @(x) (fun4(x,lam1_S,lam1_Su));
+f4 = subs(f4, [lam_S, lam_Su], [lam1_S,lam1_Su]);
+fun4= matlabFunction(f4,'Vars',{var});
+func_temp = @(x) (fun4(x));
 func=@(t,x) func_temp(x);
 options_ode = odeset('reltol',1.e-4,'abstol', 1.e-4);
 [T,X] = ode15s(func, tspan, x0, options_ode);
@@ -519,4 +522,4 @@ OUT.Su = Su;
 OUT.T = T;
 
 end
-
+end
