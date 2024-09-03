@@ -8,7 +8,7 @@ A three species MOCAT-SSEM is considered, with active satellites (S), derelicts 
 
 ## System requirements
 
-Matlab.
+Matlab with Optimization Toolbox.
 
 
 ## Installation guide
@@ -18,10 +18,12 @@ Download this folder and run main file: "optimal_capacity.m".
 
 ## Demo/Output
 
-Check our work, currently under peer review in Nature. The preprint will be soon available on Research Square.
+The main file "optimal_capacity.m" is set to reproduce the results of Case 1 reported in Table 2 and Figure 2. Run time is usually in the order of seconds.
 
 
 ## Citing
+
+Check our work, currently under peer review in Nature. The preprint will be soon available on Research Square.
 
 If you find this project research useful, please cite our work:
 
