@@ -23,22 +23,22 @@ The main file "optimal_capacity.m" is set to reproduce the results of Case 1 rep
 
 ## Citing
 
-Check our work, currently under peer review in Nature. The preprint will be soon available on Research Square.
-
 If you find this project research useful, please cite our work:
 
 ```
 @article{lavezzi_nature_24,
 author = {Lavezzi, Giovanni and Jang, Dan and Linares, Richard},
-journal={}, 
+journal={Under peer review at Nature}, 
 title = {A Stable and Sustainable Maximum Orbital Capacity in Low Earth Orbit},
 year = {2024},
 volume = {},
 number = {},
 pages = {},
-doi = {},
+doi = {10.21203/rs.3.rs-4927491/v1},
 }
 ```
+
+Check our work, currently under peer review in Nature. Link to the [preprint](https://www.researchgate.net/publication/383876801_A_Stable_and_Sustainable_Maximum_Orbital_Capacity_in_Low_Earth_Orbit).
 
 
 ## Acknowledgments
