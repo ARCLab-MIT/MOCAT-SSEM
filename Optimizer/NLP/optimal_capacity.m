@@ -7,22 +7,23 @@ clc
 % Description:
 
 % A constrained nonlinear programming (NLP) optimization problem is 
-% formulated to compute the maximum orbital capacity of the low region of 
-% LEO, considering equilibrium points and the failure rate of the 
-% satellites as constraints. 
+% formulated to compute the LEO optimal orbital carrying capacity solutions, 
+% considering stable equilibrium points and sustainability constraints. 
 % A three species MOCAT-SSEM is considered, with active satellites (S), 
 % derelicts (D), and debris (N).
 
-% Author: Dr. Giovanni Lavezzi, 08/2024
+% Author: Dr. Giovanni Lavezzi 
+% v1: 08/2024
+% v2: 03/2025
 %==========================================================================
 %==========================================================================
 % Data
 
 sel_plots = 1; % plot selection, 1: yes, 0: no
 
-N_shell = 14;
+N_shell = 24;
 h_min = 200; % initial altitude [km]
-h_max = 900; % final altitude [km] 2000
+h_max = 1400; % final altitude [km] 2000
 R0 = linspace(h_min,h_max,N_shell+1);
 R02 = linspace(h_min,h_max,N_shell+1);
 deltaH = R02(2)-R02(1); % thickness of the shell [km]
@@ -40,7 +41,7 @@ Dhl = deltaH*1000;
 Dhu = -deltaH*1000;
 Cd = 2.2;
 failure_rate_L = 0; % lower boundary
-failure_rate_U = 1; %3.5e-4; % upper boundary 
+failure_rate_U = 0.1; %3.5e-4; % upper boundary 
 
 failure_rate_L = failure_rate_L/100;
 failure_rate_U = failure_rate_U/100; % [% = fail_rate / 100] 
@@ -49,14 +50,6 @@ P = 0.9;
 alpha = 0.1; % fraction of collisions that satellites fail to avoid 0.2      
 alpha_active = 0.01; % fraction of collisions occuring between active satellites 0.01             
 delta = 0;
-
-% HC: high capacity
-% NHC: no high capacity
-%          HC1  - HC2  - NHC1   - NHC2
-% P        0.9  - 0.65   (same as HC1)
-% alp      0.1  - 0.1 
-% alp_act  0.01 - 0.01
-% delta    0    - 0   
 
 %==========================================================================
 % physical characteristics
@@ -147,7 +140,22 @@ options = optimoptions( 'fmincon' , 'Display' , 'off' ,...
         'StepTolerance', 1e-18, ... 
         'UseParallel', false );
 A = []; b = []; Aeq = []; beq = []; 
-lb = 1*ones(size(x0));
+
+lb_S = 0.45 * ones(size(x0_S));
+lb_D = 0.0005 * ones(size(x0_D));
+lb_N = 0.0005 * ones(size(x0_N));
+lb_l = 0.0005 * ones(size(x0_lambda)); 
+
+max_shell = 14 + 1;
+lb_S(max_shell:end) = 0;
+lb_D(max_shell:end) = 0;
+lb_N(max_shell:end) = 0;
+lb_l(max_shell:end) = 0;
+
+lb = [lb_S, ...
+      lb_D, ...
+      lb_N, ...
+      lb_l];
 ub = [];
     
 [N_shell,...
@@ -187,17 +195,26 @@ X_out(1,:) = xopt(1:N_shell);
 X_out(2,:) = xopt(N_shell+1:2*N_shell);
 X_out(3,:) = xopt(2*N_shell+1:3*N_shell);
 lam1(1,:) = xopt(3*N_shell+1:4*N_shell); 
+for i1 = 1:N_shell
+    if X_out(1,i1) < 1e-2
+        X_out(1,i1) = 0;
+    end
+    if X_out(2,i1) < 1e-2
+        X_out(2,i1) = 0;
+    end
+    if X_out(3,i1) < 1e-2
+        X_out(3,i1) = 0;
+    end
+    if lam1(1,i1) < 1e-2
+        lam1(1,i1) = 0;
+    end
+end
 
 fprintf("cpu time: %f s\n",cpu_f)
 fprintf("N_shell: %d \n",N_shell)
 fprintf("Altitude range: %d-%d km\n",h_min,h_max)
 fprintf("Constraint Tolerance: %e\n",options.ConstraintTolerance)
 fprintf("Function Tolerance: %e\n",options.FunctionTolerance)
-if ~isempty(lb)
-    fprintf("Lower boundary: %d (S), %d (D), %d (N), %d (lambda)\n",lb(1),lb(N_shell+1),lb(2*N_shell),lb(3*N_shell+1))
-else
-    fprintf("No lower boundary set\n")
-end
 
 ceq = equilib(xopt,data);
 S_eq = ceq(1:N_shell);
@@ -416,4 +433,3 @@ if sel_plots
 end
 
 %==========================================================================
-%% Functions

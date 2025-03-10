@@ -51,9 +51,13 @@ for k=1:N_shell
     end
     yeq_N(k) = yeq_N(k) + sum(yeq_N_b(k,:),2);
 
-    % Inequality constraints
-    y_fail_l(k) = -(lambda * Dt * (1 - failure_rate_L) - S);
-    y_fail_u(k) = lambda * Dt * (1 - failure_rate_U) - S; 
+    % Inequality constraints - failure rate
+    % y_fail_l(k) = -(lambda * Dt * (1 - failure_rate_L) - S);
+    % y_fail_u(k) = lambda * Dt * (1 - failure_rate_U) - S; 
+
+    % Inequality constraints - max debris and derelicts per shell
+    y_fail_l(k) = N - 1500;
+    y_fail_u(k) = D - 300; 
 
 end
 
