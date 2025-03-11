@@ -1,5 +1,7 @@
 # Stable and Sustainable Orbital Capacity Solutions in Low Earth Orbit
 
+Note: the files will be uploaded after the review and approval from the Department of the Air Force Artificial Intelligence Accelerator. 
+
 ## Description
 
 The main contributions of this work are the following: 
