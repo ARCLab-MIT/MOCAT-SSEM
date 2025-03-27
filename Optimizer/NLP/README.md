@@ -1,7 +1,5 @@
 # Stable and Sustainable Orbital Capacity Solutions in Low Earth Orbit
 
-Note: the files will be uploaded after the review and approval from the Department of the Air Force Artificial Intelligence Accelerator. 
-
 ## Description
 
 The main contributions of this work are the following: 
@@ -40,20 +38,7 @@ The folder "1_to_run_MC" contains the scripts to run MOCAT-MC. The folder "2_to_
 
 If you find this project research useful, please cite our work:
 
-```
-@article{lavezzi_acta_25,
-author = {Lavezzi, Giovanni and Jang, Dan and Linares, Richard},
-journal={Under peer review at Acta Astronautica}, 
-title = {Stable and Sustainable Orbital Capacity Solutions in Low Earth Orbit},
-year = {2025},
-volume = {},
-number = {},
-pages = {},
-}
-```
-
-<!-- doi = {10.21203/rs.3.rs-4927491/v1}, -->
-<!-- Check our paper, currently under peer review in Acta Astronautica. Link to the [preprint](https://www.researchgate.net/publication/383876801_A_Stable_and_Sustainable_Maximum_Orbital_Capacity_in_Low_Earth_Orbit). -->
+* Link to the [preprint](https://www.researchgate.net/publication/383876801_Stable_and_Sustainable_Orbital_Capacity_Solutions_in_Low_Earth_Orbit).
 
 
 ## Acknowledgments
