@@ -38,7 +38,7 @@ The folder "1_to_run_MC" contains the scripts to run MOCAT-MC. The folder "2_to_
 
 If you find this project research useful, please cite our work:
 
-* Link to the [preprint](https://www.researchgate.net/publication/383876801_Stable_and_Sustainable_Orbital_Capacity_Solutions_in_Low_Earth_Orbit).
+* Link to the [journal paper](https://www.researchgate.net/publication/392989770_Stable_and_Sustainable_Orbital_Capacity_Solutions_in_Low_Earth_Orbit).
 
 
 ## Acknowledgments
